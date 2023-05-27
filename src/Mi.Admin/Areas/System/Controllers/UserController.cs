@@ -1,6 +1,6 @@
 ﻿using Mi.Core.Models;
-using Mi.Service.System;
-using Mi.Service.System.Models;
+using Mi.IService.System;
+using Mi.IService.System.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace Mi.Admin.Areas.System.Controllers
 	[Area("System")]
 	public class UserController : Controller
 	{
-		private readonly UserService _userService;
+		private readonly IUserService _userService;
 
-		public UserController(UserService userService)
+		public UserController(IUserService userService)
 		{
 			_userService = userService;
 		}

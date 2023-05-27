@@ -1,11 +1,12 @@
 ﻿using Mi.Core.Models.Paging;
 using Mi.IRepository.System;
 using Mi.IRepository.System.QueryModels;
-using Mi.Service.System.Models;
+using Mi.IService.System;
+using Mi.IService.System.Models;
 
 namespace Mi.Service.System
 {
-	public class UserService
+	public class UserService : IUserService, IScoped
 	{
 		private readonly IUserRepository _userRepository;
 

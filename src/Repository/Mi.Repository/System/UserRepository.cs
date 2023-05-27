@@ -1,11 +1,10 @@
-﻿using Mi.IRepository.System.QueryModels;
-using Mi.Toolkit.Extension;
+﻿using Mi.Toolkit.Extension;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace Mi.Repository.System
 {
-	public class UserRepository : RepositoryBase<SysUser>, IUserRepository
+	public class UserRepository : RepositoryBase<SysUser>, IUserRepository, IScoped
 	{
 		public UserRepository(MIDB db) : base(db)
 		{

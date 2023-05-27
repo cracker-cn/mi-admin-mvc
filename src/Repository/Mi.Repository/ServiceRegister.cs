@@ -10,7 +10,6 @@ namespace Mi.Repository
 		public void ConfigService(IServiceCollection service)
 		{
 			service.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-			service.AddScoped<IUserRepository,UserRepository>();
 		}
 	}
 }

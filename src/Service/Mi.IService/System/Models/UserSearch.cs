@@ -1,6 +1,6 @@
 ﻿using Mi.Core.Models.Paging;
 
-namespace Mi.Service.System.Models
+namespace Mi.IService.System.Models
 {
 	public class UserSearch : PagingSearchModel
 	{

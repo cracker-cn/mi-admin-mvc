@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mi.Repository", "Repository
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mi.Service", "Service\Mi.Service\Mi.Service.csproj", "{08A0E876-F1EB-42D3-B8E2-3856A55238C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mi.Admin", "Mi.Admin\Mi.Admin.csproj", "{74F475C2-C317-4690-BC0F-7419C12F6E91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mi.Admin", "Mi.Admin\Mi.Admin.csproj", "{74F475C2-C317-4690-BC0F-7419C12F6E91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mi.IService", "Service\Mi.IService\Mi.IService.csproj", "{2884D48B-60A7-491E-AACC-5B32AF030422}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{74F475C2-C317-4690-BC0F-7419C12F6E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74F475C2-C317-4690-BC0F-7419C12F6E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74F475C2-C317-4690-BC0F-7419C12F6E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2884D48B-60A7-491E-AACC-5B32AF030422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2884D48B-60A7-491E-AACC-5B32AF030422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2884D48B-60A7-491E-AACC-5B32AF030422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2884D48B-60A7-491E-AACC-5B32AF030422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{A8B213B6-D145-4423-931F-673A60BE9C93} = {9B084088-299E-4451-AA87-11360D52CA88}
 		{5C46A07B-3D43-4F56-AF1F-0E7DBC7A6F17} = {9B084088-299E-4451-AA87-11360D52CA88}
 		{08A0E876-F1EB-42D3-B8E2-3856A55238C6} = {BE1D0729-C2AE-46D9-8F1D-F52D2B8E08BB}
+		{2884D48B-60A7-491E-AACC-5B32AF030422} = {BE1D0729-C2AE-46D9-8F1D-F52D2B8E08BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {163BEB42-055B-4B76-A400-2137124838F0}

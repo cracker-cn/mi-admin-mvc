@@ -6,7 +6,7 @@ namespace Mi.Service
 	{
 		public void ConfigService(IServiceCollection service)
 		{
-			service.AddScoped<UserService>();
+
 		}
 	}
 }
