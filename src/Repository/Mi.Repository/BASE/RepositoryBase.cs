@@ -4,6 +4,7 @@ using System.Reflection;
 
 using Dapper;
 
+using Mi.Core.DB;
 using Mi.Core.Models.Paging;
 using Mi.IRepository.BASE;
 using Mi.Repository.DB;
@@ -102,8 +103,7 @@ namespace Mi.Repository.BASE
 
         public T Get(object id)
         {
-            var prop = typeof(T).GetProperties().FirstOrDefault(x => x.GetCustomAttribute<KeyAttribute>() != null);
-            return DB.Set<T>().Find(Convert.ChangeType(id, prop!.PropertyType)) ?? new T();
+            return DB.Get<T>(id);
         }
 
         public T Get(Expression<Func<T, bool>> exp)
@@ -131,10 +131,9 @@ namespace Mi.Repository.BASE
             return await DB.Set<T>().Where(exp).ToListAsync();
         }
 
-        public async Task<T> GetAsync(object id)
+        public Task<T> GetAsync(object id)
         {
-            var prop = typeof(T).GetProperties().FirstOrDefault(x => x.GetCustomAttribute<KeyAttribute>() != null);
-            return await DB.FindAsync<T>(Convert.ChangeType(id, prop!.PropertyType)) ?? new T();
+            return DB.GetAsync<T>(id);
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> exp)
@@ -182,13 +181,23 @@ namespace Mi.Repository.BASE
             return 0 < DB.SaveChanges();
         }
 
-        public async Task<bool> UpdateAsync(T model)
+		public bool Update(object id, Action<Updater<T>> action)
+		{
+            return DB.Edit((long)id,action);
+		}
+
+		public async Task<bool> UpdateAsync(T model)
         {
             DB.Update(model);
             return 0 < await DB.SaveChangesAsync();
         }
 
-        public async Task<bool> UpdateManyAsync(IList<T> models)
+		public Task<bool> UpdateAsync(object id, Action<Updater<T>> action)
+		{
+			return DB.EditAsync((long)id, action);
+		}
+
+		public async Task<bool> UpdateManyAsync(IList<T> models)
         {
             DB.UpdateRange(models);
             return models.Count == await DB.SaveChangesAsync();

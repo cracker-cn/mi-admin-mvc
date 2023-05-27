@@ -11,8 +11,8 @@ namespace Mi.Entity.BASE
         public long CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; } = DateTime.Now;
-        public long ModifiedBy { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public long? ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
         [DefaultValue(0)]
         public int IsDeleted { get; set; } = 0;

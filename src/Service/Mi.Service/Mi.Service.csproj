@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Repository\Mi.IRepository\Mi.IRepository.csproj" />
-    <ProjectReference Include="..\Mi.IService\Mi.IService.csproj" />
+    <Folder Include="System\Models\Result\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Repository\Mi.Repository\Mi.Repository.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,12 +20,12 @@
         /// <summary>
         /// 上次更新用户
         /// </summary>
-        long ModifiedBy { get; set; }
+        long? ModifiedBy { get; set; }
 
         /// <summary>
         /// 上次更新时间
         /// </summary>
-        DateTime ModifiedOn { get; set; }
+        DateTime? ModifiedOn { get; set; }
 
         /// <summary>
         /// 已删除1 正常0

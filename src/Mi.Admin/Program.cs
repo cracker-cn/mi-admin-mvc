@@ -1,3 +1,5 @@
+using Mi.Core.Service;
+
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 
@@ -5,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddRequiredService();
 var app = builder.Build();
+DotNetService.Instance = app.Services;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
