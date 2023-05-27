@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "SGkQux9EKhho8l02EOo1Hr/TLbR5kDOZMBXcoouJQI3qmoLr8o14LXKwNlvO0pZizS5W+eBR31PI7nEydrZT/Q==",
+  "success": true,
+  "projectFilePath": "D:\\github\\mi-admin-mvc\\src\\Mi.Toolkit\\Mi.Toolkit.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\hdh\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\hdh\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\hdh\\.nuget\\packages\\microsoft.extensions.dependencymodel\\7.0.0\\microsoft.extensions.dependencymodel.7.0.0.nupkg.sha512",
+    "C:\\Users\\hdh\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
+    "C:\\Users\\hdh\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

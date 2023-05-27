@@ -1,0 +1,17 @@
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Core.deps.json
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Core.dll
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Core.pdb
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Entity.dll
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Toolkit.dll
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Entity.pdb
+D:\github\mi-admin-mvc\src\Mi.Core\bin\Debug\net7.0\Mi.Toolkit.pdb
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.csproj.AssemblyReference.cache
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.AssemblyInfoInputs.cache
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.AssemblyInfo.cs
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.csproj.CoreCompileInputs.cache
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.csproj.CopyComplete
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.dll
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\refint\Mi.Core.dll
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\Mi.Core.pdb
+D:\github\mi-admin-mvc\src\Mi.Core\obj\Debug\net7.0\ref\Mi.Core.dll

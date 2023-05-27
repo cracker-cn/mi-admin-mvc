@@ -1,0 +1,12 @@
+D:\github\mi-admin-mvc\src\Mi.Toolkit\bin\Debug\net7.0\Mi.Toolkit.deps.json
+D:\github\mi-admin-mvc\src\Mi.Toolkit\bin\Debug\net7.0\Mi.Toolkit.dll
+D:\github\mi-admin-mvc\src\Mi.Toolkit\bin\Debug\net7.0\Mi.Toolkit.pdb
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.csproj.AssemblyReference.cache
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.GeneratedMSBuildEditorConfig.editorconfig
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.AssemblyInfoInputs.cache
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.AssemblyInfo.cs
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.csproj.CoreCompileInputs.cache
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.dll
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\refint\Mi.Toolkit.dll
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\Mi.Toolkit.pdb
+D:\github\mi-admin-mvc\src\Mi.Toolkit\obj\Debug\net7.0\ref\Mi.Toolkit.dll
