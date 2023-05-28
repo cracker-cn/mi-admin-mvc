@@ -4,84 +4,91 @@ using Dapper;
 
 using Mi.Core.DB;
 using Mi.Entity.BASE;
-using Mi.Entity.Field;
 
 namespace Mi.IRepository.BASE
 {
-	public interface IRepositoryBase<T> where T : EntityBase, new()
-	{
-		#region 新增
+    public interface IRepositoryBase<T> where T : EntityBase, new()
+    {
+        #region 新增
 
-		bool Add(T model);
+        bool Add(T model);
 
-		object AddReturnId(T model);
+        object AddReturnId(T model);
 
-		T AddReturnEntity(T model);
+        T AddReturnEntity(T model);
 
-		Task<bool> AddAsync(T model);
+        Task<bool> AddAsync(T model);
 
-		Task<object> AddReturnIdAsync(T model);
+        Task<object> AddReturnIdAsync(T model);
 
-		Task<T> AddReturnEntityAsync(T model);
+        Task<T> AddReturnEntityAsync(T model);
 
-		Task<bool> AddManyAsync(IList<T> models);
+        Task<bool> AddManyAsync(IList<T> models);
 
-		#endregion 新增
+        #endregion 新增
 
-		#region 删除
+        #region 删除
 
-		bool Delete(T model);
+        bool Delete(T model);
 
-		bool Delete(object id);
+        bool Delete(object id);
 
-		Task<bool> DeleteAsync(T model);
+        Task<bool> DeleteAsync(T model);
 
-		Task<bool> DeleteAsync(object id);
+        Task<bool> DeleteAsync(object id);
 
-		Task<bool> DeleteManyAsync(IList<T> models);
+        Task<bool> DeleteManyAsync(IList<T> models);
 
-		#endregion 删除
+        #endregion 删除
 
-		#region 更新
+        #region 更新
 
-		bool Update(T model);
+        bool Update(T model);
 
-		Task<bool> UpdateAsync(T model);
+        Task<bool> UpdateAsync(T model);
 
-		bool Update(object id, Action<Updater<T>> action);
+        bool Update(object id, Action<Updater<T>> action);
 
-		Task<bool> UpdateAsync(object id, Action<Updater<T>> action);
+        Task<bool> UpdateAsync(object id, Action<Updater<T>> action);
 
-		Task<bool> UpdateManyAsync(IList<T> models);
+        Task<bool> UpdateManyAsync(IList<T> models);
 
-		#endregion 更新
+        int Execute(string sql, object? param = default);
 
-		#region 查询
+        Task<int> ExecuteAsync(string sql, object? param = default);
 
-		T Get(object id);
+        TField ExecuteScalar<TField>(string sql, object? param = default);
 
-		T Get(Expression<Func<T, bool>> exp);
+        Task<TField> ExecuteScalarAsync<TField>(string sql, object? param = default);
 
-		IList<T> GetAll();
+        #endregion 更新
 
-		IList<T> GetAll(Expression<Func<T, bool>> exp);
+        #region 查询
 
-		Task<T> GetAsync(object id);
+        T Get(object id);
 
-		Task<T> GetAsync(Expression<Func<T, bool>> exp);
+        T Get(Expression<Func<T, bool>> exp);
 
-		Task<IList<T>> GetAllAsync();
+        IList<T> GetAll();
 
-		Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> exp);
+        IList<T> GetAll(Expression<Func<T, bool>> exp);
 
-		PagingModel<T> QueryPage(int page, int size, Expression<Func<T, bool>>? exp = default);
+        Task<T> GetAsync(object id);
 
-		Task<PagingModel<T>> QueryPageAsync(int page, int size, Expression<Func<T, bool>>? exp = default);
+        Task<T> GetAsync(Expression<Func<T, bool>> exp);
 
-		PagingModel<T> QueryPage(int page, int size, string sql, DynamicParameters parameters, string? orderBy = default);
+        Task<IList<T>> GetAllAsync();
 
-		Task<PagingModel<T>> QueryPageAsync(int page, int size, string sql, DynamicParameters parameters, string? orderBy = default);
+        Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> exp);
 
-		#endregion 查询
-	}
+        PagingModel<T> QueryPage(int page, int size, Expression<Func<T, bool>>? exp = default);
+
+        Task<PagingModel<T>> QueryPageAsync(int page, int size, Expression<Func<T, bool>>? exp = default);
+
+        PagingModel<T> QueryPage(int page, int size, string sql, DynamicParameters parameters, string? orderBy = default);
+
+        Task<PagingModel<T>> QueryPageAsync(int page, int size, string sql, DynamicParameters parameters, string? orderBy = default);
+
+        #endregion 查询
+    }
 }

@@ -40,6 +40,7 @@
     </script>
 
     <script type="text/html" id="user-bar">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="has-role"><i class="layui-icon layui-icon-username"></i></button>
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="gen"><i class="layui-icon layui-icon-password"></i></button>
         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
     </script>
@@ -79,7 +80,7 @@
                         title: '操作',
                         toolbar: '#user-bar',
                         align: 'center',
-                        width: 130
+                        width: 180
                     }
                 ]],
                 skin: 'line',
@@ -112,6 +113,8 @@
                     window.remove(obj);
                 } else if (obj.event === 'gen') {
                     window.gen(obj);
+                }else if(obj.event === 'has-role'){
+                    window.role(obj)
                 }
             });
 
@@ -131,6 +134,16 @@
 
             window.refresh = function (param) {
                 table.reload('user-table');
+            }
+
+            window.role = function (obj) {
+                layer.open({
+                    type: 2,
+                    title: '用户角色',
+                    shade: 0.1,
+                    area: ['600px', '400px'],
+                    content: pageRootUrl + 'UserRole?id=' + obj.data['userId']
+                });
             }
 
             window.add = function () {

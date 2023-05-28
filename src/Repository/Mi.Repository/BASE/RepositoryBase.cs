@@ -102,6 +102,26 @@ namespace Mi.Repository.BASE
             return models.Count == await DB.SaveChangesAsync();
         }
 
+        public int Execute(string sql, object? param = null)
+        {
+            return DB.Connection.Execute(sql, param);
+        }
+
+        public Task<int> ExecuteAsync(string sql, object? param = null)
+        {
+            return DB.Connection.ExecuteAsync(sql, param);
+        }
+
+        public TField ExecuteScalar<TField>(string sql, object? param = null)
+        {
+            return DB.Connection.ExecuteScalar<TField>(sql, param);
+        }
+
+        public Task<TField> ExecuteScalarAsync<TField>(string sql, object? param = null)
+        {
+            return DB.Connection.ExecuteScalarAsync<TField>(sql, param);
+        }
+
         public T Get(object id)
         {
             return DB.Get<T>(id);

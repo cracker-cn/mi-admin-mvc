@@ -10,8 +10,4 @@
     <ProjectReference Include="..\..\Repository\Mi.Repository\Mi.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="System\Models\Result\" />
-  </ItemGroup>
-
 </Project>
