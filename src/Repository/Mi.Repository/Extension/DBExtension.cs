@@ -44,7 +44,7 @@ namespace Mi.Repository.Extension
             exp ??= x => true;
             var result = new PagingModel<T>();
             result.Total = await db.Set<T>().CountAsync(exp);
-            result.Rows = await db.Set<T>().Skip((page - 1) * size).Take(size).ToListAsync();
+            result.Rows = await db.Set<T>().Where(exp).Skip((page - 1) * size).Take(size).ToListAsync();
             return result;
         }
 
