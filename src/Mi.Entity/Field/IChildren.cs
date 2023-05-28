@@ -1,6 +1,6 @@
 ﻿namespace Mi.Entity.Field
 {
-    public interface IChildrenField<T>
+    public interface IChildren<T>
     {
         /// <summary>
         /// 子集

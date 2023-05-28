@@ -4,7 +4,7 @@
     /// 功能分组，便于权限分配
     /// </summary>
     [Table("SysFunctionGroup")]
-    public class SysFunctionGroup : EntityBase, IRemarkField
+    public class SysFunctionGroup : EntityBase, IRemark
     {
         /// <summary>
         /// 组名，同名为一组

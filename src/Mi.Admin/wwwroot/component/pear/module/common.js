@@ -109,6 +109,22 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             })
         }
+
+        /**
+         * ajax请求是否成功
+         * @param {any} code EnumResponseCode
+         */
+        this.ajaxSuccess = function (code) {
+            return code === 90001
+        }
+
+        /**
+         * 表格code
+         * @param {any} code EnumResponseCode
+         */
+        this.tableCode = function (code) {
+            return this.ajaxSuccess(code) ? 0 : -1
+        }
     }
     exports(MOD_NAME, common);
 });

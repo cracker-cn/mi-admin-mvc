@@ -1,6 +1,6 @@
 ﻿namespace Mi.Entity.Field
 {
-    public interface IParentIdField<T>
+    public interface IParentId<T>
     {
         /// <summary>
         /// 父级Id

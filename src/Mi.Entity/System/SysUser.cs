@@ -23,5 +23,11 @@
         /// </summary>
         [NotNull]
         public string? PasswordSalt { get; set; }
+
+        /// <summary>
+        /// 1超级管理员
+        /// </summary>
+        [DefaultValue(0)]
+        public int IsSuperAdmin { get; set; } = 0;
     }
 }

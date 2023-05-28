@@ -1,4 +1,6 @@
-﻿using Mi.Core.Service;
+﻿using Mi.Core.GlobalUser;
+using Mi.Core.Models;
+using Mi.Core.Service;
 using Mi.Repository.DB;
 using Mi.Toolkit.Extension;
 
@@ -17,6 +19,10 @@ namespace Mi.Core.Extension
                 opt.UseSqlite(DotNetService.Get<IConfiguration>().GetConnectionString("Sqlite"));
             });
             service.AutoInject();
+            service.AddSingleton<MessageModel>();
+            service.AddHttpContextAccessor();
+            service.AddMemoryCache();
+            service.AddScoped<IMiUser,MiUser>();
         }
     }
 }

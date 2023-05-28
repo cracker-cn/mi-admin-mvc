@@ -4,7 +4,7 @@
 	/// 角色
 	/// </summary>
 	[Table("SysRole")]
-	public class SysRole : EntityBase, IRemarkField
+	public class SysRole : EntityBase, IRemark
 	{
 		[NotNull]
 		public string? RoleName { get; set; }

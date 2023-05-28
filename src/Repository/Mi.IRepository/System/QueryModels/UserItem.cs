@@ -1,14 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Mi.IRepository.System.QueryModels
+﻿namespace Mi.IRepository.System.QueryModels
 {
-	public class UserItem
-	{
-		public long UserId { get; set; }
+    public class UserItem
+    {
+        public long UserId { get; set; }
 
-		[NotNull]
-		public string? UserName { get; set; }
+        [NotNull]
+        public string? UserName { get; set; }
 
-		public List<string>? RoleNames { get; set; }
-	}
+        public string? RoleNameString { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public IList<string>? RoleNames { get; set; }
+    }
 }

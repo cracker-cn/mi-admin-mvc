@@ -5,15 +5,16 @@ using System.Reflection;
 using Dapper;
 
 using Mi.Core.DB;
-using Mi.Core.Models.Paging;
+using Mi.Entity.BASE;
+using Mi.Entity.Field;
 using Mi.IRepository.BASE;
-using Mi.Repository.DB;
+using Mi.Repository.Extension;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace Mi.Repository.BASE
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class, new()
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase, new()
     {
         protected readonly MIDB DB;
 
@@ -143,36 +144,22 @@ namespace Mi.Repository.BASE
 
         public PagingModel<T> QueryPage(int page, int size, Expression<Func<T, bool>>? exp = null)
         {
-            exp ??= x => true;
-            var result = new PagingModel<T>();
-            result.Total = DB.Set<T>().Count(exp);
-            result.Rows = DB.Set<T>().Skip((page - 1) * size).Take(size).ToList();
-            return result;
+            return DB.QueryPage<T>(page, size, exp);
         }
 
         public PagingModel<T> QueryPage(int page, int size, string sql, DynamicParameters parameters, string? orderBy = null)
         {
-            var result = new PagingModel<T>();
-            result.Total = DB.Connection.ExecuteScalar<int>(DBHelper.GetCount(sql), parameters);
-            result.Rows = DB.Connection.Query<T>(DBHelper.GetPaging(page, size, sql, orderBy), parameters).ToList();
-            return result;
+            return DB.QueryPage<T>(page, size, sql, parameters, orderBy);
         }
 
-        public async Task<PagingModel<T>> QueryPageAsync(int page, int size, Expression<Func<T, bool>>? exp = null)
+        public Task<PagingModel<T>> QueryPageAsync(int page, int size, Expression<Func<T, bool>>? exp = null)
         {
-            exp ??= x => true;
-            var result = new PagingModel<T>();
-            result.Total = await DB.Set<T>().CountAsync(exp);
-            result.Rows = await DB.Set<T>().Skip((page - 1) * size).Take(size).ToListAsync();
-            return result;
+            return DB.QueryPageAsync<T>(page, size, exp);
         }
 
-        public async Task<PagingModel<T>> QueryPageAsync(int page, int size, string sql, DynamicParameters parameters, string? orderBy = null)
+        public Task<PagingModel<T>> QueryPageAsync(int page, int size, string sql, DynamicParameters parameters, string? orderBy = null)
         {
-            var result = new PagingModel<T>();
-            result.Total = await DB.Connection.ExecuteScalarAsync<int>(DBHelper.GetCount(sql), parameters);
-            result.Rows = (await DB.Connection.QueryAsync<T>(DBHelper.GetPaging(page, size, sql, orderBy), parameters)).ToList();
-            return result;
+            return DB.QueryPageAsync<T>(page, size, sql, parameters, orderBy);
         }
 
         public bool Update(T model)
@@ -181,23 +168,23 @@ namespace Mi.Repository.BASE
             return 0 < DB.SaveChanges();
         }
 
-		public bool Update(object id, Action<Updater<T>> action)
-		{
-            return DB.Edit((long)id,action);
-		}
+        public bool Update(object id, Action<Updater<T>> action)
+        {
+            return DB.Edit((long)id, action);
+        }
 
-		public async Task<bool> UpdateAsync(T model)
+        public async Task<bool> UpdateAsync(T model)
         {
             DB.Update(model);
             return 0 < await DB.SaveChangesAsync();
         }
 
-		public Task<bool> UpdateAsync(object id, Action<Updater<T>> action)
-		{
-			return DB.EditAsync((long)id, action);
-		}
+        public Task<bool> UpdateAsync(object id, Action<Updater<T>> action)
+        {
+            return DB.EditAsync((long)id, action);
+        }
 
-		public async Task<bool> UpdateManyAsync(IList<T> models)
+        public async Task<bool> UpdateManyAsync(IList<T> models)
         {
             DB.UpdateRange(models);
             return models.Count == await DB.SaveChangesAsync();

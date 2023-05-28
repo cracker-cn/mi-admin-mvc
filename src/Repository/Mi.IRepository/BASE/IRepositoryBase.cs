@@ -3,10 +3,12 @@
 using Dapper;
 
 using Mi.Core.DB;
+using Mi.Entity.BASE;
+using Mi.Entity.Field;
 
 namespace Mi.IRepository.BASE
 {
-	public interface IRepositoryBase<T> where T : class, new()
+	public interface IRepositoryBase<T> where T : EntityBase, new()
 	{
 		#region 新增
 

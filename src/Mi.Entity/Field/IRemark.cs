@@ -1,6 +1,6 @@
 ﻿namespace Mi.Entity.Field
 {
-    public interface IRemarkField
+    public interface IRemark
     {
         string? Remark { get; set; }
     }

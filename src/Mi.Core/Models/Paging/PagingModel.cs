@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mi.Core.Models.Paging
 {
-    public class PagingModel<T> where T : class, new()
+    public class PagingModel<T> where T : new()
     {
         public IList<T>? Rows { get; set; }
 

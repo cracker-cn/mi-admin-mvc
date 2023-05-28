@@ -1,6 +1,6 @@
 ﻿namespace Mi.Entity.Field
 {
-    public interface ISortField
+    public interface ISort
     {
         /// <summary>
         /// 排序值，越小越靠前

@@ -1,12 +1,7 @@
 ﻿namespace Mi.Entity.BASE
 {
-    public interface IEntityBase
+    public interface IEntityBase : IPrimaryKey<long>
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        long Id { get; set; }
-
         /// <summary>
         /// 创建用户
         /// </summary>

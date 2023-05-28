@@ -1,7 +1,7 @@
 ﻿namespace Mi.Entity.System
 {
     [Table("SysDict")]
-    public class SysDict : EntityBase, IParentIdField<long>, ISortField, IRemarkField
+    public class SysDict : EntityBase, IParentId<long>, ISort, IRemark
     {
         /// <summary>
         /// 字典名称

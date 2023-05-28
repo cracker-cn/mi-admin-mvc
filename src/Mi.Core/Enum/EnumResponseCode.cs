@@ -41,6 +41,11 @@ namespace Mi.Core.Enum
         /// <summary>
         ///     失败
         /// </summary>
-        Fail = 90007
-    }
+        Fail = 90007,
+
+        /// <summary>
+        /// 参数错误
+        /// </summary>
+        ParameterError = 90008
+	}
 }

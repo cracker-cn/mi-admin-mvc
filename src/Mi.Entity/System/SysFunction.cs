@@ -6,7 +6,7 @@ namespace Mi.Entity.System
     /// 功能
     /// </summary>
     [Table("SysFunction")]
-    public class SysFunction : EntityBase, ISortField, IParentIdField<long>, IChildrenField<string>
+    public class SysFunction : EntityBase, ISort, IParentId<long>, IChildren<string>
     {
         /// <summary>
         /// 功能名称
