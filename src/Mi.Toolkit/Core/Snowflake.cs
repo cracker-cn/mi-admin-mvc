@@ -11,6 +11,9 @@
     /// </remarks>
     public class Snowflake
     {
+        private static Lazy<Snowflake> lazyInstance => new Lazy<Snowflake>(() => new Snowflake(2, 3));
+        public static Snowflake Instance => lazyInstance.Value;
+
         /// <summary>
         ///     雪花ID
         /// </summary>
@@ -169,7 +172,7 @@
         /// <returns></returns>
         private long GetCurrentTimestamp()
         {
-            return (long)(DateTime.Now - StartTimestamp).TotalMilliseconds;
+            return (long)Math.Round((DateTime.Now - StartTimestamp).TotalMicroseconds);
         }
 
         #endregion 核心方法

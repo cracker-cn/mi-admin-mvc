@@ -8,6 +8,6 @@ namespace Mi.Toolkit.Helper
         /// 雪花ID
         /// </summary>
         /// <returns></returns>
-        public static long SnowflakeId() => new Snowflake(1,2).NextId();
+        public static long SnowflakeId() => Snowflake.Instance.NextId();
     }
 }

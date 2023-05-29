@@ -12,7 +12,7 @@
                     }
                     @foreach (var item in Model)
                     {
-                        <input @(item.Checked ? "checked" : "") type="checkbox" value="@item.Value" title="@(item.Name + $"【{item.Remark}】")" name="roleIds[@(index++)]" lay-skin="tag">
+                        <input @(item.Checked ? "checked" : "") type="checkbox" value="@item.Value" title="@(item.Name + $"【{item.Remark}】")" name="roleIds[@(index++)]" lay-filter="role-id" lay-skin="tag">
                     }
                 </div>
             </div>
@@ -38,12 +38,18 @@
             let common = layui.common;
 
             form.on('submit(save)', function (data) {
-                let param = { ...data.field }
-                param.userId = '@ViewBag.Id'
+                let param = { userId: '@ViewBag.Id' }
+                let i = 0
+                for(const key in data.field){
+                    if (key.indexOf('roleIds') != -1) {
+                        param[`roleIds[${i}]`] = data.field[key]
+                        delete data.field[key]
+                        i += 1
+                    }
+                }
                 $.ajax({
                     url: '/System/User/SetUserRole',
                     data: param,
-                    contentType: 'application/x-www-form-urlencoded',
                     dataType: 'json',
                     type: 'post',
                     success: function (result) {

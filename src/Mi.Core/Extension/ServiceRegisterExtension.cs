@@ -16,7 +16,8 @@ namespace Mi.Core.Extension
         {
             service.AddDbContext<MIDB>(opt =>
             {
-                opt.UseSqlite(DotNetService.Get<IConfiguration>().GetConnectionString("Sqlite")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                opt.UseSqlite(DotNetService.Get<IConfiguration>().GetConnectionString("Sqlite"))
+                .EnableSensitiveDataLogging();
             });
             service.AutoInject();
             service.AddSingleton<MessageModel>();
