@@ -73,6 +73,11 @@ namespace Mi.IRepository.BASE
 
         IList<T> GetAll(Expression<Func<T, bool>> exp);
 
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
         Task<T> GetAsync(object id);
 
         Task<T> GetAsync(Expression<Func<T, bool>> exp);

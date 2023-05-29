@@ -25,7 +25,12 @@ namespace Mi.Core.Extension
 			return new MessageModel(EnumResponseCode.Fail, msg);
 		}
 
-		public static MessageModel ParameterError(this MessageModel model, string msg)
+        public static MessageModel SuccessOrFail(this MessageModel model,bool successed)
+        {
+            return successed ? model.Success() : model.Fail();
+        }
+
+        public static MessageModel ParameterError(this MessageModel model, string msg)
 		{
 			return new MessageModel(EnumResponseCode.ParameterError, msg);
 		}

@@ -12,3 +12,4 @@ global using Mi.Toolkit.Helper;
 global using Mi.Toolkit.ICore;
 
 global using Microsoft.Extensions.DependencyInjection;
+global using Mi.Core.CommonOption;

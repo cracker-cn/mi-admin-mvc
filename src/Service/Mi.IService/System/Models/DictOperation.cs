@@ -1,8 +1,11 @@
-﻿namespace Mi.Entity.System
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mi.IService.System.Models
 {
-    [Table("SysDict")]
-    public class SysDict : EntityBase, IParentId<long>, ISort, IRemark
+    public class DictOperation
     {
+        public long DictId { get; set; }
+
         /// <summary>
         /// 字典名称
         /// </summary>
@@ -20,13 +23,8 @@
         /// </summary>
         public string? Value { get; set; }
 
-        /// <summary>
-        /// 父级Key
-        /// </summary>
-        public string? ParentKey { get; set; }
-
-        public int Sort { get; set; }
         public long ParentId { get; set; }
         public string? Remark { get; set; }
+        public int Sort { get; set; }
     }
 }
