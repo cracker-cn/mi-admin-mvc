@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Mi.Toolkit.Helper
+namespace Mi.Core.Toolkit.Helper
 {
     /// <summary>
     /// 加密

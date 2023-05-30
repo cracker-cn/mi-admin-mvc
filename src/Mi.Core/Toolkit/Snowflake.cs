@@ -1,4 +1,4 @@
-﻿namespace Mi.Toolkit.Core
+﻿namespace Mi.Core.Toolkit
 {
     /// <summary>
     /// 雪花算法

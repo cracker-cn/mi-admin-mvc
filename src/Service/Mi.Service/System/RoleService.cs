@@ -1,4 +1,6 @@
-﻿namespace Mi.Service.System
+﻿using Mi.Core.Toolkit.API;
+
+namespace Mi.Service.System
 {
     public class RoleService : IRoleService, IScoped
     {

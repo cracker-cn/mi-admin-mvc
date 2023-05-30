@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mi.Toolkit.Extension
+namespace Mi.Core.Toolkit.Extension
 {
     public static class ObjectExtension
     {

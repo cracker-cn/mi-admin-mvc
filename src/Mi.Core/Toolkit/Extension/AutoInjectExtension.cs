@@ -1,12 +1,14 @@
-﻿using Mi.Toolkit.Helper;
-using Mi.Toolkit.ICore;
+﻿using Mi.Core.Toolkit.API;
+using Mi.Core.Toolkit.Helper;
 
-namespace Mi.Toolkit.Extension
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Mi.Core.Toolkit.Extension
 {
     /// <summary>
     /// 自动服务注册
     /// </summary>
-    public static class ServiceRegisterExtension
+    public static class AutoInjectExtension
     {
         /// <summary>
         /// 注册系统服务，使用继承注册器<see cref="IServiceRegistrar" />或<see cref="IScoped" />或<see cref="ITransient" />或

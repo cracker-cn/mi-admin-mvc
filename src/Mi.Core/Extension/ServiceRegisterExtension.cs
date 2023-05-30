@@ -1,8 +1,9 @@
-﻿using Mi.Core.GlobalUser;
+﻿using Mi.Core.Factory;
+using Mi.Core.GlobalUser;
 using Mi.Core.Models;
 using Mi.Core.Service;
 using Mi.Repository.DB;
-using Mi.Toolkit.Extension;
+using Mi.Core.Toolkit.Extension;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,8 @@ namespace Mi.Core.Extension
             service.AddSingleton<MessageModel>();
             service.AddHttpContextAccessor();
             service.AddMemoryCache();
-            service.AddScoped<IMiUser,MiUser>();
+            service.AddScoped<IMiUser, MiUser>();
+            service.AddScoped<CreatorFactory>();
         }
     }
 }

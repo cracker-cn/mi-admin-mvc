@@ -3,7 +3,7 @@ using System.Runtime.Loader;
 
 using Microsoft.Extensions.DependencyModel;
 
-namespace Mi.Toolkit.Helper
+namespace Mi.Core.Toolkit.Helper
 {
     public class RuntimeHelper
     {

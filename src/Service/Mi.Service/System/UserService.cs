@@ -1,6 +1,7 @@
 ﻿using Mi.Core.GlobalUser;
+using Mi.Core.Toolkit.API;
 using Mi.Entity.System;
-using Mi.Toolkit.Helper;
+using Mi.Core.Toolkit.Helper;
 
 namespace Mi.Service.System
 {

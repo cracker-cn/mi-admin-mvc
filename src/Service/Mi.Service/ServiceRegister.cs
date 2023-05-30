@@ -1,4 +1,5 @@
-﻿using Mi.IService.System.Models.Result;
+﻿using Mi.Core.Toolkit.API;
+using Mi.IService.System.Models.Result;
 
 namespace Mi.Service
 {
@@ -10,6 +11,7 @@ namespace Mi.Service
             {
                 cfg.CreateMap<SysDict, SysDictItem>();
                 cfg.CreateMap<DictOperation, SysDict>();
+                cfg.CreateMap<FunctionOperation, SysFunction>();
             });
         }
     }

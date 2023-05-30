@@ -3,6 +3,7 @@
 using Dapper;
 
 using Mi.Core.Models;
+using Mi.Core.Toolkit.API;
 using Mi.Repository.Extension;
 
 namespace Mi.Repository.System

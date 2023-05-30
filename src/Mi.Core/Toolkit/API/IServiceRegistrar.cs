@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Mi.Toolkit.ICore
+namespace Mi.Core.Toolkit.API
 {
     public interface IServiceRegistrar
     {

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
-namespace Mi.Toolkit.Extension
+namespace Mi.Core.Toolkit.Extension
 {
 	public static class ExpressionLogicalOperatorsExtension
 	{

@@ -1,6 +1,4 @@
-﻿using Mi.Toolkit.Core;
-
-namespace Mi.Toolkit.Helper
+﻿namespace Mi.Core.Toolkit.Helper
 {
     public class IdHelper
     {

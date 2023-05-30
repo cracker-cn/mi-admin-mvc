@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Mi.Toolkit.Extension
+namespace Mi.Core.Toolkit.Extension
 {
     public static class StringExtension
     {

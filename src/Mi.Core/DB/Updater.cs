@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 
 using Mi.Entity.BASE;
-using Mi.Toolkit.Helper;
+using Mi.Core.Toolkit.Helper;
 
 namespace Mi.Core.DB
 {

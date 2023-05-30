@@ -10,7 +10,7 @@ namespace Mi.Entity.BASE
         [DefaultValue(-1)]
         public long CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.Now.ToLocalTime();
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
 
