@@ -18,7 +18,7 @@ namespace Mi.Repository.DB
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //	optionsBuilder.UseSqlite("Data Source=D:\\github\\mi-admin-mvc\\db\\mi.db");
+        //    optionsBuilder.UseSqlite("Data Source=D:\\github\\mi-admin-mvc\\db\\mi.db");
         //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

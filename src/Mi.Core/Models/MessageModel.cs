@@ -44,5 +44,12 @@ namespace Mi.Core.Models
             Message = "查询" + (successed ? "成功" : "失败");
             Result = result;
         }
+
+        public MessageModel(T? result)
+        {
+            Code = EnumResponseCode.Success;
+            Message = "成功";
+            Result = result;
+        }
     }
 }

@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 });
 builder.Services.AddRequiredService();
 var app = builder.Build();
-DotNetService.Instance = app.Services;
+DotNetService.Initialization(builder.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

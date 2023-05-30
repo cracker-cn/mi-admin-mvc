@@ -1,4 +1,5 @@
-﻿using Mi.IService.System.Models.Result;
+﻿using Mi.Entity.System;
+using Mi.IService.System.Models.Result;
 
 namespace Mi.IService.System
 {
@@ -19,6 +20,8 @@ namespace Mi.IService.System
         Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation);
 
         Task<MessageModel> RemoveDictAsync(IList<string> ids);
+
+        Task<MessageModel<SysDict>> GetAsync(long id);
 
         #endregion Admin_UI
     }

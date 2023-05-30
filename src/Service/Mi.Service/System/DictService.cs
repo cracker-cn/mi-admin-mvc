@@ -156,6 +156,13 @@ namespace Mi.Service.System
             return _message.SuccessOrFail(flag);
         }
 
+        public async Task<MessageModel<SysDict>> GetAsync(long id)
+        {
+            var dict = await _dictRepository.GetAsync(id);
+
+            return new MessageModel<SysDict>(dict);
+        }
+
         #endregion Admin_UI
     }
 }

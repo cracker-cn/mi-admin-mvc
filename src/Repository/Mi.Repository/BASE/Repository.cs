@@ -1,7 +1,5 @@
 ﻿using Dapper;
 
-using Mi.Entity.BASE;
-
 namespace Mi.Repository.BASE
 {
     public class Repository<T> where T : class, new()

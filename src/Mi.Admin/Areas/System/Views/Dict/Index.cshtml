@@ -8,11 +8,11 @@
             <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">角色名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="roleName" class="layui-input">
+                    <input type="text" name="dictName" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="dict-query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
                 </button>
@@ -27,19 +27,19 @@
 <!--table-->
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="role-table" lay-filter="role-table"></table>
+        <table id="dict-table" lay-filter="dict-table"></table>
     </div>
 </div>
 
 @section Scripts{
-    <script type="text/html" id="role-toolbar">
+    <script type="text/html" id="dict-toolbar">
         <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
             <i class="layui-icon layui-icon-add-1"></i>
             新增
         </button>
     </script>
 
-    <script type="text/html" id="role-bar">
+    <script type="text/html" id="dict-bar">
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
     </script>
@@ -50,11 +50,11 @@
             let form = layui.form;
             let $ = layui.jquery;
             let common = layui.common;
-            let pageRootUrl = "/System/Role/";
+            let pageRootUrl = "/System/Dict/";
 
             table.render({
-                elem: '#role-table',
-                url: pageRootUrl + 'GetRoleList',
+                elem: '#dict-table',
+                url: pageRootUrl + 'GetDictList',
                 page: true,
                 request: {
                     limitName: 'size'
@@ -67,7 +67,7 @@
                     },
                     {
                         title: '角色名',
-                        field: 'roleName',
+                        field: 'dictName',
                         align: 'center'
                     },
                     {
@@ -82,13 +82,13 @@
                     },
                     {
                         title: '操作',
-                        toolbar: '#role-bar',
+                        toolbar: '#dict-bar',
                         align: 'center',
                         width: 130
                     }
                 ]],
                 skin: 'line',
-                toolbar: '#role-toolbar',
+                toolbar: '#dict-toolbar',
                 defaultToolbar: [{
                     title: '刷新',
                     layEvent: 'refresh',
@@ -104,7 +104,7 @@
                 }
             });
 
-            table.on('toolbar(role-table)', function (obj) {
+            table.on('toolbar(dict-table)', function (obj) {
                 if (obj.event === 'add') {
                     window.add();
                 } else if (obj.event === 'refresh') {
@@ -112,7 +112,7 @@
                 }
             });
 
-            table.on('tool(role-table)', function (obj) {
+            table.on('tool(dict-table)', function (obj) {
                 if (obj.event === 'remove') {
                     window.remove(obj);
                 } else if (obj.event === 'edit') {
@@ -120,22 +120,22 @@
                 }
             });
 
-            form.on('submit(role-query)', function (data) {
-                table.reload('role-table', {
+            form.on('submit(dict-query)', function (data) {
+                table.reload('dict-table', {
                     where: data.field
                 })
                 return false;
             });
 
             $("#btnReset").click(function () {
-                $("input[name='roleName']").val('');
-                table.reload('role-table', {
+                $("input[name='dictName']").val('');
+                table.reload('dict-table', {
                     where: {}
                 })
             })
 
             window.refresh = function (param) {
-                table.reload('role-table');
+                table.reload('dict-table');
             }
 
             window.add = function () {
@@ -159,14 +159,14 @@
             }
 
             window.remove = function (obj) {
-                layer.confirm('确定要删除该角色', {
+                layer.confirm('确定要删除该字典？', {
                     icon: 3,
                     title: '提示'
                 }, function (index) {
                     layer.close(index);
                     let loading = layer.load();
                     $.ajax({
-                        url: pageRootUrl + "RemoveRole?id=" + obj.data['id'],
+                        url: pageRootUrl + "RemoveDict?id=" + obj.data['id'],
                         dataType: 'json',
                         type: 'post',
                         success: function (result) {
