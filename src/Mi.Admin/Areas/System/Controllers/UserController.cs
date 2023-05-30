@@ -37,6 +37,7 @@ namespace Mi.Admin.Areas.System.Controllers
         [HttpPost]
         public async Task<MessageModel> GetUserList([FromBody] UserSearch search)
         {
+            throw new Ouch("12");
             return await _userService.GetUserListAsync(search);
         }
 

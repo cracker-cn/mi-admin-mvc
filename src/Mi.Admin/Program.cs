@@ -1,4 +1,5 @@
 using Mi.Core.Service;
+using Mi.Core.WebComponent.Filter;
 
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
@@ -6,7 +7,10 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
+builder.Services.AddControllersWithViews(opt =>
+{
+	opt.Filters.Add<GlobalExceptionFilter>();
+}).AddJsonOptions(opt =>
 {
 	opt.JsonSerializerOptions.Converters.Add(new LongConverter());
 	opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());

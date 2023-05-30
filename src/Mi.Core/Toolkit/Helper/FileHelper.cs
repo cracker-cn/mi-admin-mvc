@@ -8,6 +8,8 @@
         /// <param name="path">文件路径</param>
         public static void Delete(string path)
         {
+            if (!File.Exists(path))
+                throw new Ouch("文件不存在");
             File.Delete(path);
         }
 
