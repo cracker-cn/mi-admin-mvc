@@ -10,5 +10,7 @@ namespace Mi.IService.System.Models
         public string? Vague { get; set; }
 
         public string? Remark { get; set; }
+
+        public long? ParentId { get; set; }
     }
 }

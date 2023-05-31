@@ -4,7 +4,7 @@ namespace Mi.IService.System.Models
 {
     public class DictOperation
     {
-        public long DictId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 字典名称

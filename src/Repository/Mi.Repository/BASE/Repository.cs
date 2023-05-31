@@ -18,5 +18,10 @@ namespace Mi.Repository.BASE
             result.Rows = (await _db.Connection.QueryAsync<T>(DBHelper.GetPaging(model.Page, model.Size, sql), param)).ToList();
             return result;
         }
+
+        public async Task<List<T>> GetListAsync(string sql)
+        {
+            return (await _db.Connection.QueryAsync<T>(sql)).ToList();
+        }
     }
 }

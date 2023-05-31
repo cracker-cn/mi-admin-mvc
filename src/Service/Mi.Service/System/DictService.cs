@@ -7,6 +7,7 @@ using Dapper;
 using Mi.Core.GlobalVar;
 using Mi.Core.Service;
 using Mi.Core.Toolkit.API;
+using Mi.Entity.Field;
 using Mi.IService.System.Models.Result;
 using Mi.Repository.BASE;
 
@@ -34,7 +35,7 @@ namespace Mi.Service.System
 
         public async Task<IList<Option>> GetOptionsAsync(string key)
         {
-            return await Task.FromResult(_Options.Where(x => x.Name == key).ToList());
+            return await Task.FromResult(Options.Where(x => x.Name == key).ToList());
         }
 
         public async Task<string> GetValueAsync(string key)
@@ -82,17 +83,17 @@ namespace Mi.Service.System
 
         private List<Option> GetOptions()
         {
-            return _dictRepository.GetAll().Select(x => new Option { Name = x.Key, Value = x.Value }).ToList();
+            return GetAll().Select(x => new Option { Name = x.Key, Value = x.Value }).ToList();
         }
 
-        private List<Option> _Options => _cache.GetOrCreate(CacheKeyConst.DICT, opt => GetOptions()) ?? GetOptions();
+        private List<Option> Options => _cache.GetOrCreate(CacheKeyConst.DICT, opt => GetOptions()) ?? GetOptions();
 
         #region Admin_UI
 
         public async Task<MessageModel<PagingModel<SysDictItem>>> GetDictListAsync(DictSearch search)
         {
             var repo = DotNetService.Get<Repository<SysDictItem>>();
-            var sql = new StringBuilder(@"select d.*,(select count(*) from SysDict where id = d.ParentId) ChildCount from SysDict d where d.IsDeleted = 0");
+            var sql = new StringBuilder(@"select d.*,(select count(*) from SysDict where id = d.ParentId) ChildCount,(select name from SysDict where id=d.ParentId) ParentName from SysDict d where d.IsDeleted = 0");
             var parameters = new DynamicParameters();
             if (!string.IsNullOrEmpty(search.Vague))
             {
@@ -104,13 +105,18 @@ namespace Mi.Service.System
                 sql.Append(" and d.remark like @remark ");
                 parameters.Add("remark", "%" + search.Remark + "%");
             }
+            if(search.ParentId.HasValue && search.ParentId > 0)
+            {
+                sql.Append(" and d.ParentId = @parentId ");
+                parameters.Add("parentId", search.ParentId);
+            }
 
             return new MessageModel<PagingModel<SysDictItem>>(true, await repo.GetPagingAsync(search, sql.ToString(), parameters));
         }
 
         public async Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation)
         {
-            if (operation.DictId <= 0)
+            if (operation.Id <= 0)
             {
                 var dict = _mapper.Map<SysDict>(operation);
                 dict.Id = IdHelper.SnowflakeId();
@@ -124,7 +130,7 @@ namespace Mi.Service.System
             }
             else
             {
-                var dict = await _dictRepository.GetAsync(operation.DictId);
+                var dict = await _dictRepository.GetAsync(operation.Id);
                 if (operation.ParentId > 0 && operation.ParentId != dict.ParentId)
                 {
                     dict.ParentKey = _dictRepository.Get(dict.ParentId).Key;
@@ -161,6 +167,16 @@ namespace Mi.Service.System
             var dict = await _dictRepository.GetAsync(id);
 
             return new MessageModel<SysDict>(dict);
+        }
+
+        public List<SysDict> GetAll() => _dictRepository.GetAll().ToList();
+
+        public async Task<List<Option>> GetParentListAsync()
+        {
+            var sql = "select Name,Id AS Value from SysDict where IsDeleted = 0 and Id in (select ParentId from SysDict where IsDeleted = 0) ";
+            var repo = DotNetService.Get<Repository<Option>>();
+            
+            return await repo.GetListAsync(sql);
         }
 
         #endregion Admin_UI

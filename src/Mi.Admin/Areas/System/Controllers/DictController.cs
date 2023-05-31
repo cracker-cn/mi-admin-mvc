@@ -25,6 +25,7 @@ namespace Mi.Admin.Areas.System.Controllers
 
         public async Task<IActionResult> Edit(long id)
         {
+            ViewBag.Options = _dictService.GetAll();
             return View((await _dictService.GetAsync(id)).Result);
         }
 

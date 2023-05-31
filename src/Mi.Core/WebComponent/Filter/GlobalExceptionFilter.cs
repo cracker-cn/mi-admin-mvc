@@ -1,4 +1,5 @@
-﻿using Mi.Core.Extension;
+﻿using Mi.Core.Enum;
+using Mi.Core.Extension;
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,16 @@ namespace Mi.Core.WebComponent.Filter
         {
             if (!context.ExceptionHandled)
             {
-                //context.ActionDescriptor
-                context.Result = new ObjectResult(_message.Fail(context.Exception.Message));
+                if(context.Exception is Ouch)
+                {
+                    context.Result = new ObjectResult(_message.Fail(context.Exception.Message));
+                }
+                else
+                {
+                    context.Result = new ObjectResult(new MessageModel(EnumResponseCode.Error,context.Exception.Message));
+                }
             }
             context.ExceptionHandled = true;
-            var t = context.Result.GetType();
-            Console.WriteLine("=======hello");
         }
     }
 }

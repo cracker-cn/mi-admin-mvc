@@ -1,20 +1,65 @@
 ﻿@model SysDict
-
+@{
+    var list = ViewBag.Options as List<SysDict>;
+}
 <div class="layui-form">
     @Html.HiddenFor(x=>x.Id)
     <div class="mainBox">
         <div class="main-container">
+            @if(list != null && list.Count > 0)
+            {
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级</label>
+                    <div class="layui-input-block">
+                        <select name="parentId">
+                            <option value="0">请选择字典上级</option>
+                            @foreach (var item in list.Where(x=>x.Id != Model.Id))
+                            {
+                                @if(item.Id == Model.ParentId)
+                                {
+                                    <option selected="selected" value="@item.Id">@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
             <div class="layui-form-item">
-                <label class="layui-form-label">字典名称</label>
+                <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" value="@Model.Name" lay-verify="required" autocomplete="off" placeholder="请输入用户名"
+                    <input type="text" name="name" value="@Model.Name" lay-verify="required" autocomplete="off" placeholder="请输入字典名称"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">键名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="key" value="@Model.Key" lay-verify="required" autocomplete="off" placeholder="请输入字典键名"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">字典值</label>
+                <div class="layui-input-block">
+                    <input type="text" name="value" value="@Model.Value" autocomplete="off" placeholder="请输入字典值"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" value="@Model.Sort" autocomplete="off"
                            class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-block">
-                    <input type="text" name="remark" value="@Model.Remark" lay-verify="required" autocomplete="off" placeholder="请输入备注"
+                    <input type="text" name="remark" value="@Model.Remark" autocomplete="off" placeholder="请输入备注"
                            class="layui-input">
                 </div>
             </div>
@@ -23,7 +68,7 @@
     <div class="bottom">
         <div class="button-container">
             <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit
-                    lay-filter="role-save">
+                    lay-filter="save">
                 <i class="layui-icon layui-icon-ok"></i>
                 提交
             </button>
@@ -39,10 +84,11 @@
             let $ = layui.jquery;
             let common = layui.common;
 
-            form.on('submit(role-save)', function (data) {
-                var str = $.param(data.field)
+            form.on('submit(save)', function (data) {
                 $.ajax({
-                    url: '/System/Role/@(Model.Id > 0 ? "UpdateRole" : "AddRole")?' + str,
+                    url: '/System/Dict/AddOrUpdateDict',
+                    data: JSON.stringify(data.field),
+                    contentType:'application/json',
                     dataType: 'json',
                     type: 'post',
                     success: function (result) {

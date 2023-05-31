@@ -13,6 +13,8 @@ namespace Mi.IService.System
 
         Task<IList<Option>> GetOptionsAsync(string key);
 
+        List<SysDict> GetAll();
+
         #region Admin_UI
 
         Task<MessageModel<PagingModel<SysDictItem>>> GetDictListAsync(DictSearch search);
@@ -22,6 +24,8 @@ namespace Mi.IService.System
         Task<MessageModel> RemoveDictAsync(IList<string> ids);
 
         Task<MessageModel<SysDict>> GetAsync(long id);
+
+        Task<List<Option>> GetParentListAsync();
 
         #endregion Admin_UI
     }
