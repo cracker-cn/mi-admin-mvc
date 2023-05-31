@@ -1,4 +1,5 @@
 ﻿using Mi.Core.CommonOption;
+using Mi.Core.Models.UI;
 using Mi.Core.Toolkit.API;
 using Mi.IService.System.Models.Result;
 
@@ -20,6 +21,25 @@ namespace Mi.Service.System
             _permissionRepository = permissionRepository;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+        }
+
+        public async Task<List<PaMenuModel>> GetSiderMenuAsync()
+        {
+            var menu = new List<PaMenuModel>
+            {
+                new PaMenuModel(0,"工作空间","",new List<PaMenuModel>
+                {
+                    new PaMenuModel(1,"仪表板","/Workspace/Dashboard")
+                }),
+                new PaMenuModel(0,"系统管理","",new List<PaMenuModel>
+                {
+                    new PaMenuModel(1,"用户管理","/System/User"),
+                    new PaMenuModel(1,"角色管理","/System/Role"),
+                    new PaMenuModel(1,"字典管理","/System/Dict"),
+                })
+            };
+
+            return menu;
         }
 
         public async Task<MessageModel<IList<UserRoleOption>>> GetUserRolesAsync(long userId)

@@ -1,4 +1,4 @@
-﻿using Mi.Core.CommonOption;
+﻿using Mi.Core.Models.UI;
 using Mi.IService.System.Models.Result;
 
 namespace Mi.IService.System
@@ -8,5 +8,11 @@ namespace Mi.IService.System
         Task<MessageModel> SetUserRoleAsync(long userId, List<long> roleIds);
 
         Task<MessageModel<IList<UserRoleOption>>> GetUserRolesAsync(long userId);
+
+        /// <summary>
+        /// 获取当前用户可查看的侧边菜单
+        /// </summary>
+        /// <returns></returns>
+        Task<List<PaMenuModel>> GetSiderMenuAsync();
     }
 }

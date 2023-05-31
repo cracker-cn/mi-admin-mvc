@@ -31,7 +31,7 @@ namespace Mi.Service.System
             var list = new List<SysFunctionGroup>();
             foreach (var id in operation.FunctionIds)
             {
-                var item = _creatorFactory.New<SysFunctionGroup>();
+                var item = _creatorFactory.NewEntity<SysFunctionGroup>();
                 item.GroupName = operation.GroupName;
                 item.Remark = operation.Remark;
                 item.FunctionId = id;

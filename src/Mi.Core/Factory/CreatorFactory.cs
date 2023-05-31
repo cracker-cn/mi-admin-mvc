@@ -1,6 +1,7 @@
 ﻿using Mi.Core.GlobalUser;
 using Mi.Entity.BASE;
 using Mi.Core.Toolkit.Helper;
+using Mi.Core.Models.UI;
 
 namespace Mi.Core.Factory
 {
@@ -13,7 +14,7 @@ namespace Mi.Core.Factory
             _miUser = miUser;
         }
 
-        public T New<T>() where T : EntityBase, new()
+        public T NewEntity<T>() where T : EntityBase, new()
         {
             var entity = new T();
             entity.Id = IdHelper.SnowflakeId();
