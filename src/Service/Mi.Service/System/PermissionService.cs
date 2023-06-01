@@ -23,7 +23,7 @@ namespace Mi.Service.System
             _roleRepository = roleRepository;
         }
 
-        public async Task<List<PaMenuModel>> GetSiderMenuAsync()
+        public Task<List<PaMenuModel>> GetSiderMenuAsync()
         {
             var menu = new List<PaMenuModel>
             {
@@ -35,11 +35,12 @@ namespace Mi.Service.System
                 {
                     new PaMenuModel(1,"用户管理","/System/User"),
                     new PaMenuModel(1,"角色管理","/System/Role"),
-                    new PaMenuModel(1,"字典管理","/System/Dict"),
+                    new PaMenuModel(1,"功能管理","/System/Function"),
+                    new PaMenuModel(1,"数据字典","/System/Dict"),
                 })
             };
 
-            return menu;
+            return Task.FromResult(menu);
         }
 
         public async Task<MessageModel<IList<UserRoleOption>>> GetUserRolesAsync(long userId)

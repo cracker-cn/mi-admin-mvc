@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using Mi.Core.Factory;
-using Mi.Core.Toolkit.API;
 using Mi.Entity.System.Enum;
 
 namespace Mi.Service.System
@@ -13,6 +12,7 @@ namespace Mi.Service.System
         private readonly IMiUser _miUser;
         private readonly IFunctionRepository _functionRepository;
         private readonly CreatorFactory _creatorFactory;
+        private readonly IList<SysFunction> _allFunctions;
 
         public FunctionService(IMapper mapper, MessageModel message, IMiUser miUser
             , IFunctionRepository functionRepository
@@ -23,11 +23,12 @@ namespace Mi.Service.System
             _miUser = miUser;
             _functionRepository = functionRepository;
             _creatorFactory = creatorFactory;
+            _allFunctions = functionRepository.GetAll();
         }
 
         public async Task<MessageModel> AddOrUpdateFunctionAsync(FunctionOperation operation)
         {
-            if (operation.FunctionId <= 0)
+            if (operation.Id <= 0)
             {
                 var func = _mapper.Map<SysFunction>(operation);
                 func.CreatedBy = _miUser.UserId;
@@ -47,8 +48,8 @@ namespace Mi.Service.System
             }
             else
             {
-                var func = _functionRepository.Get(operation.FunctionId);
-                operation.CopyTo(func,"Id");
+                var func = _functionRepository.Get(operation.Id);
+                operation.CopyTo(func, "Id");
                 func.ModifiedBy = _miUser.UserId;
                 func.ModifiedOn = TimeHelper.LocalTime();
                 await _functionRepository.UpdateAsync(func);
@@ -68,6 +69,44 @@ namespace Mi.Service.System
                 return EnumTreeNode.LeafNode;
 
             return EnumTreeNode.RootNode;
+        }
+
+        public Task<SysFunction> GetAsync(long id)
+        {
+            return _functionRepository.GetAsync(id);
+        }
+
+        public async Task<IList<SysFunction>> GetFunctionListAsync(FunctionSearch search)
+        {
+            var exp = ExpressionCreator.New<SysFunction>()
+                .AndIf(!string.IsNullOrEmpty(search.FunctionName), x => x.FunctionName.Contains(search.FunctionName!))
+                .AndIf(!string.IsNullOrEmpty(search.Url), x => x.Url != null && x.Url.Contains(search.Url!));
+
+            var list = await _functionRepository.GetAllAsync(exp);
+
+            return list;
+        }
+
+        public IList<TreeOption> GetFunctionTree()
+        {
+            var topLevels = _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode);
+            return topLevels.Select(x => new TreeOption
+            {
+                Name = x.FunctionName,
+                Value = x.Id.ToString(),
+                Children = GetFunctionChildNode(x.Id)
+            }).ToList();
+        }
+
+        private IList<TreeOption> GetFunctionChildNode(long id)
+        {
+            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id);
+            return children.Select(x => new TreeOption
+            {
+                Name = x.FunctionName,
+                Value = x.Id.ToString(),
+                Children = GetFunctionChildNode(x.Id)
+            }).ToList();
         }
     }
 }

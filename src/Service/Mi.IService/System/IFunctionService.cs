@@ -8,5 +8,11 @@ namespace Mi.IService.System
         Task<MessageModel> AddOrUpdateFunctionAsync(FunctionOperation operation);
 
         EnumTreeNode CheckFunctionNode(SysFunction node);
+
+        Task<IList<SysFunction>> GetFunctionListAsync(FunctionSearch search);
+
+        IList<TreeOption> GetFunctionTree();
+
+        Task<SysFunction> GetAsync(long id); 
     }
 }

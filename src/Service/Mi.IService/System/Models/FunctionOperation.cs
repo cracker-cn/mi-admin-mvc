@@ -6,18 +6,13 @@ namespace Mi.IService.System.Models
 {
     public class FunctionOperation
     {
-        public long FunctionId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 功能名称
         /// </summary>
         [NotNull]
         public string? FunctionName { get; set; }
-
-        /// <summary>
-        /// 树节点
-        /// </summary>
-        public EnumTreeNode Node { get; set; }
 
         /// <summary>
         /// 图标
