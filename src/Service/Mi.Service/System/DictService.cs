@@ -90,9 +90,9 @@ namespace Mi.Service.System
 
         #region Admin_UI
 
-        public async Task<MessageModel<PagingModel<SysDictItem>>> GetDictListAsync(DictSearch search)
+        public async Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search)
         {
-            var repo = DotNetService.Get<Repository<SysDictItem>>();
+            var repo = DotNetService.Get<Repository<DictItem>>();
             var sql = new StringBuilder(@"select d.*,(select count(*) from SysDict where id = d.ParentId) ChildCount,(select name from SysDict where id=d.ParentId) ParentName from SysDict d where d.IsDeleted = 0");
             var parameters = new DynamicParameters();
             if (!string.IsNullOrEmpty(search.Vague))
@@ -111,7 +111,7 @@ namespace Mi.Service.System
                 parameters.Add("parentId", search.ParentId);
             }
 
-            return new MessageModel<PagingModel<SysDictItem>>(true, await repo.GetPagingAsync(search, sql.ToString(), parameters));
+            return new MessageModel<PagingModel<DictItem>>(true, await repo.GetPagingAsync(search, sql.ToString(), parameters));
         }
 
         public async Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation)

@@ -30,7 +30,7 @@ namespace Mi.Admin.Areas.System.Controllers
         }
 
         [HttpPost]
-        public async Task<MessageModel<PagingModel<SysDictItem>>> GetDictList([FromBody] DictSearch search)
+        public async Task<MessageModel<PagingModel<DictItem>>> GetDictList([FromBody] DictSearch search)
             => await _dictService.GetDictListAsync(search);
 
         [HttpPost]

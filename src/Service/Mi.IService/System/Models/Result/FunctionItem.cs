@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Mi.Entity.Field;
 using Mi.Entity.System.Enum;
 
-namespace Mi.IService.System.Models
+namespace Mi.IService.System.Models.Result
 {
-    public class FunctionOperation
+    public class FunctionItem : IChildren<IList<FunctionItem>>
     {
         public long Id { get; set; }
 
@@ -27,7 +28,7 @@ namespace Mi.IService.System.Models
         /// <summary>
         /// 功能类型
         /// </summary>
-        public int FunctionType { get; set; }
+        public EnumFunctionType FunctionType { get; set; }
 
         /// <summary>
         /// 授权码
@@ -36,5 +37,6 @@ namespace Mi.IService.System.Models
 
         public long ParentId { get; set; }
         public int Sort { get; set; }
+        public IList<FunctionItem>? Children { get; set; }
     }
 }

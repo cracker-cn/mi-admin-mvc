@@ -9,7 +9,7 @@ namespace Mi.Service
         {
             service.AddAutoMapper(cfg =>
             {
-                cfg.CreateMap<SysDict, SysDictItem>();
+                cfg.CreateMap<SysDict, DictItem>();
                 cfg.CreateMap<DictOperation, SysDict>();
                 cfg.CreateMap<FunctionOperation, SysFunction>();
             });

@@ -23,7 +23,6 @@ layui.config({
 	step:"step",		         // 分布表单组件
 	tag:"tag",			         // 多标签页组件
 	popup:"popup",               // 弹层封装
-	treetable:"treetable",       // 树状表格
 	dtree:"dtree",			     // 树结构
 	tinymce:"tinymce/tinymce",   // 编辑器
 	area:"area",			     // 省市级联  

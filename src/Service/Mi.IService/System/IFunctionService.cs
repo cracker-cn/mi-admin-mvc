@@ -1,5 +1,6 @@
 ﻿using Mi.Entity.System;
 using Mi.Entity.System.Enum;
+using Mi.IService.System.Models.Result;
 
 namespace Mi.IService.System
 {
@@ -9,10 +10,12 @@ namespace Mi.IService.System
 
         EnumTreeNode CheckFunctionNode(SysFunction node);
 
-        Task<IList<SysFunction>> GetFunctionListAsync(FunctionSearch search);
+        Task<IList<FunctionItem>> GetFunctionListAsync(FunctionSearch search);
 
         IList<TreeOption> GetFunctionTree();
 
-        Task<SysFunction> GetAsync(long id); 
+        Task<SysFunction> GetAsync(long id);
+
+        Task<MessageModel> RemoveFunctionAsync(IList<long> ids);
     }
 }

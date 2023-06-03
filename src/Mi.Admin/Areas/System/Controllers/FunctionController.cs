@@ -37,5 +37,9 @@ namespace Mi.Admin.Areas.System.Controllers
         [HttpPost]
         public async Task<MessageModel> AddOrUpdateFunction([FromBody] FunctionOperation operation)
             => await _functionService.AddOrUpdateFunctionAsync(operation);
+
+        [HttpPost]
+        public async Task<MessageModel> RemoveFunction([FromForm] IList<long> ids)
+            => await _functionService.RemoveFunctionAsync(ids);
     }
 }

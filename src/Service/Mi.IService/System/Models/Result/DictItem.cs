@@ -2,7 +2,7 @@
 
 namespace Mi.IService.System.Models.Result
 {
-    public class SysDictItem : SysDict
+    public class DictItem : SysDict
     {
         public int ChildCount { get; set; }
 

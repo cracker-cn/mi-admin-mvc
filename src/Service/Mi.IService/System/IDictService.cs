@@ -17,7 +17,7 @@ namespace Mi.IService.System
 
         #region Admin_UI
 
-        Task<MessageModel<PagingModel<SysDictItem>>> GetDictListAsync(DictSearch search);
+        Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search);
 
         Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation);
 

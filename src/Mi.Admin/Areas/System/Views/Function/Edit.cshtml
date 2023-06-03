@@ -1,5 +1,4 @@
 ﻿@using Mi.IService.System;
-@using Newtonsoft.Json;
 @model SysFunction
 @inject IFunctionService funcService
 
@@ -11,7 +10,7 @@
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-block">
                     <input type="radio" name="functionType" value="10" title="菜单" checked>
-                    <input type="radio" name="functionType" value="10" title="按钮">
+                    <input type="radio" name="functionType" value="20" title="按钮">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -79,7 +78,23 @@
             let parentTreeSelect = xmSelect.render({
                 el: '#parent-tree-select',
                 language: 'zn',
-                data: @Html.Raw(JsonConvert.SerializeObject(funcService.GetFunctionTree()))
+                radio: true,
+                name: 'parentId',
+                data: @Html.Raw(JsonConvert.SerializeObject(funcService.GetFunctionTree())),
+                prop: {
+                    name: 'Name',
+                    value: 'Value',
+                },
+                model: {
+                    label: {
+                        type: 'text',
+                        text: {
+                            left: '',
+                            right: '',
+                            separator: ', ',
+                        },
+                    }
+                },
             })
 
             form.on('submit(role-save)', function (data) {
@@ -95,8 +110,9 @@
                                 icon: 1,
                                 time: 1000
                             }, function () {
-                                parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
-                                parent.window.refresh()
+                                //parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                                //parent.window.refresh()
+                                parent.window.App.methods.closeDialogAndRefresh()
                             });
                         } else {
                             layer.msg(result.message, {

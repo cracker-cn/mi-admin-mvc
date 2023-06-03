@@ -2,6 +2,7 @@
 
 using Mi.Core.Factory;
 using Mi.Entity.System.Enum;
+using Mi.IService.System.Models.Result;
 
 namespace Mi.Service.System
 {
@@ -37,25 +38,51 @@ namespace Mi.Service.System
                 func.Node = CheckFunctionNode(func);
                 if (func.ParentId > 0)
                 {
-                    var parent = await _functionRepository.GetAsync(operation.ParentId);
-                    if (parent.Id > 0)
-                    {
-                        parent.Children += $",{func.Id}";
-                        parent.Node = CheckFunctionNode(parent);
-                    }
+                    await UpdateParentNodeAsync(func.ParentId, func.Id);
                 }
                 await _functionRepository.AddAsync(func);
             }
             else
             {
                 var func = _functionRepository.Get(operation.Id);
-                operation.CopyTo(func, "Id");
+                if (operation.ParentId > 0 && operation.ParentId != func.ParentId)
+                {
+                    await UpdateParentNodeAsync(operation.ParentId, func.Id, func.ParentId);
+                }
+                func.FunctionName = operation.FunctionName;
+                func.Icon = operation.Icon;
+                func.Url = operation.Url;
+                func.AuthorizationCode = operation.AuthorizationCode;
+                func.ParentId = operation.ParentId;
+                func.Sort = operation.Sort;
+                func.FunctionType = (EnumFunctionType)operation.FunctionType;
                 func.ModifiedBy = _miUser.UserId;
                 func.ModifiedOn = TimeHelper.LocalTime();
                 await _functionRepository.UpdateAsync(func);
             }
 
             return _message.Success();
+        }
+
+        private async Task UpdateParentNodeAsync(long parentId, long childId, long rawParentId = default)
+        {
+            var parent = await _functionRepository.GetAsync(parentId);
+            parent.Children += "," + childId;
+            parent.Node = CheckFunctionNode(parent);
+            parent.Children = parent.Children.Trim(',');
+            parent.ModifiedBy = _miUser.UserId;
+            parent.ModifiedOn = TimeHelper.LocalTime();
+            if (rawParentId > 0)
+            {
+                var raw = await _functionRepository.GetAsync(rawParentId);
+                raw.Children = (raw.Children ?? "").Replace(childId.ToString(), "").Trim(',');
+                raw.Node = CheckFunctionNode(raw);
+                raw.ModifiedBy = _miUser.UserId;
+                raw.ModifiedOn = TimeHelper.LocalTime();
+                await _functionRepository.UpdateAsync(raw);
+            }
+
+            await _functionRepository.UpdateAsync(parent);
         }
 
         public EnumTreeNode CheckFunctionNode(SysFunction node)
@@ -76,15 +103,46 @@ namespace Mi.Service.System
             return _functionRepository.GetAsync(id);
         }
 
-        public async Task<IList<SysFunction>> GetFunctionListAsync(FunctionSearch search)
+        public async Task<IList<FunctionItem>> GetFunctionListAsync(FunctionSearch search)
         {
             var exp = ExpressionCreator.New<SysFunction>()
                 .AndIf(!string.IsNullOrEmpty(search.FunctionName), x => x.FunctionName.Contains(search.FunctionName!))
                 .AndIf(!string.IsNullOrEmpty(search.Url), x => x.Url != null && x.Url.Contains(search.Url!));
 
-            var list = await _functionRepository.GetAllAsync(exp);
+            var searchList = _allFunctions.Where(exp.Compile());
+            var idArray = searchList.Select(s => s.ParentId).Concat(searchList.Where(p => p.Node == EnumTreeNode.RootNode).Select(p => p.Id)).Distinct();
+            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id));
+            var list = topLevel.Select(x => new FunctionItem
+            {
+                FunctionName = x.FunctionName,
+                Icon = x.Icon,
+                Url = x.Url,
+                FunctionType = x.FunctionType,
+                AuthorizationCode = x.AuthorizationCode,
+                ParentId = x.ParentId,
+                Sort = x.Sort,
+                Id = x.Id,
+                Children = GetFuncChildNode(x.Id)
+            }).ToList();
 
-            return list;
+            return await Task.FromResult(list);
+        }
+
+        private IList<FunctionItem> GetFuncChildNode(long id)
+        {
+            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id);
+            return children.Select(x => new FunctionItem
+            {
+                FunctionName = x.FunctionName,
+                Icon = x.Icon,
+                Url = x.Url,
+                FunctionType = x.FunctionType,
+                AuthorizationCode = x.AuthorizationCode,
+                ParentId = x.ParentId,
+                Sort = x.Sort,
+                Id = x.Id,
+                Children = GetFuncChildNode(x.Id)
+            }).ToList();
         }
 
         public IList<TreeOption> GetFunctionTree()
@@ -107,6 +165,22 @@ namespace Mi.Service.System
                 Value = x.Id.ToString(),
                 Children = GetFunctionChildNode(x.Id)
             }).ToList();
+        }
+
+        public async Task<MessageModel> RemoveFunctionAsync(IList<long> ids)
+        {
+            if (ids.Count <= 0) return _message.Fail("id不能为空");
+
+            var funcs = await _functionRepository.GetAllAsync(x=>ids.Contains(x.Id));
+            foreach (var item in funcs)
+            {
+                item.IsDeleted = 1;
+                item.ModifiedBy = _miUser.UserId;
+                item.ModifiedOn = TimeHelper.LocalTime();
+            }
+            await _functionRepository.UpdateManyAsync(funcs);
+
+            return _message.Success();
         }
     }
 }
