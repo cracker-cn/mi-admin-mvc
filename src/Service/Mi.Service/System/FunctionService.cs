@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 
 using Mi.Core.Factory;
+using Mi.Core.GlobalVar;
 using Mi.Entity.System.Enum;
 using Mi.IService.System.Models.Result;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Mi.Service.System
 {
@@ -12,19 +15,19 @@ namespace Mi.Service.System
         private readonly MessageModel _message;
         private readonly IMiUser _miUser;
         private readonly IFunctionRepository _functionRepository;
-        private readonly CreatorFactory _creatorFactory;
         private readonly IList<SysFunction> _allFunctions;
+        private readonly IMemoryCache _cache;
 
         public FunctionService(IMapper mapper, MessageModel message, IMiUser miUser
             , IFunctionRepository functionRepository
-            , CreatorFactory creatorFactory)
+            , IMemoryCache cache)
         {
             _mapper = mapper;
             _message = message;
             _miUser = miUser;
             _functionRepository = functionRepository;
-            _creatorFactory = creatorFactory;
-            _allFunctions = functionRepository.GetAll();
+            _cache = cache;
+            _allFunctions = GetFunctionsCache();
         }
 
         public async Task<MessageModel> AddOrUpdateFunctionAsync(FunctionOperation operation)
@@ -60,6 +63,7 @@ namespace Mi.Service.System
                 func.ModifiedOn = TimeHelper.LocalTime();
                 await _functionRepository.UpdateAsync(func);
             }
+            _cache.Remove(CacheKeyConst.FUNCTION);
 
             return _message.Success();
         }
@@ -111,7 +115,7 @@ namespace Mi.Service.System
 
             var searchList = _allFunctions.Where(exp.Compile());
             var idArray = searchList.Select(s => s.ParentId).Concat(searchList.Where(p => p.Node == EnumTreeNode.RootNode).Select(p => p.Id)).Distinct();
-            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id));
+            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id)).OrderBy(x=>x.Sort);
             var list = topLevel.Select(x => new FunctionItem
             {
                 FunctionName = x.FunctionName,
@@ -130,7 +134,7 @@ namespace Mi.Service.System
 
         private IList<FunctionItem> GetFuncChildNode(long id)
         {
-            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id);
+            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id).OrderBy(x => x.Sort);
             return children.Select(x => new FunctionItem
             {
                 FunctionName = x.FunctionName,
@@ -147,7 +151,7 @@ namespace Mi.Service.System
 
         public IList<TreeOption> GetFunctionTree()
         {
-            var topLevels = _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode);
+            var topLevels = _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
             return topLevels.Select(x => new TreeOption
             {
                 Name = x.FunctionName,
@@ -158,7 +162,7 @@ namespace Mi.Service.System
 
         private IList<TreeOption> GetFunctionChildNode(long id)
         {
-            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id);
+            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id).OrderBy(x=>x.Sort);
             return children.Select(x => new TreeOption
             {
                 Name = x.FunctionName,
@@ -179,8 +183,12 @@ namespace Mi.Service.System
                 item.ModifiedOn = TimeHelper.LocalTime();
             }
             await _functionRepository.UpdateManyAsync(funcs);
+            _cache.Remove(CacheKeyConst.FUNCTION);
 
             return _message.Success();
         }
+
+        public IList<SysFunction> GetFunctionsCache()
+            => _cache.GetOrCreate(CacheKeyConst.FUNCTION, opt => _functionRepository.GetAll()) ?? _functionRepository.GetAll();
     }
 }
