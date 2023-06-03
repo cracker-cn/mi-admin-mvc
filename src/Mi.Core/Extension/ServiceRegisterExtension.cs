@@ -8,6 +8,7 @@ using Mi.Core.Toolkit.Extension;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Mi.Core.Extension
 {
@@ -24,8 +25,18 @@ namespace Mi.Core.Extension
             service.AddSingleton<MessageModel>();
             service.AddHttpContextAccessor();
             service.AddMemoryCache();
+            service.AddSimpleCaptcha(builder =>
+            {
+                builder.UseMemoryStore();
+                builder.AddConfiguration(opt =>
+                {
+                    opt.CodeLength = 4;
+                    opt.ExpiryTime = TimeSpan.FromMinutes(2);
+                });
+            });
             service.AddScoped<IMiUser, MiUser>();
             service.AddScoped<CreatorFactory>();
+            service.AddScoped<CaptchaFactory>();
         }
     }
 }

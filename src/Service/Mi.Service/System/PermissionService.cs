@@ -1,4 +1,5 @@
-﻿using Mi.Core.Models.UI;
+﻿using Mi.Core.Factory;
+using Mi.Core.Models.UI;
 using Mi.Entity.System.Enum;
 using Mi.IService.System.Models.Result;
 
@@ -11,18 +12,21 @@ namespace Mi.Service.System
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IFunctionService _functionService;
+        private readonly CreatorFactory _creatorFactory;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
             , IUserRepository userRepository
             , IRoleRepository roleRepository
-            , IFunctionService functionService)
+            , IFunctionService functionService
+            , CreatorFactory creatorFactory)
         {
             _message = message;
             _permissionRepository = permissionRepository;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _functionService = functionService;
+            _creatorFactory = creatorFactory;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -76,6 +80,27 @@ namespace Mi.Service.System
             await _permissionRepository.UserRoleRepo.AddManyAsync(list);
 
             return _message.Success();
+        }
+
+        public async Task<MessageModel> RegisterAsync(string userName, string password)
+        {
+            if (userName.RegexValidate("[A-Za-z0-9]{4,12}"))
+            {
+                return _message.Fail("用户名只支持大小写字母和数字，最短4位，最长12位");
+            }
+            var user = _creatorFactory.NewEntity<SysUser>();
+            user.UserName = userName;
+            user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
+            user.Password = EncryptionHelper.GenEncodingPassword(password,user.PasswordSalt);
+
+            await _userRepository.AddAsync(user);
+
+            return _message.Success("注册成功，请等待管理员审核！");
+        }
+
+        public Task<MessageModel> LoginAsync(string userName, string password, string verifyCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

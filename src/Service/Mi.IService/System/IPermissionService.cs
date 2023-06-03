@@ -14,5 +14,9 @@ namespace Mi.IService.System
         /// </summary>
         /// <returns></returns>
         Task<List<PaMenuModel>> GetSiderMenuAsync();
+
+        Task<MessageModel> RegisterAsync(string userName,string password);
+
+        Task<MessageModel> LoginAsync(string userName, string password, string verifyCode);
     }
 }

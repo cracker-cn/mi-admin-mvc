@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,26 @@ namespace Mi.Core.Toolkit.Helper
             var rng = RandomNumberGenerator.Create();
             rng.GetBytes(rndBytes);
             return BitConverter.ToInt32(rndBytes, 0);
+        }
+
+        public static string GetMacAddress()
+        {
+            try
+            {
+                NetworkInterface[] networks = NetworkInterface.GetAllNetworkInterfaces();
+                foreach (NetworkInterface network in networks)
+                {
+                    if (network.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    {
+                        return network.GetPhysicalAddress().ToString();
+                    }
+                }
+                return string.Empty;
+            }
+            catch(Exception ex)
+            {
+                throw new Ouch(ex.Message);
+            }
         }
     }
 }
