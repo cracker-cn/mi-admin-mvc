@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Mi.Admin.Areas.Workspace.Controllers
+namespace Mi.Admin.Controllers
 {
-    [Area("Workspace")]
     [Authorize]
-    public class DashboardController : Controller
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {

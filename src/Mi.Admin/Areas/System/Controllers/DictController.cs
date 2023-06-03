@@ -4,11 +4,13 @@ using Mi.IService.System;
 using Mi.IService.System.Models;
 using Mi.IService.System.Models.Result;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.System.Controllers
 {
     [Area("System")]
+    [Authorize]
     public class DictController : Controller
     {
         private readonly IDictService _dictService;

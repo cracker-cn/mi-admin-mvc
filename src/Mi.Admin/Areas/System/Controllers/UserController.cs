@@ -2,11 +2,13 @@
 using Mi.IService.System;
 using Mi.IService.System.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.System.Controllers
 {
     [Area("System")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

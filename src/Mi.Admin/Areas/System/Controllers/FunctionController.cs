@@ -3,11 +3,13 @@ using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.System.Controllers
 {
     [Area("System")]
+    [Authorize]
     public class FunctionController : Controller
     {
         private readonly IFunctionService _functionService;
