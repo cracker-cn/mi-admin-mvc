@@ -1,7 +1,7 @@
 ## 网站配置
 logo: 
   ## 网站名称
-  title: "Pear Admin"
+  title: "MI Admin"
   ## 网站图标
   image: "admin/images/logo.png"
 ## 菜单配置
@@ -33,7 +33,7 @@ tab:
   ## 浏览器刷新时是否预加载非激活标签页
   preload: true
   ## 可打开的数量, false 不限制极值
-  max: "30"
+  max: false
   ## 首页
   index: 
     id: "10" ## 标识 ID , 建议与菜单项中的 ID 一致

@@ -20,6 +20,11 @@
     <link href="~/component/login/css/ax.css" rel="stylesheet" type="text/css">
     <link href="~/component/login/css/ax-response.css" rel="stylesheet" type="text/css">
     <link href="~/component/login/css/main.css" rel="stylesheet" type="text/css">
+    <style>
+        .mi-active{
+            color: #198cff;
+        }
+    </style>
 </head>
 <body class="ax-align-origin">
     <div class="login ax-shadow-cloud ax-radius-md">
@@ -30,8 +35,8 @@
                     <div class="ax-break"></div>
                     <div class="ax-tab" axTab>
                         <ul class="ax-row ax-tab-nav ax-menu-tab">
-                            <li><a href="###" class="ax-item">登录账号</a></li>
-                            <li><a href="###" class="ax-item">注册新用户</a></li>
+                            <li><a href="###" class="ax-item toggle-item mi-active">登录账号</a></li>
+                            <li><a href="###" class="ax-item toggle-item">注册新用户</a></li>
                             <li class="ax-col"></li>
                         </ul>
                         <ul class="ax-tab-content">
@@ -206,6 +211,11 @@
         layui.use(['form','jquery'],function(){
             let $ = layui.$;
             let form = layui.form
+
+            $('.toggle-item').click(function(){
+                $('.toggle-item').removeClass('mi-active')
+                $(this).addClass('mi-active');
+            })
 
             function uuid() {
                 var temp_url = URL.createObjectURL(new Blob());

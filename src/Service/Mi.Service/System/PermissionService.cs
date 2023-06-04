@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Transactions;
 
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
@@ -167,7 +168,7 @@ namespace Mi.Service.System
             foreach (var topLevel in topLevels)
             {
                 topLevel.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(topLevel.Id ?? "0"));
-                if(topLevel.Children != null && topLevel.Children.Any(x => x.Checked))
+                if (topLevel.Children != null && topLevel.Children.Any(x => x.Checked))
                 {
                     topLevel.Checked = false;
                     topLevel.Spread = true;

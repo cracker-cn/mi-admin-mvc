@@ -20,7 +20,7 @@ namespace Mi.Core.Extension
             {
                 opt.UseSqlite(DotNetService.Get<IConfiguration>().GetConnectionString("Sqlite"))
                 .EnableSensitiveDataLogging();
-            });
+            },ServiceLifetime.Scoped);
             service.AutoInject();
             service.AddSingleton<MessageModel>();
             service.AddHttpContextAccessor();
