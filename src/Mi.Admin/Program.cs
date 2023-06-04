@@ -1,10 +1,8 @@
-using Mi.Core.GlobalVar;
 using Mi.Core.Service;
 using Mi.Core.WebComponent.Filter;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +16,7 @@ builder.Services.AddControllersWithViews(opt =>
 });
 
 builder.Services.AddAuthentication()
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings",options));
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddRequiredService();
 var app = builder.Build();

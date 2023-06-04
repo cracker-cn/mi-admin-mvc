@@ -47,7 +47,7 @@ namespace Mi.Core.GlobalUser
 		private void LoadFetures()
 		{
 			var model = _context.Features.Get<UserModel>() ?? new UserModel();
-			IsSuperAdmin = model.IsSuperAdmin == 1;
+			IsSuperAdmin = model.IsSuperAdmin;
 		}
 	}
 }

@@ -39,5 +39,10 @@ namespace Mi.Core.Extension
 		{
 			return model.Code == EnumResponseCode.Success && model.Result != null;
 		}
-	}
+
+        public static bool EnsureSuccess(this MessageModel model)
+        {
+            return model.Code == EnumResponseCode.Success;
+        }
+    }
 }

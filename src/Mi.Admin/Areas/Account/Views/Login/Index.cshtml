@@ -16,6 +16,7 @@
     <meta content="telephone=no" name="format-detection" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>登录</title>
+    <link href="~/component/layui/css/layui.css" rel="stylesheet" />
     <link href="~/component/login/css/ax.css" rel="stylesheet" type="text/css">
     <link href="~/component/login/css/ax-response.css" rel="stylesheet" type="text/css">
     <link href="~/component/login/css/main.css" rel="stylesheet" type="text/css">
@@ -29,19 +30,19 @@
                     <div class="ax-break"></div>
                     <div class="ax-tab" axTab>
                         <ul class="ax-row ax-tab-nav ax-menu-tab">
-                            <a href="###" class="ax-item">登录账号</a>
-                            <a href="###" class="ax-item">注册新用户</a>
+                            <li><a href="###" class="ax-item">登录账号</a></li>
+                            <li><a href="###" class="ax-item">注册新用户</a></li>
                             <li class="ax-col"></li>
                         </ul>
                         <ul class="ax-tab-content">
                             <li>
-                                <form>
+                                <div class="layui-form">
                                     <div class="ax-break"></div>
                                     <div class="ax-break ax-hide-tel"></div>
                                     <div class="ax-form-group">
                                         <div class="ax-flex-row">
                                             <div class="ax-form-con">
-                                                <div class="ax-form-input"><span class="ax-pos-left" style="width: 2.4rem;"><i class="ax-iconfont ax-icon-me-f"></i></span><input name="username" value="admin" placeholder="输入登录名称" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span></div>
+                                                <div class="ax-form-input"><span class="ax-pos-left" style="width: 2.4rem;"><i class="ax-iconfont ax-icon-me-f"></i></span><input name="userName" lay-verify="required" placeholder="输入登录名称" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +52,7 @@
                                             <div class="ax-form-con">
                                                 <div class="ax-form-input">
                                                     <span class="ax-pos-left" style="width:2.4rem;"><i class="ax-iconfont ax-icon-lock-f"></i></span>
-                                                    <input name="password" placeholder="输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
+                                                    <input name="password" lay-verify="required" placeholder="输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -66,9 +67,9 @@
                                                     <div class="ax-row">
                                                         <div class="ax-flex-block">
                                                             <span class="ax-pos-left" style="width:2.4rem;"><i class="ax-iconfont ax-icon-shield-f"></i></span>
-                                                            <input name="username" placeholder="输入验证码..." value="" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
+                                                            <input name="code" lay-verify="required" placeholder="输入验证码..." value="" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
                                                         </div>
-                                                        <a class="ax-form-img"><img id="captchaImg" src="/api/public/captcha"></a>
+                                                        <a class="ax-form-img"><img asp-append-version="true" id="captchaImg" src="/api/public/captcha"></a>
                                                     </div>
                                                 </div>
 
@@ -100,7 +101,7 @@
                                     <div class="ax-form-group">
                                         <div class="ax-flex-row">
                                             <div class="ax-flex-block">
-                                                <div class="ax-form-input"><button type="button" class="ax-btn ax-primary ax-full">登录</button></div>
+                                                <div class="ax-form-input"><button type="button" lay-submit lay-filter="login" class="ax-btn ax-primary ax-full">登录</button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -109,10 +110,10 @@
                                     <div class="ax-break ax-hide-tel"></div>
                                     <div class="ax-break ax-hide-tel"></div>
 
-                                </form>
+                                </div>
                             </li>
                             <li>
-                                <form>
+                                <div class="layui-form">
 
                                     <div class="ax-break"></div>
                                     <div class="ax-break ax-hide-tel"></div>
@@ -120,7 +121,7 @@
                                     <div class="ax-form-group">
                                         <div class="ax-flex-row">
                                             <div class="ax-form-con">
-                                                <div class="ax-form-input"><span class="ax-pos-left" style="width: 2.4rem;"><i class="ax-iconfont ax-icon-me-f"></i></span><input name="username" placeholder="输入名称" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span></div>
+                                                <div class="ax-form-input"><span class="ax-pos-left" style="width: 2.4rem;"><i class="ax-iconfont ax-icon-me-f"></i></span><input lay-verify="required" name="re_userName" placeholder="输入名称" type="text"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -132,7 +133,7 @@
                                             <div class="ax-form-con">
                                                 <div class="ax-form-input">
                                                     <span class="ax-pos-left" style="width:2.4rem;"><i class="ax-iconfont ax-icon-lock-f"></i></span>
-                                                    <input name="password" placeholder="输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
+                                                    <input name="re_password" lay-verify="required" placeholder="输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -145,7 +146,7 @@
                                             <div class="ax-form-con">
                                                 <div class="ax-form-input">
                                                     <span class="ax-pos-left" style="width:2.4rem;"><i class="ax-iconfont ax-icon-lock-f"></i></span>
-                                                    <input name="password" placeholder="再次输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
+                                                    <input lay-verify="required" name="re_sure_password" placeholder="再次输入密码" type="password"><span class="ax-pos-right"><a href="###" class="ax-iconfont ax-icon-close ax-val-none"></a></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +155,7 @@
 
                                     <div class="ax-break-md"></div>
 
-                                    <div class="ax-form-group">
+@*                                    <div class="ax-form-group">
                                         <div class="ax-flex-row">
                                             <div class="ax-form-con">
                                                 <div class="ax-form-input">
@@ -167,7 +168,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>*@
 
 
                                     <div class="ax-break-md"></div>
@@ -175,7 +176,7 @@
                                     <div class="ax-form-group">
                                         <div class="ax-flex-row">
                                             <div class="ax-flex-block">
-                                                <div class="ax-form-input"><button type="button" class="ax-btn ax-primary ax-full">注册</button></div>
+                                                <div class="ax-form-input"><button type="button" lay-submit lay-filter="register" class="ax-btn ax-primary ax-full">注册</button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -184,7 +185,7 @@
                                     <div class="ax-break ax-hide-tel"></div>
                                     <div class="ax-break ax-hide-tel"></div>
 
-                                </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -204,9 +205,57 @@
     <script>
         layui.use(['form','jquery'],function(){
             let $ = layui.$;
+            let form = layui.form
+
+            function uuid() {
+                var temp_url = URL.createObjectURL(new Blob());
+                var uuid = temp_url.toString();
+                URL.revokeObjectURL(temp_url);
+                return uuid.substr(uuid.lastIndexOf("/") + 1);
+            }
 
             $('#captchaImg').click(function () {
-                this.src = '/api/public/captcha'
+                this.src = '/api/public/captcha?v=' + uuid()
+            })
+
+            form.on('submit(login)',function(data){
+                $.post('/Account/Login/Do',data.field,function(res){
+                    if(res.code === 90001){
+                        window.location.href = '/'
+                    }else{
+                        layer.msg(res.message, {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                })
+            })
+
+            form.on('submit(register)',function(data){
+                if (data.field.re_sure_password != data.field.re_password){
+                    layer.msg('两次密码不一致', {
+                        icon: 2,
+                        time: 1000
+                    });
+                    return;
+                }
+                let param = {
+                    userName:data.field.re_userName,
+                    password: data.field.re_password,
+                }
+                $.post('/Account/Login/New', param, function (res) {
+                    if (res.code === 90001) {
+                        layer.msg(res.message, {
+                            icon: 1,
+                            time: 1000
+                        });
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                })
             })
         })
     </script>

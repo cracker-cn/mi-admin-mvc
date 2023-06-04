@@ -1,7 +1,13 @@
-﻿using Mi.Core.Factory;
+﻿using System.Security.Claims;
+
+using Mi.Core.Factory;
 using Mi.Core.Models.UI;
 using Mi.Entity.System.Enum;
 using Mi.IService.System.Models.Result;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Mi.Service.System
 {
@@ -13,13 +19,17 @@ namespace Mi.Service.System
         private readonly IRoleRepository _roleRepository;
         private readonly IFunctionService _functionService;
         private readonly CreatorFactory _creatorFactory;
+        private readonly CaptchaFactory _captchaFactory;
+        private readonly HttpContext _httpContext;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
             , IUserRepository userRepository
             , IRoleRepository roleRepository
             , IFunctionService functionService
-            , CreatorFactory creatorFactory)
+            , CreatorFactory creatorFactory
+            , CaptchaFactory captchaFactory
+            , IHttpContextAccessor httpContextAccessor)
         {
             _message = message;
             _permissionRepository = permissionRepository;
@@ -27,6 +37,8 @@ namespace Mi.Service.System
             _roleRepository = roleRepository;
             _functionService = functionService;
             _creatorFactory = creatorFactory;
+            _captchaFactory = captchaFactory;
+            _httpContext = httpContextAccessor.HttpContext;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -84,23 +96,45 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> RegisterAsync(string userName, string password)
         {
-            if (userName.RegexValidate("[A-Za-z0-9]{4,12}"))
-            {
-                return _message.Fail("用户名只支持大小写字母和数字，最短4位，最长12位");
-            }
+            if (!userName.RegexValidate("[A-Za-z0-9]{4,12}")) return _message.Fail("用户名只支持大小写字母和数字，最短4位，最长12位");
+            var count = _userRepository.ExecuteScalar<int>("select count(*) from SysUser where LOWER(UserName)=@name and IsDeleted=0", new { name = userName.ToLower() });
+            if (count > 0) return _message.Fail("用户名已存在");
+
             var user = _creatorFactory.NewEntity<SysUser>();
             user.UserName = userName;
             user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
-            user.Password = EncryptionHelper.GenEncodingPassword(password,user.PasswordSalt);
-
+            user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             await _userRepository.AddAsync(user);
 
             return _message.Success("注册成功，请等待管理员审核！");
         }
 
-        public Task<MessageModel> LoginAsync(string userName, string password, string verifyCode)
+        public async Task<MessageModel> LoginAsync(string userName, string password, string verifyCode)
         {
-            throw new NotImplementedException();
+            var mac = StringHelper.GetMacAddress();
+            if (!_captchaFactory.Validate(mac, verifyCode)) return _message.Fail("验证码错误");
+
+            var user = _userRepository.Get(x => x.UserName.ToLower() == userName.ToLower());
+            if (user == null) return _message.Fail("用户名不存在");
+            var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
+            if (!flag) return _message.Fail("用户名或密码错误");
+
+            var claims = new Claim[]
+            {
+                new (ClaimTypes.Name,user.UserName),
+                new (ClaimTypes.NameIdentifier,user.Id.ToString())
+            };
+            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await _httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+            var userModel = new UserModel
+            {
+                UserId = user.Id,
+                UserName = userName,
+                IsSuperAdmin = user.IsSuperAdmin == 1
+            };
+            _httpContext.Features.Set(userModel);
+
+            return _message.Success("登录成功");
         }
     }
 }
