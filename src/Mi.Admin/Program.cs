@@ -5,6 +5,12 @@ using Mi.Core.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.StaticFiles;
 
+using Serilog;
+using Serilog.Settings.Configuration;
+using Serilog.Sinks.SystemConsole.Themes;
+
+Log.Information("Serilog Started!");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(opt =>
@@ -20,6 +26,13 @@ builder.Services.AddAuthentication()
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddRequiredService();
+//ÈÕÖ¾
+builder.Host.UseSerilog((context, logger) =>
+{
+    logger.Enrich.FromLogContext();
+    logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
+    logger.ReadFrom.Configuration(builder.Configuration, new ConfigurationReaderOptions { SectionName = "Logs" });
+});
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 

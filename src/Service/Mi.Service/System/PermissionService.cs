@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Transactions;
 
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 
 namespace Mi.Service.System
 {
@@ -46,7 +44,7 @@ namespace Mi.Service.System
             _functionService = functionService;
             _creatorFactory = creatorFactory;
             _captchaFactory = captchaFactory;
-            _context = httpContextAccessor.HttpContext;
+            _context = httpContextAccessor.HttpContext!;
             _memoryCache = memoryCache;
         }
 
