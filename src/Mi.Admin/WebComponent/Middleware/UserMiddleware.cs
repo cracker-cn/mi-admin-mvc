@@ -22,7 +22,7 @@ namespace Mi.Admin.WebComponent.Middleware
             var userName = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
             if (id > 0 && !string.IsNullOrEmpty(userName))
             {
-                var userModel = await powerService.QueryUserModelAsync(id, userName);
+                var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
                 if (userModel != null)
                 {
                     context.Features.Set(userModel);

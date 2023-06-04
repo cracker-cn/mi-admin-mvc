@@ -15,10 +15,14 @@ namespace Mi.IService.System
         /// <returns></returns>
         Task<List<PaMenuModel>> GetSiderMenuAsync();
 
+        Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id);
+
+        Task<MessageModel> SetRoleFunctionsAsync(long id,IList<long> funcIds);
+
         Task<MessageModel> RegisterAsync(string userName, string password);
 
         Task<MessageModel> LoginAsync(string userName, string password, string verifyCode);
 
-        Task<UserModel> QueryUserModelAsync(long id, string userName);
+        Task<UserModel> QueryUserModelCacheAsync(long id, string userName);
     }
 }

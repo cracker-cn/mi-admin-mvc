@@ -1,0 +1,27 @@
+﻿@using Mi.IService.System;
+@inject IPermissionService powerSevice
+
+<div id="tree-function"></div>
+
+@section Scripts{
+    <script>
+        layui.use(function () {
+            var tree = layui.tree;
+            var layer = layui.layer;
+            var util = layui.util;
+
+            let data = @(Html.Raw(JsonConvert.SerializeObject(await powerSevice.GetRoleFunctionsAsync(ViewBag.Id), new JsonSerializerSettings
+               {
+                   ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+               })))
+
+                tree.render({
+                    elem: '#tree-function',
+                    data: data,
+                    showCheckbox: true,
+                    id: 'tree-function-1',
+                    isJump: false
+                });
+        })
+    </script>
+}

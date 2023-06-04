@@ -248,6 +248,8 @@
                         layer.msg(res.message, {
                             icon: 1,
                             time: 1000
+                        },function(){
+                            window.location.reload();
                         });
                     } else {
                         layer.msg(res.message, {

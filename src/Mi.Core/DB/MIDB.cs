@@ -27,7 +27,6 @@ namespace Mi.Repository.DB
 
             modelBuilder.Entity<SysDict>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysFunction>().HasQueryFilter(x => x.IsDeleted == 0);
-            modelBuilder.Entity<SysFunctionGroup>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysRole>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysRoleFunction>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysUser>().HasQueryFilter(x => x.IsDeleted == 0);

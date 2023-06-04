@@ -41,6 +41,7 @@
 
     <script type="text/html" id="role-bar">
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
+        <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>
         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
     </script>
 
@@ -84,7 +85,7 @@
                         title: '操作',
                         toolbar: '#role-bar',
                         align: 'center',
-                        width: 130
+                        width: 180
                     }
                 ]],
                 skin: 'line',
@@ -117,6 +118,14 @@
                     window.remove(obj);
                 } else if (obj.event === 'edit') {
                     window.edit(obj);
+                }else if(obj.event === 'power'){
+                    layer.open({
+                        type: 2,
+                        title: '授权',
+                        shade: 0.1,
+                        area: ['80%', '75%'],
+                        content: pageRootUrl + 'RoleFunction'
+                    });
                 }
             });
 

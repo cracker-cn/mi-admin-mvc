@@ -1,9 +1,13 @@
-﻿using System.Security.Claims;
+﻿using System.Collections;
+using System.Security.Claims;
 
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
+using Mi.Core.Service;
 using Mi.Entity.System.Enum;
+using Mi.IRepository.BASE;
 using Mi.IService.System.Models.Result;
+using Mi.Repository.BASE;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -130,12 +134,12 @@ namespace Mi.Service.System
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
-            await QueryUserModelAsync(user.Id,user.UserName);
+            await QueryUserModelCacheAsync(user.Id, user.UserName);
 
             return _message.Success("登录成功");
         }
 
-        public async Task<UserModel> QueryUserModelAsync(long id,string userName)
+        public async Task<UserModel> QueryUserModelCacheAsync(long id, string userName)
         {
             var key = userName + "_info";
             var cacheData = _memoryCache.Get<UserModel>(key);
@@ -149,11 +153,74 @@ namespace Mi.Service.System
                     UserName = user.UserName,
                     IsSuperAdmin = user.IsSuperAdmin == 1
                 };
-                _memoryCache.Set(key,userModel);
+                _memoryCache.Set(key, userModel);
                 return userModel;
             }
 
             return new UserModel();
+        }
+
+        public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
+        {
+            var raw = await QueryRoleFuncsAsync(id);
+            var topLevels = raw.Where(x=>x.Node == EnumTreeNode.RootNode);
+            foreach (var topLevel in topLevels)
+            {
+                topLevel.Children = await GetLayuiTreeChildrenAsync(raw,topLevel.Id);
+            }
+            return new MessageModel<IList<LayuiTreeModel>>(topLevels.ToList());
+        }
+
+        private async Task<IList<LayuiTreeModel>> QueryRoleFuncsAsync(long id)
+        {
+            var repo = DotNetService.Get<Repository<LayuiTreeModel>>();
+            var sql = @"SELECT
+	                        f.FunctionName AS Title,
+	                        f.Id AS Id,
+	                        '' AS Field,
+	                        f.Url AS Href,
+	                        ( CASE WHEN rf.Id > 0 THEN 1 ELSE 0 END ) AS Checked,
+                            f.ParentId,
+                            f.Node
+                        FROM
+	                        SysFunction f
+	                        LEFT JOIN SysRoleFunction rf ON f.Id = rf.FunctionId
+	                        AND rf.IsDeleted = 0 and rf.RoleId = @id
+                        WHERE
+	                        f.IsDeleted = 0";
+            return await repo.GetListAsync(sql, new { id });
+        }
+
+        private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw,long parentId)
+        {
+            var children = raw.Where(x => x.ParentId == parentId);
+            foreach (var child in children)
+            {
+                child.Children = await GetLayuiTreeChildrenAsync(raw, child.Id);
+            }
+            return children.ToList();
+        }
+
+        public async Task<MessageModel> SetRoleFunctionsAsync(long id, IList<long> funcIds)
+        {
+            var role = _roleRepository.Get(id);
+            if (role == null || role.Id <= 0) return _message.Fail("角色不存在");
+            
+            var repo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
+            await repo.ExecuteAsync("delete from SysRoleFunction where RoleId=@id", new {id});
+
+            var powers = new List<SysRoleFunction>();
+            foreach (var item in funcIds)
+            {
+                var temp = _creatorFactory.NewEntity<SysRoleFunction>();
+                temp.RoleId = id;
+                temp.FunctionId = item;
+                powers.Add(temp);
+            }
+
+            if (powers.Count > 0) await repo.AddManyAsync(powers);
+
+            return _message.Success();
         }
     }
 }
