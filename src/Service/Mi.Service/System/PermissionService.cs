@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace Mi.Service.System
 {
@@ -163,10 +163,15 @@ namespace Mi.Service.System
         public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
         {
             var raw = await QueryRoleFuncsAsync(id);
-            var topLevels = raw.Where(x=>x.Node == EnumTreeNode.RootNode);
+            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode);
             foreach (var topLevel in topLevels)
             {
-                topLevel.Children = await GetLayuiTreeChildrenAsync(raw,topLevel.Id);
+                topLevel.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(topLevel.Id ?? "0"));
+                if(topLevel.Children != null && topLevel.Children.Any(x => x.Checked))
+                {
+                    topLevel.Checked = false;
+                    topLevel.Spread = true;
+                }
             }
             return new MessageModel<IList<LayuiTreeModel>>(topLevels.ToList());
         }
@@ -191,12 +196,17 @@ namespace Mi.Service.System
             return await repo.GetListAsync(sql, new { id });
         }
 
-        private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw,long parentId)
+        private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw, long parentId)
         {
             var children = raw.Where(x => x.ParentId == parentId);
             foreach (var child in children)
             {
-                child.Children = await GetLayuiTreeChildrenAsync(raw, child.Id);
+                child.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(child.Id ?? "0"));
+                if (child.Children != null && child.Children.Any(x => x.Checked))
+                {
+                    child.Checked = false;
+                    child.Spread = true;
+                }
             }
             return children.ToList();
         }
@@ -205,9 +215,9 @@ namespace Mi.Service.System
         {
             var role = _roleRepository.Get(id);
             if (role == null || role.Id <= 0) return _message.Fail("角色不存在");
-            
+
             var repo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
-            await repo.ExecuteAsync("delete from SysRoleFunction where RoleId=@id", new {id});
+            await repo.ExecuteAsync("delete from SysRoleFunction where RoleId=@id", new { id });
 
             var powers = new List<SysRoleFunction>();
             foreach (var item in funcIds)

@@ -1,14 +1,33 @@
 ﻿@using Mi.IService.System;
 @inject IPermissionService powerSevice
 
-<div id="tree-function"></div>
+<div class="mainBox">
+    <div class="main-container">
+        <div class="layui-form-item">
+            <label class="layui-form-label">功能树：</label>
+            <div class="layui-input-block">
+                <div id="tree-function"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bottom">
+    <div class="button-container">
+        <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit
+                lay-filter="save">
+            <i class="layui-icon layui-icon-ok"></i>
+            提交
+        </button>
+    </div>
+</div>
 
 @section Scripts{
     <script>
         layui.use(function () {
-            var tree = layui.tree;
-            var layer = layui.layer;
-            var util = layui.util;
+            let tree = layui.tree;
+            let layer = layui.layer;
+            let form = layui.form;
+            let $ = layui.$;
 
             let data = @(Html.Raw(JsonConvert.SerializeObject(await powerSevice.GetRoleFunctionsAsync(ViewBag.Id), new JsonSerializerSettings
                {
@@ -17,11 +36,44 @@
 
                 tree.render({
                     elem: '#tree-function',
-                    data: data,
+                    data: data.result,
                     showCheckbox: true,
                     id: 'tree-function-1',
-                    isJump: false
+                    isJump: false,
+                    showLine: true
                 });
+
+            form.on('submit(save)', function (data) {
+                layer.confirm('敏感操作，是否继续？', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    let checkedData = tree.getChecked('tree-function-1');
+                    let param = { id: '@ViewBag.Id' };
+                    for (let i = 0; i < checkedData.length; i++) {
+                        param[`funcs[${i}]`] = checkedData[i]
+                    }
+
+                    $.post('/System/Role/SetRoleFunctions', param, function (result) {
+                        layer.close(loading);
+                        if (result.code === 90001) {
+                            layer.msg(result.message, {
+                                icon: 1,
+                                time: 1000
+                            },function(){
+                                parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                            });
+                        } else {
+                            layer.msg(result.message, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    })
+                })
+            })
         })
     </script>
 }

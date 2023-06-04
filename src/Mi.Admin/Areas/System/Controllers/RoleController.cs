@@ -6,7 +6,7 @@ using Mi.IService.System.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Newtonsoft.Json;
+using NuGet.Packaging;
 
 namespace Mi.Admin.Areas.System.Controllers
 {
@@ -56,11 +56,47 @@ namespace Mi.Admin.Areas.System.Controllers
             => await _roleService.UpdateRoleAsync(id, name, remark);
 
         [HttpPost]
-        public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
+        public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctions(long id)
             => await _permissionService.GetRoleFunctionsAsync(id);
 
         [HttpPost]
-        public async Task<MessageModel> SetRoleFunctionsAsync(long id, IList<long> funcIds)
-            => await _permissionService.SetRoleFunctionsAsync(id, funcIds);
+        public async Task<MessageModel> SetRoleFunctions([FromForm] long id, [FromForm] IList<LayuiTreeModel> funcs)
+        {
+            var funcIds = GetIds(funcs);
+            return await _permissionService.SetRoleFunctionsAsync(id, funcIds);
+        }
+
+        [NonAction]
+        private IList<long> GetIds(IList<LayuiTreeModel> funcs)
+        {
+            var ids = new List<long>();
+            foreach (var item in funcs)
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    ids.Add(long.Parse(item.Id));
+                    ids.AddRange(GetChildIds(item.Children));
+                }
+            }
+            return ids;
+        }
+
+        [NonAction]
+        private IList<long> GetChildIds(IList<LayuiTreeModel>? funcs)
+        {
+            var ids = new List<long>();
+            if(funcs != null)
+            {
+                foreach (var item in funcs)
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        ids.Add(long.Parse(item.Id));
+                        ids.AddRange(GetChildIds(item.Children));
+                    }
+                }
+            }
+            return ids;
+        }
     }
 }

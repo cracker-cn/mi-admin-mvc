@@ -5,7 +5,7 @@ namespace Mi.Core.Models.UI
     public class LayuiTreeModel
     {
         public string? Title { get; set; }
-        public long Id { get; set; }
+        public string? Id { get; set; }
         public string? Field { get; set; }
         public string? Href { get; set; }
         public IList<LayuiTreeModel>? Children { get; set; }
