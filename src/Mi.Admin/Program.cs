@@ -1,5 +1,6 @@
+using Mi.Admin.WebComponent.Filter;
+using Mi.Admin.WebComponent.Middleware;
 using Mi.Core.Service;
-using Mi.Core.WebComponent.Filter;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.StaticFiles;
@@ -49,6 +50,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseFetchUser();
 
 app.MapControllerRoute(
     name: "Area",

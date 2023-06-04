@@ -5,7 +5,7 @@ using Mi.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Mi.Core.WebComponent.Filter
+namespace Mi.Admin.WebComponent.Filter
 {
     public class GlobalExceptionFilter : IExceptionFilter
     {

@@ -8,6 +8,7 @@ using Mi.IService.System.Models.Result;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Mi.Service.System
 {
@@ -20,7 +21,8 @@ namespace Mi.Service.System
         private readonly IFunctionService _functionService;
         private readonly CreatorFactory _creatorFactory;
         private readonly CaptchaFactory _captchaFactory;
-        private readonly HttpContext _httpContext;
+        private readonly HttpContext _context;
+        private readonly IMemoryCache _memoryCache;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
@@ -29,7 +31,8 @@ namespace Mi.Service.System
             , IFunctionService functionService
             , CreatorFactory creatorFactory
             , CaptchaFactory captchaFactory
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IMemoryCache memoryCache)
         {
             _message = message;
             _permissionRepository = permissionRepository;
@@ -38,7 +41,8 @@ namespace Mi.Service.System
             _functionService = functionService;
             _creatorFactory = creatorFactory;
             _captchaFactory = captchaFactory;
-            _httpContext = httpContextAccessor.HttpContext;
+            _context = httpContextAccessor.HttpContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -125,16 +129,31 @@ namespace Mi.Service.System
                 new (ClaimTypes.NameIdentifier,user.Id.ToString())
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await _httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
-            var userModel = new UserModel
-            {
-                UserId = user.Id,
-                UserName = userName,
-                IsSuperAdmin = user.IsSuperAdmin == 1
-            };
-            _httpContext.Features.Set(userModel);
+            await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+            await QueryUserModelAsync(user.Id,user.UserName);
 
             return _message.Success("登录成功");
+        }
+
+        public async Task<UserModel> QueryUserModelAsync(long id,string userName)
+        {
+            var key = userName + "_info";
+            var cacheData = _memoryCache.Get<UserModel>(key);
+            if (cacheData != null) return cacheData;
+            var user = await _userRepository.GetAsync(id);
+            if (user != null)
+            {
+                var userModel = new UserModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    IsSuperAdmin = user.IsSuperAdmin == 1
+                };
+                _memoryCache.Set(key,userModel);
+                return userModel;
+            }
+
+            return new UserModel();
         }
     }
 }
