@@ -6,12 +6,24 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.StaticFiles;
 
 using Serilog;
-using Serilog.Settings.Configuration;
+using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 Log.Information("Serilog Started!");
 
+//string SerilogOutputTemplate = "{NewLine}时间:{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}日志等级:{Level}{NewLine}所在类:{SourceContext}{NewLine}日志信息:{Message}{NewLine}{Exception}";
+string SerilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
+
 var builder = WebApplication.CreateBuilder(args);
+
+/// <summary>
+/// Serilog日志模板
+/// </summary>
+string serilogDebug = builder.Environment.WebRootPath + "\\log\\debug\\.log";
+string serilogInfo = builder.Environment.WebRootPath + "\\log\\info\\.log";
+string serilogWarn = builder.Environment.WebRootPath + "\\log\\warning\\.log";
+string serilogError = builder.Environment.WebRootPath + "\\log\\error\\.log";
+string serilogFatal = builder.Environment.WebRootPath + "\\log\\fatal\\.log";
 
 builder.Services.AddControllersWithViews(opt =>
 {
@@ -31,7 +43,12 @@ builder.Host.UseSerilog((context, logger) =>
 {
     logger.Enrich.FromLogContext();
     logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
-    logger.ReadFrom.Configuration(builder.Configuration, new ConfigurationReaderOptions { SectionName = "Logs" });
+    logger.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(a => a.File(serilogDebug, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)))
+                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(a => a.File(serilogInfo, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)))
+                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(a => a.File(serilogWarn, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)))
+                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Error).WriteTo.Async(a => a.File(serilogError, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)))
+                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogFatal, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)));
+
 });
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
