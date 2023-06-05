@@ -1,0 +1,129 @@
+﻿@using Mi.IService.System;
+@model SysFunction
+@inject IFunctionService funcService
+
+<div class="layui-form">
+    @Html.HiddenFor(x=>x.Id)
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="functionType" value="10" title="菜单" checked>
+                    <input type="radio" name="functionType" value="20" title="按钮">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上级</label>
+                <div class="layui-input-block">
+                    <div id="parent-tree-select"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="functionName" value="@Model.FunctionName" lay-verify="required" autocomplete="off" placeholder="请输入功能名称"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" value="@Model.Url" autocomplete="off" placeholder="请输入访问地址"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图标</label>
+                <div class="layui-input-block">
+                    <input type="text" name="icon" value="@Model.Icon" autocomplete="off" placeholder="请输入访问地址"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" value="@Model.Sort" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">授权码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="authorizationCode" value="@Model.AuthorizationCode" autocomplete="off" placeholder="请输入访问地址"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit
+                    lay-filter="role-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        layui.use(['form', 'jquery', 'common'], function () {
+            let form = layui.form;
+            let $ = layui.jquery;
+            let common = layui.common;
+
+            let parentTreeSelect = xmSelect.render({
+                el: '#parent-tree-select',
+                language: 'zn',
+                radio: true,
+                name: 'parentId',
+                data: @Html.Raw(JsonConvert.SerializeObject(funcService.GetFunctionTree())),
+                prop: {
+                    name: 'Name',
+                    value: 'Value',
+                },
+                model: {
+                    label: {
+                        type: 'text',
+                        text: {
+                            left: '',
+                            right: '',
+                            separator: ', ',
+                        },
+                    }
+                },
+            })
+
+            form.on('submit(role-save)', function (data) {
+                $.ajax({
+                    url: '/System/Function/AddOrUpdateFunction',
+                    data: JSON.stringify(data.field),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    type: 'post',
+                    success: function (result) {
+                        if (common.ajaxSuccess(result.code)) {
+                            layer.msg(result.message, {
+                                icon: 1,
+                                time: 1000
+                            }, function () {
+                                //parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                                //parent.window.refresh()
+                                parent.window.App.methods.closeDialogAndRefresh()
+                            });
+                        } else {
+                            layer.msg(result.message, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    }
+                })
+                return false;
+            });
+        })
+    </script>
+}

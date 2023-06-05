@@ -1,0 +1,10 @@
+bin
+bin/
+obj
+obj/
+.vs
+.vscode
+Logs
+Logs/
+log
+log/
