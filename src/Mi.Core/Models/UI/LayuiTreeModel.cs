@@ -18,5 +18,8 @@ namespace Mi.Core.Models.UI
 
         [JsonIgnore, Newtonsoft.Json.JsonIgnore]
         public EnumTreeNode Node { get; set; }
+
+        [JsonIgnore, Newtonsoft.Json.JsonIgnore]
+        public int Sort { get; set; }
     }
 }

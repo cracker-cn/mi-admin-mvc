@@ -34,6 +34,8 @@
             <template #default="scope">
                 <el-tag v-if="scope.row.functionType == 10" type="success">菜单</el-tag>
                 <el-tag v-else-if="scope.row.functionType == 20" type="warning">按钮</el-tag>
+                <el-tag v-else-if="scope.row.functionType == 30" type="info">资源</el-tag>
+                <el-tag v-else-if="scope.row.functionType == 40">功能</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="icon" label="图标"></el-table-column>
@@ -68,6 +70,8 @@
             <el-radio-group v-model="editForm.functionType">
                 <el-radio :label="10">菜单</el-radio>
                 <el-radio :label="20">按钮</el-radio>
+                <el-radio :label="30">资源</el-radio>
+                <el-radio :label="40">功能</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item label="地址">

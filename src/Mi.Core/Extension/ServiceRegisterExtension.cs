@@ -34,7 +34,7 @@ namespace Mi.Core.Extension
                     opt.ExpiryTime = TimeSpan.FromMinutes(2);
                 });
             });
-            service.AddSingleton<IMiUser, MiUser>();
+            service.AddScoped<IMiUser, MiUser>();
             service.AddScoped<CreatorFactory>();
             service.AddScoped<CaptchaFactory>();
         }

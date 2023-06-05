@@ -1,4 +1,5 @@
-﻿using Mi.Core.Models;
+﻿using Mi.Core.Attributes;
+using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
 
@@ -37,6 +38,7 @@ namespace Mi.Admin.Areas.System.Controllers
         }
 
         [HttpPost]
+        [AuthorizeCode("System:User:List")]
         public async Task<MessageModel> GetUserList([FromBody] UserSearch search)
         {
             return await _userService.GetUserListAsync(search);

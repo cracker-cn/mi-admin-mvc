@@ -83,7 +83,7 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-app.UseFetchUser();
+//app.UseFetchUser();
 
 app.MapControllerRoute(
     name: "Area",

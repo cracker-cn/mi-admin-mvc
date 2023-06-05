@@ -16,6 +16,16 @@
         /// <summary>
         /// 按钮
         /// </summary>
-        Button = 20
+        Button = 20,
+
+        /// <summary>
+        /// 资源
+        /// </summary>
+        Resource = 30,
+
+        /// <summary>
+        /// 功能，不借助按钮给用户操作
+        /// </summary>
+        Function = 40
     }
 }

@@ -154,6 +154,19 @@ namespace Mi.Service.System
                     UserName = user.UserName,
                     IsSuperAdmin = user.IsSuperAdmin == 1
                 };
+                var roleFuncRepo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
+                var userRoleRepo = DotNetService.Get<IRepositoryBase<SysUserRole>>();
+
+                var roleIds = (await userRoleRepo.GetAllAsync(x=>x.UserId == user.Id)).Select(x=>x.RoleId).ToList();
+                userModel.Roles = string.Join(",",_roleRepository.GetAll(x=>roleIds.Contains(x.Id)));
+                var funcIds = (await roleFuncRepo.GetAllAsync(x => roleIds.Contains(x.RoleId))).Select(x=>x.FunctionId).ToList();
+                userModel.PowerItems = _functionService.GetFunctionsCache().Where(x => funcIds.Contains(x.Id)).Select(x=>new PowerItem
+                {
+                    Id = x.Id,
+                    Url = x.Url,
+                    AuthCode = x.AuthorizationCode
+                }).ToList();
+
                 _memoryCache.Set(key, userModel);
                 return userModel;
             }
@@ -164,7 +177,7 @@ namespace Mi.Service.System
         public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
         {
             var raw = await QueryRoleFuncsAsync(id);
-            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode);
+            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
             foreach (var topLevel in topLevels)
             {
                 topLevel.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(topLevel.Id ?? "0"));
@@ -187,19 +200,20 @@ namespace Mi.Service.System
 	                        f.Url AS Href,
 	                        ( CASE WHEN rf.Id > 0 THEN 1 ELSE 0 END ) AS Checked,
                             f.ParentId,
-                            f.Node
+                            f.Node,
+                            f.Sort
                         FROM
 	                        SysFunction f
 	                        LEFT JOIN SysRoleFunction rf ON f.Id = rf.FunctionId
 	                        AND rf.IsDeleted = 0 and rf.RoleId = @id
                         WHERE
-	                        f.IsDeleted = 0";
+	                        f.IsDeleted = 0 order by f.sort ";
             return await repo.GetListAsync(sql, new { id });
         }
 
         private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw, long parentId)
         {
-            var children = raw.Where(x => x.ParentId == parentId);
+            var children = raw.Where(x => x.ParentId == parentId).OrderBy(x=>x.Sort);
             foreach (var child in children)
             {
                 child.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(child.Id ?? "0"));
@@ -239,7 +253,6 @@ namespace Mi.Service.System
             var userName = _context.User.FindFirst(x => x.Type == ClaimTypes.Name)?.Value;
             var key = userName + "_info";
             _memoryCache.Remove(key);
-            _context.Features.Set(new UserModel());
             await _context.SignOutAsync();
         }
     }
