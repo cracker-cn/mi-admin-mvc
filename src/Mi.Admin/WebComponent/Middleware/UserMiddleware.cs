@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 
+using Mi.Core.Models;
 using Mi.Core.Service;
 using Mi.IService.System;
 
@@ -16,18 +17,18 @@ namespace Mi.Admin.WebComponent.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var powerService = DotNetService.Get<IPermissionService>();
+            //var powerService = DotNetService.Get<IPermissionService>();
 
-            var id = long.Parse(context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var userName = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-            if (id > 0 && !string.IsNullOrEmpty(userName))
-            {
-                var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
-                if (userModel != null)
-                {
-                    context.Features.Set(userModel);
-                }
-            }
+            //var id = long.Parse(context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+            //var userName = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            //if (id > 0 && !string.IsNullOrEmpty(userName))
+            //{
+            //    var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
+            //    if (userModel != null)
+            //    {
+            //        context.Features.Set(userModel);
+            //    }
+            //}
             await _next(context);
         }
     }

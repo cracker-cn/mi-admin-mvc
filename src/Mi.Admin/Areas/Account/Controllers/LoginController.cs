@@ -33,8 +33,7 @@ namespace Mi.Admin.Areas.Account.Controllers
 
         public async Task<IActionResult> Exit()
         {
-            await _httpContext.SignOutAsync();
-            _httpContext.Features.Set(new UserModel());
+            await _permissionService.LogoutAsync();
             return Redirect("/Account/Login");
         }
     }

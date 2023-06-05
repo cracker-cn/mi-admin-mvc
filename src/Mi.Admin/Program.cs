@@ -3,6 +3,7 @@ using Mi.Admin.WebComponent.Middleware;
 using Mi.Core.Service;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 
 using Serilog;
@@ -50,6 +51,7 @@ builder.Host.UseSerilog((context, logger) =>
                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogFatal, rollingInterval: RollingInterval.Day, outputTemplate: SerilogOutputTemplate)));
 
 });
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 
@@ -79,6 +81,7 @@ app.UseStaticFiles(options);
 app.UseRouting();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 app.UseFetchUser();
 

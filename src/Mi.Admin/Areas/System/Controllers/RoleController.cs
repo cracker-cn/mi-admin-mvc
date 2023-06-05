@@ -26,7 +26,6 @@ namespace Mi.Admin.Areas.System.Controllers
 
         public IActionResult Index()
         {
-            throw new Exception("test");
             return View();
         }
 

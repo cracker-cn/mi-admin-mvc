@@ -23,6 +23,8 @@ namespace Mi.IService.System
 
         Task<MessageModel> LoginAsync(string userName, string password, string verifyCode);
 
+        Task LogoutAsync();
+
         Task<UserModel> QueryUserModelCacheAsync(long id, string userName);
     }
 }

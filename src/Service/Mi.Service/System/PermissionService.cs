@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System.Data;
+using System.Net.Http;
+using System.Security.Claims;
 
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
@@ -230,6 +232,15 @@ namespace Mi.Service.System
             if (powers.Count > 0) await repo.AddManyAsync(powers);
 
             return _message.Success();
+        }
+
+        public async Task LogoutAsync()
+        {
+            var userName = _context.User.FindFirst(x => x.Type == ClaimTypes.Name)?.Value;
+            var key = userName + "_info";
+            _memoryCache.Remove(key);
+            _context.Features.Set(new UserModel());
+            await _context.SignOutAsync();
         }
     }
 }
