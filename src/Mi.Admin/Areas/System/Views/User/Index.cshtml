@@ -91,11 +91,12 @@
                     icon: 'layui-icon-refresh',
                 }, 'filter'],
                 parseData: function (res) {
+                    let paging = common.pagingResult(res);
                     return {
                         "code": common.tableCode(res.code),
                         "msg": res.message,
-                        "count": res.result.total,
-                        "data": res.result.rows
+                        "count": paging.total,
+                        "data": paging.data
                     };
                 }
             });

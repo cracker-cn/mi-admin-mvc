@@ -125,6 +125,24 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
         this.tableCode = function (code) {
             return this.ajaxSuccess(code) ? 0 : -1
         }
+
+        /**
+         * layui table分页结果
+         * @param {any} res
+         * @returns
+         */
+        this.pagingResult = function (res) {
+            let paging = { total: 0, data: [] }
+            if (res.result) {
+                if (res.result.total) {
+                    paging.total = res.result.total
+                }
+                if (res.result.rows) {
+                    paging.data = res.result.rows
+                }
+            }
+            return paging;
+        }
     }
     exports(MOD_NAME, common);
 });
