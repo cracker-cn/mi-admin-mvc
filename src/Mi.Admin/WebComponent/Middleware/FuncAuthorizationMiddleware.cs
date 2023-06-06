@@ -41,10 +41,10 @@ namespace Mi.Admin.WebComponent.Middleware
                         if (userModel.PowerItems != null)
                         {
                             var endpoint = context.GetEndpoint();
-                            var attrs = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute[]>();
-                            if (endpoint != null && attrs != null)
+                            var attr = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute>();
+                            if (endpoint != null && attr != null)
                             {
-                                flag = userModel.PowerItems!.Any(x => attrs.Select(a => a.Code).Contains(x.AuthCode));
+                                flag = userModel.PowerItems!.Any(x => x.AuthCode == attr.Code);
                             }
                             else if (!string.IsNullOrEmpty(path))
                             {

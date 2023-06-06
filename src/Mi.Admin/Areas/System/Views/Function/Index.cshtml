@@ -26,7 +26,7 @@
         <el-button type="primary" @@click="expand(true)"><el-icon><Expand /></el-icon>&nbsp;展开</el-button>
         <el-button type="primary" @@click="expand(false)"><el-icon><Fold /></el-icon>&nbsp;折叠</el-button>
     </el-row>
-    <el-table class="mt-1" :data="tableData" ref="table"
+    <el-table class="mt-1" :data="tableData" ref="table" :empty-text="emptyText"
               row-key="id" :expand-row-keys="expandKeys">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="functionName" label="功能名称"></el-table-column>
@@ -39,7 +39,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="icon" label="图标"></el-table-column>
-        <el-table-column prop="url" label="访问地址"></el-table-column>
+        <el-table-column prop="url" label="访问地址" min-width="150"></el-table-column>
         <el-table-column prop="authorizationCode" label="授权码"></el-table-column>
         <el-table-column prop="sort" label="排序"></el-table-column>
         <el-table-column label="操作">
@@ -105,6 +105,7 @@
                 return {
                     treeData,
                     form: {},
+                    emptyText:'无数据',
                     expandKeys: [],
                     allKeys: [],
                     tableData: [],
@@ -142,7 +143,7 @@
                 handleDelete(row, ids) {
                     ElementPlus.ElMessageBox.confirm(
                         '操作不可撤回，是否继续？',
-                        'Warning',
+                        '提示',
                         {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -192,7 +193,6 @@
                 },
                 onQuery() {
                     this.fetchTableData()
-                    this.expand(true)
                 },
                 resetQuery() {
                     this.form = {}
@@ -205,6 +205,8 @@
                             if (res.data.code == 0) {
                                 this.tableData = res.data.data
                                 this.allKeys = this.tableData.map(x => x.id)
+                            }else{
+                                this.emptyText = res.data.message
                             }
                         })
                 },

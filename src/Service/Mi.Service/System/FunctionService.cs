@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+
+using AutoMapper;
 
 using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
@@ -113,10 +115,9 @@ namespace Mi.Service.System
                 .AndIf(!string.IsNullOrEmpty(search.FunctionName), x => x.FunctionName.Contains(search.FunctionName!))
                 .AndIf(!string.IsNullOrEmpty(search.Url), x => x.Url != null && x.Url.Contains(search.Url!));
 
-            var searchList = _allFunctions.Where(exp.Compile());
-            //TODO: 搜索时必须查找父级
-            var idArray = searchList.Select(s => s.ParentId).Concat(searchList.Where(p => p.Node == EnumTreeNode.RootNode).Select(p => p.Id)).Distinct();
-            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id) && x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
+            var searchList = _allFunctions.Where(exp.Compile()).OrderBy(x=>x.Sort);
+            var flag = exp.Body.NodeType == ExpressionType.AndAlso;
+            var topLevel = flag ? searchList : _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
             var list = topLevel.Select(x => new FunctionItem
             {
                 FunctionName = x.FunctionName,

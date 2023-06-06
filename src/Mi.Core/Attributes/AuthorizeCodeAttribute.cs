@@ -1,6 +1,6 @@
 ﻿namespace Mi.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class AuthorizeCodeAttribute : Attribute
     {
         private string code { get; set; }
