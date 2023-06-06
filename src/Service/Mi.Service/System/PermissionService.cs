@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Net.Http;
 using System.Security.Claims;
 
 using Mi.Core.Factory;
@@ -28,6 +27,7 @@ namespace Mi.Service.System
         private readonly CaptchaFactory _captchaFactory;
         private readonly HttpContext _context;
         private readonly IMemoryCache _memoryCache;
+        private readonly IMiUser _miUser;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
@@ -37,7 +37,8 @@ namespace Mi.Service.System
             , CreatorFactory creatorFactory
             , CaptchaFactory captchaFactory
             , IHttpContextAccessor httpContextAccessor
-            , IMemoryCache memoryCache)
+            , IMemoryCache memoryCache
+            , IMiUser miUser)
         {
             _message = message;
             _permissionRepository = permissionRepository;
@@ -48,6 +49,7 @@ namespace Mi.Service.System
             _captchaFactory = captchaFactory;
             _context = httpContextAccessor.HttpContext!;
             _memoryCache = memoryCache;
+            _miUser = miUser;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -142,6 +144,7 @@ namespace Mi.Service.System
 
         public async Task<UserModel> QueryUserModelCacheAsync(long id, string userName)
         {
+            var keys = _memoryCache.GetCacheKeys();
             var key = userName + "_info";
             var cacheData = _memoryCache.Get<UserModel>(key);
             if (cacheData != null) return cacheData;
@@ -157,10 +160,10 @@ namespace Mi.Service.System
                 var roleFuncRepo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
                 var userRoleRepo = DotNetService.Get<IRepositoryBase<SysUserRole>>();
 
-                var roleIds = (await userRoleRepo.GetAllAsync(x=>x.UserId == user.Id)).Select(x=>x.RoleId).ToList();
-                userModel.Roles = string.Join(",",_roleRepository.GetAll(x=>roleIds.Contains(x.Id)));
-                var funcIds = (await roleFuncRepo.GetAllAsync(x => roleIds.Contains(x.RoleId))).Select(x=>x.FunctionId).ToList();
-                userModel.PowerItems = _functionService.GetFunctionsCache().Where(x => funcIds.Contains(x.Id)).Select(x=>new PowerItem
+                var roleIds = (await userRoleRepo.GetAllAsync(x => x.UserId == user.Id)).Select(x => x.RoleId).ToList();
+                userModel.Roles = string.Join(",", _roleRepository.GetAll(x => roleIds.Contains(x.Id)));
+                var funcIds = (await roleFuncRepo.GetAllAsync(x => roleIds.Contains(x.RoleId))).Select(x => x.FunctionId).ToList();
+                userModel.PowerItems = _functionService.GetFunctionsCache().Where(x => funcIds.Contains(x.Id)).Select(x => new PowerItem
                 {
                     Id = x.Id,
                     Url = x.Url,
@@ -177,7 +180,7 @@ namespace Mi.Service.System
         public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
         {
             var raw = await QueryRoleFuncsAsync(id);
-            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
+            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x => x.Sort);
             foreach (var topLevel in topLevels)
             {
                 topLevel.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(topLevel.Id ?? "0"));
@@ -190,7 +193,7 @@ namespace Mi.Service.System
             return new MessageModel<IList<LayuiTreeModel>>(topLevels.ToList());
         }
 
-        private async Task<IList<LayuiTreeModel>> QueryRoleFuncsAsync(long id)
+        private static async Task<IList<LayuiTreeModel>> QueryRoleFuncsAsync(long id)
         {
             var repo = DotNetService.Get<Repository<LayuiTreeModel>>();
             var sql = @"SELECT
@@ -213,7 +216,7 @@ namespace Mi.Service.System
 
         private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw, long parentId)
         {
-            var children = raw.Where(x => x.ParentId == parentId).OrderBy(x=>x.Sort);
+            var children = raw.Where(x => x.ParentId == parentId).OrderBy(x => x.Sort);
             foreach (var child in children)
             {
                 child.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(child.Id ?? "0"));
@@ -250,8 +253,7 @@ namespace Mi.Service.System
 
         public async Task LogoutAsync()
         {
-            var userName = _context.User.FindFirst(x => x.Type == ClaimTypes.Name)?.Value;
-            var key = userName + "_info";
+            var key = _miUser.UserName + "_info";
             _memoryCache.Remove(key);
             await _context.SignOutAsync();
         }

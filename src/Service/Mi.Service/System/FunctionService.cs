@@ -114,8 +114,9 @@ namespace Mi.Service.System
                 .AndIf(!string.IsNullOrEmpty(search.Url), x => x.Url != null && x.Url.Contains(search.Url!));
 
             var searchList = _allFunctions.Where(exp.Compile());
+            //TODO: 搜索时必须查找父级
             var idArray = searchList.Select(s => s.ParentId).Concat(searchList.Where(p => p.Node == EnumTreeNode.RootNode).Select(p => p.Id)).Distinct();
-            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id)).OrderBy(x=>x.Sort);
+            var topLevel = _allFunctions.Where(x => idArray.Contains(x.Id) && x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
             var list = topLevel.Select(x => new FunctionItem
             {
                 FunctionName = x.FunctionName,
