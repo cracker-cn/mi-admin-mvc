@@ -1,5 +1,6 @@
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
+using Mi.Core.Models.UI;
 using Mi.Core.Service;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,8 +10,6 @@ using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
-
-Log.Information("Serilog Started!");
 
 //string SerilogOutputTemplate = "{NewLine}时间:{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}日志等级:{Level}{NewLine}所在类:{SourceContext}{NewLine}日志信息:{Message}{NewLine}{Exception}";
 string SerilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
@@ -52,6 +51,11 @@ builder.Host.UseSerilog((context, logger) =>
 
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
+
+//UI配置
+var uiConfig = builder.Configuration.GetSection("AdminUI");
+builder.Services.Configure<PaConfigModel>(uiConfig);
+
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 
