@@ -15,7 +15,7 @@ namespace Mi.IService.System
         /// <returns></returns>
         Task<List<PaMenuModel>> GetSiderMenuAsync();
 
-        Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id);
+        Task<MessageModel<IList<long>>> GetRoleFunctionIdsAsync(long id);
 
         Task<MessageModel> SetRoleFunctionsAsync(long id,IList<long> funcIds);
 

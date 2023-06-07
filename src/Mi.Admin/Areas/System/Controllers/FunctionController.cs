@@ -24,16 +24,10 @@ namespace Mi.Admin.Areas.System.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit(long id)
-        {
-            return View(await _functionService.GetAsync(id));
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetFunctionList(FunctionSearch search)
+        public async Task<MessageModel> GetFunctionList(FunctionSearch search)
         {
-            var list = await _functionService.GetFunctionListAsync(search);
-            return Ok(new { code = 0, msg = "success", data = list });
+            return await _functionService.GetFunctionListAsync(search);
         }
 
         [HttpPost]

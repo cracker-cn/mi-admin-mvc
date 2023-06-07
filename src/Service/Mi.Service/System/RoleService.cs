@@ -17,6 +17,9 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> AddRoleAsync(string name, string remark)
         {
+            var isExist = (await _roleRepository.GetAllAsync(x=>x.RoleName.ToLower() == name.ToLower())).Count>0;
+            if (isExist) return _message.Fail("角色名已存在");
+
             var role = new SysRole
             {
                 Id = IdHelper.SnowflakeId(),
@@ -57,6 +60,10 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> UpdateRoleAsync(long id, string name, string remark)
         {
+            var isExist = (await _roleRepository.GetAllAsync(x => x.RoleName.ToLower() == name.ToLower())).Count > 0;
+            var role = await _roleRepository.GetAsync(id);
+            if (isExist && role.RoleName != name) return _message.Fail("角色名已存在");
+
             await _roleRepository.UpdateAsync(id, node => node.Set(x => x.RoleName, name)
                 .ModifiedTime()
                 .Set(x => x.Remark, remark)

@@ -10,7 +10,7 @@ namespace Mi.IService.System
 
         EnumTreeNode CheckFunctionNode(SysFunction node);
 
-        Task<IList<FunctionItem>> GetFunctionListAsync(FunctionSearch search);
+        Task<MessageModel<IList<FunctionItem>>> GetFunctionListAsync(FunctionSearch search);
 
         IList<TreeOption> GetFunctionTree();
 

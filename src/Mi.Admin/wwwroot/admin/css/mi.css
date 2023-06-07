@@ -3,3 +3,13 @@
 .mt-1{
     margin-top:15px !important;
 }
+
+.my-1 {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.my-2 {
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+}

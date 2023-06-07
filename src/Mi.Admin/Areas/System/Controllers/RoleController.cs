@@ -34,7 +34,7 @@ namespace Mi.Admin.Areas.System.Controllers
             return View((await _roleService.GetRoleAsync(id)).Result);
         }
 
-        public IActionResult RoleFunction(long id)
+        public IActionResult RoleAuthorization(long id)
         {
             ViewBag.Id = id;
             return View();
@@ -57,47 +57,13 @@ namespace Mi.Admin.Areas.System.Controllers
             => await _roleService.UpdateRoleAsync(id, name, remark);
 
         [HttpPost]
-        public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctions(long id)
-            => await _permissionService.GetRoleFunctionsAsync(id);
-
-        [HttpPost]
-        public async Task<MessageModel> SetRoleFunctions([FromForm] long id, [FromForm] IList<LayuiTreeModel> funcs)
+        public async Task<MessageModel> SetRoleFunctions([FromForm] long id, [FromForm] IList<long> funcIds)
         {
-            var funcIds = GetIds(funcs);
             return await _permissionService.SetRoleFunctionsAsync(id, funcIds);
         }
 
-        [NonAction]
-        private IList<long> GetIds(IList<LayuiTreeModel> funcs)
-        {
-            var ids = new List<long>();
-            foreach (var item in funcs)
-            {
-                if (!string.IsNullOrEmpty(item.Id))
-                {
-                    ids.Add(long.Parse(item.Id));
-                    ids.AddRange(GetChildIds(item.Children));
-                }
-            }
-            return ids;
-        }
-
-        [NonAction]
-        private IList<long> GetChildIds(IList<LayuiTreeModel>? funcs)
-        {
-            var ids = new List<long>();
-            if(funcs != null)
-            {
-                foreach (var item in funcs)
-                {
-                    if (!string.IsNullOrEmpty(item.Id))
-                    {
-                        ids.Add(long.Parse(item.Id));
-                        ids.AddRange(GetChildIds(item.Children));
-                    }
-                }
-            }
-            return ids;
-        }
+        [HttpPost]
+        public async Task<MessageModel<IList<long>>> GetRoleFunctionIds(long id)
+            => await _permissionService.GetRoleFunctionIdsAsync(id);
     }
 }

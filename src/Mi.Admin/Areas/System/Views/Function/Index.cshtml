@@ -165,6 +165,11 @@
                                         ElementPlus.ElMessage.error(res.data.message)
                                     }
                                 })
+                        }).catch(() => {
+                            ElMessage({
+                                type: 'info',
+                                message: '取消操作',
+                            })
                         })
                 },
                 batchRemove() {
@@ -207,8 +212,8 @@
                 fetchTableData() {
                     axios.get(ROOT_PATH + 'GetFunctionList?' + Qs.stringify(this.form))
                         .then(res => {
-                            if (res.data.code == 0) {
-                                this.tableData = res.data.data
+                            if (res.data.code == 90001) {
+                                this.tableData = res.data.result
                                 this.allKeys = this.tableData.map(x => x.id)
                             }else{
                                 this.emptyText = res.data.message

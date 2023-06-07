@@ -12,7 +12,7 @@
                     }
                     @foreach (var item in Model)
                     {
-                        <input @(item.Checked ? "checked" : "") type="checkbox" value="@item.Value" title="@(item.Name + $"【{item.Remark}】")" name="roleIds[@(index++)]" lay-filter="role-id" lay-skin="tag">
+                        <input @(item.Checked ? "checked" : "") type="checkbox" value="@item.Value" title="@(item.Name + (!string.IsNullOrEmpty(item.Remark) ? $"【{item.Remark}】" : ""))" name="roleIds[@(index++)]" lay-filter="role-id" lay-skin="tag">
                     }
                 </div>
             </div>
@@ -40,7 +40,7 @@
             form.on('submit(save)', function (data) {
                 let param = { userId: '@ViewBag.Id' }
                 let i = 0
-                for(const key in data.field){
+                for (const key in data.field) {
                     if (key.indexOf('roleIds') != -1) {
                         param[`roleIds[${i}]`] = data.field[key]
                         delete data.field[key]

@@ -192,58 +192,6 @@ namespace Mi.Service.System
             return new UserModel();
         }
 
-        public async Task<MessageModel<IList<LayuiTreeModel>>> GetRoleFunctionsAsync(long id)
-        {
-            var raw = await QueryRoleFuncsAsync(id);
-            var topLevels = raw.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x => x.Sort);
-            foreach (var topLevel in topLevels)
-            {
-                topLevel.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(topLevel.Id ?? "0"));
-                if (topLevel.Children != null && topLevel.Children.Any(x => x.Checked))
-                {
-                    topLevel.Checked = false;
-                    topLevel.Spread = true;
-                }
-            }
-            return new MessageModel<IList<LayuiTreeModel>>(topLevels.ToList());
-        }
-
-        private static async Task<IList<LayuiTreeModel>> QueryRoleFuncsAsync(long id)
-        {
-            var repo = DotNetService.Get<Repository<LayuiTreeModel>>();
-            var sql = @"SELECT
-	                        f.FunctionName AS Title,
-	                        f.Id AS Id,
-	                        '' AS Field,
-	                        f.Url AS Href,
-	                        ( CASE WHEN rf.Id > 0 THEN 1 ELSE 0 END ) AS Checked,
-                            f.ParentId,
-                            f.Node,
-                            f.Sort
-                        FROM
-	                        SysFunction f
-	                        LEFT JOIN SysRoleFunction rf ON f.Id = rf.FunctionId
-	                        AND rf.IsDeleted = 0 and rf.RoleId = @id
-                        WHERE
-	                        f.IsDeleted = 0 order by f.sort ";
-            return await repo.GetListAsync(sql, new { id });
-        }
-
-        private async Task<IList<LayuiTreeModel>> GetLayuiTreeChildrenAsync(IList<LayuiTreeModel> raw, long parentId)
-        {
-            var children = raw.Where(x => x.ParentId == parentId).OrderBy(x => x.Sort);
-            foreach (var child in children)
-            {
-                child.Children = await GetLayuiTreeChildrenAsync(raw, long.Parse(child.Id ?? "0"));
-                if (child.Children != null && child.Children.Any(x => x.Checked))
-                {
-                    child.Checked = false;
-                    child.Spread = true;
-                }
-            }
-            return children.ToList();
-        }
-
         public async Task<MessageModel> SetRoleFunctionsAsync(long id, IList<long> funcIds)
         {
             var role = _roleRepository.Get(id);
@@ -271,6 +219,14 @@ namespace Mi.Service.System
             var key = _miUser.UserName + "_info";
             _memoryCache.Remove(key);
             await _context.SignOutAsync();
+        }
+
+        public async Task<MessageModel<IList<long>>> GetRoleFunctionIdsAsync(long id)
+        {
+            var roleFuncRepo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
+            var ids = (await roleFuncRepo.GetAllAsync(x => x.RoleId == id)).Select(x => x.FunctionId).ToList();
+
+            return new MessageModel<IList<long>>(ids);
         }
     }
 }

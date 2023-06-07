@@ -110,7 +110,7 @@ namespace Mi.Service.System
             return _functionRepository.GetAsync(id);
         }
 
-        public async Task<IList<FunctionItem>> GetFunctionListAsync(FunctionSearch search)
+        public async Task<MessageModel<IList<FunctionItem>>> GetFunctionListAsync(FunctionSearch search)
         {
             var exp = ExpressionCreator.New<SysFunction>()
                 .AndIf(!string.IsNullOrEmpty(search.FunctionName), x => x.FunctionName.Contains(search.FunctionName!))
@@ -132,7 +132,7 @@ namespace Mi.Service.System
                 Children = GetFuncChildNode(x.Id)
             }).ToList();
 
-            return await Task.FromResult(list);
+            return new MessageModel<IList<FunctionItem>>(await Task.FromResult(list));
         }
 
         private IList<FunctionItem> GetFuncChildNode(long id)
