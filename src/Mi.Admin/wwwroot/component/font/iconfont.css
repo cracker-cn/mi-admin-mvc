@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3723472 */
-  src: url('iconfont.woff2?t=1686139111098') format('woff2'),
-       url('iconfont.woff?t=1686139111098') format('woff'),
-       url('iconfont.ttf?t=1686139111098') format('truetype');
+  src: url('iconfont.woff2?t=1686150758034') format('woff2'),
+       url('iconfont.woff?t=1686150758034') format('woff'),
+       url('iconfont.ttf?t=1686150758034') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.mi-iconfonticon:before {
+  content: "\e627";
+}
+
+.mi-zhandianpeizhi:before {
+  content: "\e6a3";
+}
+
+.mi-kaifa:before {
+  content: "\e733";
 }
 
 .mi-tijikongjian:before {

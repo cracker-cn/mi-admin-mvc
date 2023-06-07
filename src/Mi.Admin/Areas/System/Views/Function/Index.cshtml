@@ -64,7 +64,7 @@
            align-center>
     <el-form :model="editForm" label-width="120px" :rules="rules" ref="editFormRef">
         <el-form-item label="上级">
-            <el-tree-select node-key="Value" value-key="Value" v-model="editForm.parentId"
+            <el-tree-select node-key="Value" value-key="Value" v-model="editForm.parentId" show-checkbox
                             :check-strictly=true clearable :filter-method="filterMethod" filterable
                             :data="filterTree" :render-after-expand="false" :props="{label:'Name',children:'Children'}" />
         </el-form-item>
@@ -86,7 +86,7 @@
             <el-input v-model="editForm.icon" />
         </el-form-item>
         <el-form-item label="排序">
-            <el-input-number v-model="editForm.sort" :min="1" :max="99" />
+            <el-input-number v-model="editForm.sort" :min="1" :max="999" />
         </el-form-item>
         <el-form-item label="授权码">
             <el-input v-model="editForm.authorizationCode" />
@@ -143,6 +143,9 @@
                 handleEdit(row) {
                     this.updateId = row.id
                     Object.assign(this.editForm, row)
+                    if(this.editForm.parentId == 0){
+                        this.editForm.parentId = null
+                    }
                     this.editDialog = true
                 },
                 handleDelete(row, ids) {

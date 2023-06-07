@@ -13,6 +13,15 @@
             right:20px;
             bottom:20px;
         }
+
+        .custom-tree-node{
+            display:block;
+            width:100%;
+        }
+
+        .tag-span{
+            float:right;
+        }
     </style>
 }
 
@@ -20,7 +29,19 @@
 <el-tree :data="treeData" show-checkbox :props="defaultProps" node-key="id" ref="treeRef"
          :default-checked-keys="defaultKeys" :check-strictly="true" class="my-1"
          :default-expanded-keys="defaultExpandedKeys"
-         :filter-node-method="filterNode"></el-tree>
+         :filter-node-method="filterNode">
+    <template #default="{ node, data }">
+        <span class="custom-tree-node">
+            <span>{{ node.label }}</span>
+            <span class="tag-span">
+                <el-tag v-if="data.functionType == 10" type="success" size="small">菜单</el-tag>
+                <el-tag v-else-if="data.functionType == 20" type="warning" size="small">按钮</el-tag>
+                <el-tag v-else-if="data.functionType == 30" type="info" size="small">资源</el-tag>
+                <el-tag v-else-if="data.functionType == 40" size="small">功能</el-tag>
+            </span>
+        </span>
+    </template>
+     </el-tree>
 <el-button class="btn-submit" type="primary" @@click="submit">提交</el-button>
 
 @section Scripts{
