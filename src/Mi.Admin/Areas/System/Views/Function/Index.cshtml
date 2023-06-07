@@ -38,7 +38,12 @@
                 <el-tag v-else-if="scope.row.functionType == 40">功能</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="icon" label="图标"></el-table-column>
+        <el-table-column prop="icon" label="图标">
+            <template #default="scope">
+                <i v-if="scope.row.icon" :class="scope.row.icon"></i>
+                <span v-else></span>
+            </template>
+        </el-table-column>
         <el-table-column prop="url" label="访问地址" min-width="150"></el-table-column>
         <el-table-column prop="authorizationCode" label="授权码"></el-table-column>
         <el-table-column prop="sort" label="排序"></el-table-column>

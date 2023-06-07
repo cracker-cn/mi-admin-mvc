@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Linq;
 using System.Security.Claims;
 
 using Mi.Core.Factory;
@@ -56,7 +57,7 @@ namespace Mi.Service.System
         {
             var topLevels = _functionService.GetFunctionsCache()
                 .Where(x => x.Node == EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu).OrderBy(x => x.Sort);
-            var list = topLevels.Select(x => new PaMenuModel(x.Id, 0, x.FunctionName, x.Url, GetPaChildren(x.Id).ToList())).ToList();
+            var list = topLevels.Select(x => new PaMenuModel(x.Id, 0, x.FunctionName, x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
 
             return await Task.FromResult(list);
         }
@@ -64,7 +65,21 @@ namespace Mi.Service.System
         private IList<PaMenuModel> GetPaChildren(long id)
         {
             var children = _functionService.GetFunctionsCache().Where(x => x.Node != EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu && x.ParentId == id).OrderBy(x => x.Sort);
-            return children.Select(x => new PaMenuModel(x.Id, 1, x.FunctionName, x.Url, GetPaChildren(x.Id).ToList())).ToList();
+            return children.Select(x => new PaMenuModel(x.Id, GetMenuType(x.Children),x.FunctionName,x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
+        }
+
+        /// <summary>
+        /// 获取菜单类型 0目录 1菜单
+        /// </summary>
+        /// <param name="children"></param>
+        /// <returns></returns>
+        private int GetMenuType(string? children)
+        {
+            if (string.IsNullOrEmpty(children)) return 1;
+            var arr = children.Split(',');
+            if (arr == null) return 1;
+            var flag = _functionService.GetFunctionsCache().Any(x => arr.Contains(x.Id.ToString()) && x.FunctionType == EnumFunctionType.Menu);
+            return flag ? 0 : 1;
         }
 
         public async Task<MessageModel<IList<UserRoleOption>>> GetUserRolesAsync(long userId)

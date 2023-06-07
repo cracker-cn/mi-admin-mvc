@@ -74,5 +74,16 @@ namespace Mi.Core.Models.UI
             OpenType = type == 1 ? "_iframe" : "";
             Children = children;
         }
+
+        public PaMenuModel(long id, int type, string? title, string? href,string? icon, List<PaMenuModel> children)
+        {
+            Id = id;
+            Type = type;
+            Title = title;
+            Href = href;
+            Icon = icon;
+            OpenType = type == 1 ? "_iframe" : "";
+            Children = children;
+        }
     }
 }

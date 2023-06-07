@@ -63,6 +63,7 @@ namespace Mi.Service.System
                 func.FunctionType = (EnumFunctionType)operation.FunctionType;
                 func.ModifiedBy = _miUser.UserId;
                 func.ModifiedOn = TimeHelper.LocalTime();
+                func.Node = CheckFunctionNode(func);
                 await _functionRepository.UpdateAsync(func);
             }
             _cache.Remove(CacheKeyConst.FUNCTION);

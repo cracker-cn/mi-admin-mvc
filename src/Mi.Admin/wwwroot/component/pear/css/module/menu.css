@@ -157,7 +157,7 @@
 	margin-left: 26px !important;
 }
 .pear-nav-tree .layui-nav-child dd a i {
-	display: none;
+	/*display: none;*/
 }
 .pear-nav-tree .layui-nav-hover dd a span {
 	margin-left: 0px !important;
