@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Mi.Core.Attributes;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.Workspace.Controllers
@@ -7,6 +9,7 @@ namespace Mi.Admin.Areas.Workspace.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
+        [AuthorizeCode("Dashboard")]
         public IActionResult Index()
         {
             return View();

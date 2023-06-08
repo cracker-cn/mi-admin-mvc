@@ -24,6 +24,10 @@
         .mi-active{
             color: #198cff;
         }
+
+        #captchaImg:hover{
+            cursor:pointer;
+        }
     </style>
 </head>
 <body class="ax-align-origin">
@@ -235,7 +239,9 @@
                     }else{
                         layer.msg(res.message, {
                             icon: 2,
-                            time: 1000
+                            time: 800
+                        },function(){
+                            $('#captchaImg').attr('src', '/api/public/captcha?v=' + uuid())
                         });
                     }
                 })

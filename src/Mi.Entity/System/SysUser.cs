@@ -29,5 +29,11 @@
         /// </summary>
         [DefaultValue(0)]
         public int IsSuperAdmin { get; set; } = 0;
+
+        /// <summary>
+        /// 启用1 禁用0
+        /// </summary>
+        [DefaultValue(0)]
+        public int IsEnabled { get; set; }
     }
 }

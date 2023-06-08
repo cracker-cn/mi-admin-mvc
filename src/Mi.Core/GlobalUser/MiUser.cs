@@ -23,7 +23,16 @@ namespace Mi.Core.GlobalUser
 
 		public bool IsSuperAdmin => _user.IsSuperAdmin;
 
-		private UserModel GetUser()
+        public IList<long> FuncIds
+		{
+			get
+			{
+				if(_user.PowerItems == null) return new List<long>();
+				return _user.PowerItems.Select(x=>x.Id).ToList();
+			}
+		}
+
+        private UserModel GetUser()
 		{
 			return _context.Features.Get<UserModel>() ?? new UserModel();
 		}

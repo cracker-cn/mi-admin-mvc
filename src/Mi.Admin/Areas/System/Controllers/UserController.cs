@@ -65,5 +65,9 @@ namespace Mi.Admin.Areas.System.Controllers
         [HttpPost]
         public async Task<MessageModel> SetUserRole(long userId, List<long> roleIds)
             => await _permissionService.SetUserRoleAsync(userId, roleIds);
+
+        [HttpPost]
+        public async Task<MessageModel> PassedUser(long id)
+            => await _userService.PassedUserAsync(id);
     }
 }

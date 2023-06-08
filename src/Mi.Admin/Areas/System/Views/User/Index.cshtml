@@ -40,6 +40,9 @@
     </script>
 
     <script type="text/html" id="user-bar">
+        {{#  if(d.isEnabled === 0){ }}
+            <button type="button" class="pear-btn mi-btn-green pear-btn-sm" lay-event="audit"><i class="layui-icon layui-icon-ok"></i></button>
+        {{#  } }}
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="has-role"><i class="layui-icon layui-icon-username"></i></button>
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="gen"><i class="layui-icon layui-icon-password"></i></button>
         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
@@ -72,6 +75,17 @@
                         align: 'center'
                     },
                     {
+                        title: '状态',
+                        field: 'isEnabled',
+                        align: 'center',
+                        templet: function (d) {
+                            if (d.isEnabled === 1) {
+                                return `<span class="layui-badge layui-bg-green">启用</span>`
+                            }
+                            return `<span class="layui-badge layui-bg-orange">禁用</span>`
+                        }
+                    },
+                    {
                         title: '创建时间',
                         field: 'createdOn',
                         align: 'center'
@@ -80,7 +94,7 @@
                         title: '操作',
                         toolbar: '#user-bar',
                         align: 'center',
-                        width: 180
+                        width: 210
                     }
                 ]],
                 skin: 'line',
@@ -114,8 +128,30 @@
                     window.remove(obj);
                 } else if (obj.event === 'gen') {
                     window.gen(obj);
-                }else if(obj.event === 'has-role'){
+                } else if (obj.event === 'has-role') {
                     window.role(obj)
+                } else if (obj.event === 'audit') {
+                    layer.confirm('启用后，用户将可以登录系统，是否继续？', {
+                        icon: 3,
+                        title: '提示'
+                    }, function (index) {
+                        layer.close(index);
+                        $.post(pageRootUrl + 'PassedUser?id=' + obj.data['userId'], function (res) {
+                            if (common.ajaxSuccess(res.code)) {
+                                layer.msg(res.message, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    window.refresh()
+                                });
+                            } else {
+                                layer.msg(res.message, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        })
+                    })
                 }
             });
 

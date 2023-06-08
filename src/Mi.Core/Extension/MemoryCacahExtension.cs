@@ -12,7 +12,7 @@ namespace Mi.Core.Extension
         /// </summary>
         /// <param name="cache"></param>
         /// <returns></returns>
-        public static List<string> GetCacheKeys(this IMemoryCache cache)
+        public static List<string> GetCacheKeys(this MemoryCache cache)
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
             var fields = cache.GetType().GetField("_entries", flags);

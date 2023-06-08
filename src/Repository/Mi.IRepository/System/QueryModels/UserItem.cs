@@ -12,5 +12,7 @@
         public DateTime CreatedOn { get; set; }
 
         public IList<string>? RoleNames { get; set; }
+
+        public int IsEnabled { get; set; }
     }
 }

@@ -50,6 +50,16 @@ namespace Mi.Service.System
             return new MessageModel<PagingModel<UserItem>>(true, "查询成功", pageModel);
         }
 
+        public async Task<MessageModel> PassedUserAsync(long id)
+        {
+            var flag = await _userRepository.UpdateAsync(id, node => node
+                .Set(x => x.IsEnabled, 1)
+                .Set(x => x.ModifiedBy, _miUser.UserId)
+                .Set(x => x.ModifiedOn, TimeHelper.LocalTime()));
+
+            return flag ? _message.Success() : _message.Fail();
+        }
+
         public async Task<MessageModel> RemoveUserAsync(long userId)
         {
             var flag = await _userRepository.UpdateAsync(userId, node => node

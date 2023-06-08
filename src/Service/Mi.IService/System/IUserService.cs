@@ -13,5 +13,7 @@ namespace Mi.IService.System
 		Task<MessageModel<string>> UpdatePasswordAsync(long userId);
 
 		Task<MessageModel<SysUser>> GetUserAsync(long userId);
+
+		Task<MessageModel> PassedUserAsync(long id);
 	}
 }

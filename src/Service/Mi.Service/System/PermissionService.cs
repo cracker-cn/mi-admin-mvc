@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Mi.Core.Factory;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
+using Mi.Entity.System;
 using Mi.Entity.System.Enum;
 using Mi.IRepository.BASE;
 using Mi.IService.System.Models.Result;
@@ -56,7 +57,7 @@ namespace Mi.Service.System
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
         {
             var topLevels = _functionService.GetFunctionsCache()
-                .Where(x => x.Node == EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu).OrderBy(x => x.Sort);
+                .Where(x => _miUser.FuncIds.Contains(x.Id) && x.Node == EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu).OrderBy(x => x.Sort);
             var list = topLevels.Select(x => new PaMenuModel(x.Id, 0, x.FunctionName, x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
 
             return await Task.FromResult(list);
@@ -64,7 +65,7 @@ namespace Mi.Service.System
 
         private IList<PaMenuModel> GetPaChildren(long id)
         {
-            var children = _functionService.GetFunctionsCache().Where(x => x.Node != EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu && x.ParentId == id).OrderBy(x => x.Sort);
+            var children = _functionService.GetFunctionsCache().Where(x => _miUser.FuncIds.Contains(x.Id) && x.Node != EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu && x.ParentId == id).OrderBy(x => x.Sort);
             return children.Select(x => new PaMenuModel(x.Id, GetMenuType(x.Children),x.FunctionName,x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
         }
 
@@ -142,6 +143,8 @@ namespace Mi.Service.System
 
             var user = _userRepository.Get(x => x.UserName.ToLower() == userName.ToLower());
             if (user == null) return _message.Fail("用户名不存在");
+            if (user.IsEnabled == 0) return _message.Fail("没有登录权限，请联系管理员");
+
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             if (!flag) return _message.Fail("用户名或密码错误");
 
@@ -159,7 +162,6 @@ namespace Mi.Service.System
 
         public async Task<UserModel> QueryUserModelCacheAsync(long id, string userName)
         {
-            var keys = _memoryCache.GetCacheKeys();
             var key = userName + "_info";
             var cacheData = _memoryCache.Get<UserModel>(key);
             if (cacheData != null) return cacheData;
@@ -175,10 +177,20 @@ namespace Mi.Service.System
                 var roleFuncRepo = DotNetService.Get<IRepositoryBase<SysRoleFunction>>();
                 var userRoleRepo = DotNetService.Get<IRepositoryBase<SysUserRole>>();
 
-                var roleIds = (await userRoleRepo.GetAllAsync(x => x.UserId == user.Id)).Select(x => x.RoleId).ToList();
-                userModel.Roles = string.Join(",", _roleRepository.GetAll(x => roleIds.Contains(x.Id)));
-                var funcIds = (await roleFuncRepo.GetAllAsync(x => roleIds.Contains(x.RoleId))).Select(x => x.FunctionId).ToList();
-                userModel.PowerItems = _functionService.GetFunctionsCache().Where(x => funcIds.Contains(x.Id)).Select(x => new PowerItem
+                var exp = ExpressionCreator.New<SysFunction>();
+                if (userModel.IsSuperAdmin)
+                {
+                    userModel.Roles = "SuperAdmin";
+                    exp = x => true;
+                }
+                else
+                {
+                    var roleIds = (await userRoleRepo.GetAllAsync(x => x.UserId == user.Id)).Select(x => x.RoleId).ToList();
+                    userModel.Roles = string.Join(",", _roleRepository.GetAll(x => roleIds.Contains(x.Id)).Select(x => x.RoleName));
+                    var funcIds = (await roleFuncRepo.GetAllAsync(x => roleIds.Contains(x.RoleId))).Select(x => x.FunctionId).ToList();
+                    exp = x => funcIds.Contains(x.Id);
+                }
+                userModel.PowerItems = _functionService.GetFunctionsCache().Where(exp.Compile()).Select(x => new PowerItem
                 {
                     Id = x.Id,
                     Url = x.Url,

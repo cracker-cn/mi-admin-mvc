@@ -19,6 +19,7 @@ namespace Mi.Repository.System
 	                    u.Id UserId,
 	                    u.UserName,
 	                    u.CreatedOn,
+	                    u.IsEnabled,
 	                    GROUP_CONCAT( r.RoleName ) RoleNameString
                     FROM
 	                    SysUser u

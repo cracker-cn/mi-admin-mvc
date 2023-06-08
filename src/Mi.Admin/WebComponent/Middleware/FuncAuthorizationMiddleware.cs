@@ -32,35 +32,24 @@ namespace Mi.Admin.WebComponent.Middleware
                 var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
                 if (userModel != null)
                 {
-                    if (!userModel.IsSuperAdmin)
+                    var controllerName = (string?)context.Request.RouteValues["controller"];
+                    var actionName = (string?)context.Request.RouteValues["action"];
+                    var path = context.Request.Path.Value;
+                    var flag = controllerName != null && controllerName.ToLower() == "home";
+                    if (userModel.PowerItems != null)
                     {
-                        //var controllerName = (string?)context.Request.RouteValues["controller"];
-                        //var actionName = (string?)context.Request.RouteValues["action"];
-                        var path = context.Request.Path.Value;
-                        var flag = false;//是否通过
-                        if (userModel.PowerItems != null)
+                        var endpoint = context.GetEndpoint();
+                        var attr = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute>();
+                        if (endpoint != null && attr != null)
                         {
-                            var endpoint = context.GetEndpoint();
-                            var attr = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute>();
-                            if (endpoint != null && attr != null)
-                            {
-                                flag = userModel.PowerItems!.Any(x => x.AuthCode == attr.Code);
-                            }
-                            else if (!string.IsNullOrEmpty(path))
-                            {
-                                flag = userModel.PowerItems!.Any(x => x.Url != null && x.Url.ToLower() == path.ToLower());
-                            }
-                            else
-                            {
-                                throw new Ouch("无法解析的地址");
-                            }
+                            flag = userModel.PowerItems!.Any(x => x.AuthCode == attr.Code);
                         }
-                        if (!flag)
-                        {
-                            await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
-                            _logger.LogWarning($"'{userModel.UserName}'访问地址'{path}'权限不足");
-                            return;
-                        }
+                    }
+                    if (!flag)
+                    {
+                        await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
+                        _logger.LogWarning($"'{userModel.UserName}'访问地址'{path}'权限不足");
+                        return;
                     }
                     context.Features.Set(userModel);
                 }

@@ -18,6 +18,7 @@ namespace Mi.Admin.Areas.System.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<List<PaMenuModel>> GetSiderMenu()
             => await _permissionService.GetSiderMenuAsync();
     }
