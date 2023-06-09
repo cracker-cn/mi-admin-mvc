@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 
 using Mi.Core.Factory;
+using Mi.Core.GlobalVar;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
 using Mi.Entity.System;
@@ -148,14 +149,15 @@ namespace Mi.Service.System
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             if (!flag) return _message.Fail("用户名或密码错误");
 
+            var userModel = await QueryUserModelCacheAsync(user.Id, user.UserName);
             var claims = new Claim[]
             {
                 new (ClaimTypes.Name,user.UserName),
-                new (ClaimTypes.NameIdentifier,user.Id.ToString())
+                new (ClaimTypes.NameIdentifier,user.Id.ToString()),
+                new (ClaimTypes.Role,userModel.Roles)
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
-            await QueryUserModelCacheAsync(user.Id, user.UserName);
 
             return _message.Success("登录成功");
         }
@@ -180,7 +182,7 @@ namespace Mi.Service.System
                 var exp = ExpressionCreator.New<SysFunction>();
                 if (userModel.IsSuperAdmin)
                 {
-                    userModel.Roles = "SuperAdmin";
+                    userModel.Roles = AuthorizationConst.SUPER_ADMIN;
                     exp = x => true;
                 }
                 else

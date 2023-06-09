@@ -21,6 +21,7 @@ namespace Mi.Admin.Areas.System.Controllers
             _permissionService = permissionService;
         }
 
+        [AuthorizeCode("System:User")]
         public IActionResult Index()
         {
             return View();

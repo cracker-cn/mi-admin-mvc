@@ -32,24 +32,27 @@ namespace Mi.Admin.WebComponent.Middleware
                 var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
                 if (userModel != null)
                 {
-                    var controllerName = (string?)context.Request.RouteValues["controller"];
-                    var actionName = (string?)context.Request.RouteValues["action"];
+                    //var controllerName = (string?)context.Request.RouteValues["controller"];
+                    //var actionName = (string?)context.Request.RouteValues["action"];
                     var path = context.Request.Path.Value;
-                    var flag = controllerName != null && controllerName.ToLower() == "home";
-                    if (userModel.PowerItems != null)
+                    if (!userModel.IsSuperAdmin)
                     {
-                        var endpoint = context.GetEndpoint();
-                        var attr = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute>();
-                        if (endpoint != null && attr != null)
+                        var flag = false;
+                        if (userModel.PowerItems != null)
                         {
-                            flag = userModel.PowerItems!.Any(x => x.AuthCode == attr.Code);
+                            var endpoint = context.GetEndpoint();
+                            var attr = endpoint?.Metadata.GetMetadata<AuthorizeCodeAttribute>();
+                            if (endpoint != null && attr != null)
+                            {
+                                flag = userModel.PowerItems!.Any(x => x.AuthCode == attr.Code);
+                            }
                         }
-                    }
-                    if (!flag)
-                    {
-                        await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
-                        _logger.LogWarning($"'{userModel.UserName}'访问地址'{path}'权限不足");
-                        return;
+                        if (!flag)
+                        {
+                            await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
+                            _logger.LogWarning($"'{userModel.UserName}'访问地址'{path}'权限不足");
+                            return;
+                        }
                     }
                     context.Features.Set(userModel);
                 }

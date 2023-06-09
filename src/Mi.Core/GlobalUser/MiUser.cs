@@ -3,38 +3,44 @@
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
+
+using Newtonsoft.Json;
 
 namespace Mi.Core.GlobalUser
 {
-	public class MiUser : IMiUser
-	{
-		private readonly HttpContext _context;
-		private readonly UserModel _user;
+    public class MiUser : IMiUser
+    {
+        private readonly HttpContext _context;
+        private readonly IMemoryCache _cache;
 
-		public MiUser(IHttpContextAccessor contextAccessor)
-		{
-			_context = contextAccessor.HttpContext!;
-            _user = GetUser();
-		}
+        public MiUser(IHttpContextAccessor contextAccessor, IMemoryCache cache)
+        {
+            _context = contextAccessor.HttpContext!;
+            _cache = cache;
+        }
 
-		public long UserId => _user.UserId;
+        public long UserId => User.UserId;
 
-		public string UserName => _user.UserName;
+        public string UserName => User.UserName;
 
-		public bool IsSuperAdmin => _user.IsSuperAdmin;
+        public bool IsSuperAdmin => User.IsSuperAdmin;
 
         public IList<long> FuncIds
-		{
-			get
-			{
-				if(_user.PowerItems == null) return new List<long>();
-				return _user.PowerItems.Select(x=>x.Id).ToList();
-			}
-		}
+        {
+            get
+            {
+                if (User.PowerItems == null) return new List<long>();
+                return User.PowerItems.Select(x => x.Id).ToList();
+            }
+        }
+
+        private UserModel User => GetUser();
 
         private UserModel GetUser()
-		{
-			return _context.Features.Get<UserModel>() ?? new UserModel();
-		}
-	}
+        {
+            var userName = _context.User.FindFirst(ClaimTypes.Name)?.Value ?? "";
+            return _cache.Get<UserModel>(userName + "_info") ?? new UserModel();
+        }
+    }
 }
