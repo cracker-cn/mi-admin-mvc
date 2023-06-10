@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 
+using Mi.Core.Extension;
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Http;
@@ -12,12 +13,10 @@ namespace Mi.Core.GlobalUser
     public class MiUser : IMiUser
     {
         private readonly HttpContext _context;
-        private readonly IMemoryCache _cache;
 
-        public MiUser(IHttpContextAccessor contextAccessor, IMemoryCache cache)
+        public MiUser(IHttpContextAccessor contextAccessor)
         {
             _context = contextAccessor.HttpContext!;
-            _cache = cache;
         }
 
         public long UserId => User.UserId;
@@ -35,12 +34,6 @@ namespace Mi.Core.GlobalUser
             }
         }
 
-        private UserModel User => GetUser();
-
-        private UserModel GetUser()
-        {
-            var userName = _context.User.FindFirst(ClaimTypes.Name)?.Value ?? "";
-            return _cache.Get<UserModel>(userName + "_info") ?? new UserModel();
-        }
+        private UserModel User => _context.GetUser();
     }
 }

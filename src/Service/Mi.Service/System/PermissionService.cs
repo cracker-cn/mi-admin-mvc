@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 
+using Newtonsoft.Json;
+
 namespace Mi.Service.System
 {
     public class PermissionService : IPermissionService, IScoped
@@ -149,12 +151,13 @@ namespace Mi.Service.System
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             if (!flag) return _message.Fail("用户名或密码错误");
 
-            var userModel = await QueryUserModelCacheAsync(user.Id, user.UserName);
+            var userModel = await QueryUserModelAsync(user);
             var claims = new Claim[]
             {
                 new (ClaimTypes.Name,user.UserName),
                 new (ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new (ClaimTypes.Role,userModel.Roles)
+                new (ClaimTypes.Role,userModel.Roles),
+                new (ClaimTypes.UserData,JsonConvert.SerializeObject(userModel))
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
@@ -162,12 +165,8 @@ namespace Mi.Service.System
             return _message.Success("登录成功");
         }
 
-        public async Task<UserModel> QueryUserModelCacheAsync(long id, string userName)
+        public async Task<UserModel> QueryUserModelAsync(SysUser? user)
         {
-            var key = userName + "_info";
-            var cacheData = _memoryCache.Get<UserModel>(key);
-            if (cacheData != null) return cacheData;
-            var user = await _userRepository.GetAsync(id);
             if (user != null)
             {
                 var userModel = new UserModel
@@ -199,7 +198,6 @@ namespace Mi.Service.System
                     AuthCode = x.AuthorizationCode
                 }).ToList();
 
-                _memoryCache.Set(key, userModel);
                 return userModel;
             }
 
@@ -230,8 +228,6 @@ namespace Mi.Service.System
 
         public async Task LogoutAsync()
         {
-            var key = _miUser.UserName + "_info";
-            _memoryCache.Remove(key);
             await _context.SignOutAsync();
         }
 

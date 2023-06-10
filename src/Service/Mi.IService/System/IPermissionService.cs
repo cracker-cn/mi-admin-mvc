@@ -1,4 +1,5 @@
 ﻿using Mi.Core.Models.UI;
+using Mi.Entity.System;
 using Mi.IService.System.Models.Result;
 
 namespace Mi.IService.System
@@ -25,6 +26,6 @@ namespace Mi.IService.System
 
         Task LogoutAsync();
 
-        Task<UserModel> QueryUserModelCacheAsync(long id, string userName);
+        Task<UserModel> QueryUserModelAsync(SysUser? user);
     }
 }
