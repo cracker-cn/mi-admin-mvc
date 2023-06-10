@@ -25,11 +25,9 @@ namespace Mi.Admin.WebComponent.Middleware
 
         public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
         {
-            var permissionService = DotNetService.Get<IPermissionService>();
-            var userModel = await permissionService.QueryUserModelAsync(StringHelper.ToLong(context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+            var userModel = context.GetUser();
             var controllerName = (string?)context.Request.RouteValues["controller"] ?? "";
 
-            context.Features.Set(userModel);
             if (!IGNORE_CONTROLLERS.Contains(controllerName.ToLower()) && userModel != null && userModel.UserId > 0)
             {
                 var path = context.Request.Path.Value;

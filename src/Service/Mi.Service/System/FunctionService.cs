@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 using AutoMapper;
 
@@ -18,11 +20,11 @@ namespace Mi.Service.System
         private readonly IMiUser _miUser;
         private readonly IFunctionRepository _functionRepository;
         private readonly IList<SysFunction> _allFunctions;
-        private readonly IMemoryCache _cache;
+        private readonly MemoryCacheFactory _cache;
 
         public FunctionService(IMapper mapper, MessageModel message, IMiUser miUser
             , IFunctionRepository functionRepository
-            , IMemoryCache cache)
+            , MemoryCacheFactory cache)
         {
             _mapper = mapper;
             _message = message;
@@ -66,7 +68,7 @@ namespace Mi.Service.System
                 func.Node = CheckFunctionNode(func);
                 await _functionRepository.UpdateAsync(func);
             }
-            _cache.Remove(CacheKeyConst.FUNCTION);
+            RemoveCache();
 
             return _message.Success();
         }
@@ -186,12 +188,18 @@ namespace Mi.Service.System
                 item.ModifiedOn = TimeHelper.LocalTime();
             }
             await _functionRepository.UpdateManyAsync(funcs);
-            _cache.Remove(CacheKeyConst.FUNCTION);
+            RemoveCache();
 
             return _message.Success();
         }
 
-        public IList<SysFunction> GetFunctionsCache()
-            => _cache.GetOrCreate(CacheKeyConst.FUNCTION, opt => _functionRepository.GetAll()) ?? _functionRepository.GetAll();
+        public IList<SysFunction> GetFunctionsCache() => _cache.Get<List<SysFunction>>(CacheConst.FUNCTION) ?? _functionRepository.GetAll();
+
+        private void RemoveCache()
+        {
+            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) && x.Contains(AuthorizationConst.SUPER_ADMIN)).ToList();
+            keys.Add(CacheConst.FUNCTION);
+            _cache.RemoveAll(keys);
+        }
     }
 }

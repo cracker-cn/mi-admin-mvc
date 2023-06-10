@@ -52,5 +52,17 @@ namespace Mi.Core.Toolkit.Helper
             long.TryParse(str, out long result);
             return result;
         }
+
+        public static string UserKey(string userName, string roleName) => $"{userName}_function_{roleName}";
+
+        public static string UserDataString(long id, string userName, string roleName) => $"{id}_{userName}_{roleName.Replace(',','&')}";
+
+        public static (long, string, string) GetUserData(string str)
+        {
+            var strArray = str.Split('_');
+            return (long.Parse(strArray[0]), strArray[1], strArray[2]);
+        }
+
+        public static string UserCachePattern() => "\\.*(_function_){1}\\.*";
     }
 }

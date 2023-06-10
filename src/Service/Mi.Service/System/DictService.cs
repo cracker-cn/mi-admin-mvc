@@ -53,7 +53,7 @@ namespace Mi.Service.System
 
             if (await _dictRepository.UpdateAsync(dict))
             {
-                _cache.Remove(CacheKeyConst.DICT);
+                _cache.Remove(CacheConst.DICT);
                 return true;
             }
             return false;
@@ -74,7 +74,7 @@ namespace Mi.Service.System
 
             if (await _dictRepository.UpdateManyAsync(list))
             {
-                _cache.Remove(CacheKeyConst.DICT);
+                _cache.Remove(CacheConst.DICT);
                 return true;
             }
 
@@ -86,7 +86,7 @@ namespace Mi.Service.System
             return GetAll().Select(x => new Option { Name = x.Key, Value = x.Value }).ToList();
         }
 
-        private List<Option> Options => _cache.GetOrCreate(CacheKeyConst.DICT, opt => GetOptions()) ?? GetOptions();
+        private List<Option> Options => _cache.GetOrCreate(CacheConst.DICT, opt => GetOptions()) ?? GetOptions();
 
         #region Admin_UI
 
@@ -157,7 +157,7 @@ namespace Mi.Service.System
 
             if (flag)
             {
-                _cache.Remove(CacheKeyConst.DICT);
+                _cache.Remove(CacheConst.DICT);
             }
             return _message.SuccessOrFail(flag);
         }

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 
-using Mi.Core.Models;
 using Mi.Core.Service;
+using Mi.Core.Toolkit.Helper;
 using Mi.IService.System;
 
 namespace Mi.Admin.WebComponent.Middleware
@@ -9,26 +9,27 @@ namespace Mi.Admin.WebComponent.Middleware
     public class UserMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<UserMiddleware> _logger;
+        private readonly string[] IGNORE_CONTROLLERS = { "home", "public", "personal" };
 
-        public UserMiddleware(RequestDelegate next)
+        public UserMiddleware(RequestDelegate next, ILogger<UserMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            //var powerService = DotNetService.Get<IPermissionService>();
+            var isLogin = context.User.Identity?.IsAuthenticated ?? false;
+            var data = context.GetUserData();
+            if (isLogin && !string.IsNullOrWhiteSpace(data))
+            {
+                var permissionService = DotNetService.Get<IPermissionService>();
+                var userModel = await permissionService.QueryUserModelAsync(data);
 
-            //var id = long.Parse(context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-            //var userName = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-            //if (id > 0 && !string.IsNullOrEmpty(userName))
-            //{
-            //    var userModel = await powerService.QueryUserModelCacheAsync(id, userName);
-            //    if (userModel != null)
-            //    {
-            //        context.Features.Set(userModel);
-            //    }
-            //}
+                context.Features.Set(userModel);
+            }
+
             await _next(context);
         }
     }

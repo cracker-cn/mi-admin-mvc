@@ -1,39 +1,36 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http;
+using System.Reflection.Metadata;
 
 using Mi.Core.Extension;
+using Mi.Core.Factory;
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 
-using Newtonsoft.Json;
-
 namespace Mi.Core.GlobalUser
 {
     public class MiUser : IMiUser
     {
-        private readonly HttpContext _context;
-
-        public MiUser(IHttpContextAccessor contextAccessor)
+        private readonly UserModel _user;
+        public MiUser(IHttpContextAccessor httpContextAccessor)
         {
-            _context = contextAccessor.HttpContext!;
+            _user = httpContextAccessor.HttpContext.GetUser();
         }
 
-        public long UserId => User.UserId;
+        public long UserId => _user.UserId;
 
-        public string UserName => User.UserName;
+        public string UserName => _user.UserName;
 
-        public bool IsSuperAdmin => User.IsSuperAdmin;
+        public bool IsSuperAdmin => _user.IsSuperAdmin;
 
         public IList<long> FuncIds
         {
             get
             {
-                if (User.PowerItems == null) return new List<long>();
-                return User.PowerItems.Select(x => x.Id).ToList();
+                if (_user.PowerItems == null) return new List<long>();
+                return _user.PowerItems.Select(x => x.Id).ToList();
             }
         }
-
-        private UserModel User => _context.GetUser();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
@@ -31,7 +32,7 @@ namespace Mi.Service.System
         private readonly CreatorFactory _creatorFactory;
         private readonly CaptchaFactory _captchaFactory;
         private readonly HttpContext _context;
-        private readonly IMemoryCache _memoryCache;
+        private readonly MemoryCacheFactory _cache;
         private readonly IMiUser _miUser;
         private readonly IUserService _userService;
 
@@ -43,7 +44,7 @@ namespace Mi.Service.System
             , CreatorFactory creatorFactory
             , CaptchaFactory captchaFactory
             , IHttpContextAccessor httpContextAccessor
-            , IMemoryCache memoryCache
+            , MemoryCacheFactory cache
             , IMiUser miUser
             , IUserService userService)
         {
@@ -55,7 +56,7 @@ namespace Mi.Service.System
             _creatorFactory = creatorFactory;
             _captchaFactory = captchaFactory;
             _context = httpContextAccessor.HttpContext!;
-            _memoryCache = memoryCache;
+            _cache = cache;
             _miUser = miUser;
             _userService = userService;
         }
@@ -64,7 +65,7 @@ namespace Mi.Service.System
         {
             var topLevels = _functionService.GetFunctionsCache()
                 .Where(x => _miUser.FuncIds.Contains(x.Id) && x.Node == EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu).OrderBy(x => x.Sort);
-            var list = topLevels.Select(x => new PaMenuModel(x.Id, 0, x.FunctionName, x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
+            var list = topLevels.Select(x => new PaMenuModel(x.Id, 0, x.FunctionName, x.Url, x.Icon, GetPaChildren(x.Id).ToList())).ToList();
 
             return await Task.FromResult(list);
         }
@@ -72,7 +73,7 @@ namespace Mi.Service.System
         private IList<PaMenuModel> GetPaChildren(long id)
         {
             var children = _functionService.GetFunctionsCache().Where(x => _miUser.FuncIds.Contains(x.Id) && x.Node != EnumTreeNode.RootNode && x.FunctionType == EnumFunctionType.Menu && x.ParentId == id).OrderBy(x => x.Sort);
-            return children.Select(x => new PaMenuModel(x.Id, GetMenuType(x.Children),x.FunctionName,x.Url,x.Icon, GetPaChildren(x.Id).ToList())).ToList();
+            return children.Select(x => new PaMenuModel(x.Id, GetMenuType(x.Children), x.FunctionName, x.Url, x.Icon, GetPaChildren(x.Id).ToList())).ToList();
         }
 
         /// <summary>
@@ -154,12 +155,18 @@ namespace Mi.Service.System
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             if (!flag) return _message.Fail("用户名或密码错误");
 
-            var roles = await _userService.GetRolesAsync(user.Id);
+            var roleNameArray = (await _userService.GetRolesAsync(user.Id)).Select(x => x.RoleName).ToList();
+            if(user.IsSuperAdmin == 1)
+            {
+                roleNameArray.Add(AuthorizationConst.SUPER_ADMIN);
+            }
+            var roleNames = string.Join(",", roleNameArray);
             var claims = new Claim[]
             {
                 new (ClaimTypes.Name,user.UserName),
                 new (ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new (ClaimTypes.Role,string.Join(",",roles.Select(x=>x.RoleName)))
+                new (ClaimTypes.Role,roleNames),
+                new (ClaimTypes.UserData,StringHelper.UserDataString(user.Id,user.UserName,roleNames))
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
@@ -167,9 +174,13 @@ namespace Mi.Service.System
             return _message.Success("登录成功");
         }
 
-        public async Task<UserModel> QueryUserModelAsync(long id)
+        public async Task<UserModel> QueryUserModelAsync(string userData)
         {
-            var user = await _userRepository.GetAsync(id);
+            var arr = StringHelper.GetUserData(userData);
+            var key = StringHelper.UserKey(arr.Item2,arr.Item3);
+            var cacheData = _cache.Get<UserModel>(key);
+            if (cacheData != null) return cacheData;
+            var user = await _userRepository.GetAsync(x => x.UserName.ToLower() == arr.Item2.ToLower());
             if (user != null)
             {
                 var userModel = new UserModel
@@ -200,6 +211,7 @@ namespace Mi.Service.System
                     Url = x.Url,
                     AuthCode = x.AuthorizationCode
                 }).ToList();
+                _cache.Set(key,userModel,CacheConst.Week);
 
                 return userModel;
             }
@@ -225,6 +237,9 @@ namespace Mi.Service.System
             }
 
             if (powers.Count > 0) await repo.AddManyAsync(powers);
+            //正则移除角色功能缓存
+            var keys = _cache.GetCacheKeys().Where(x=>Regex.IsMatch(x,StringHelper.UserCachePattern()) && x.Contains(role.RoleName));
+            _cache.RemoveAll(keys);
 
             return _message.Success();
         }

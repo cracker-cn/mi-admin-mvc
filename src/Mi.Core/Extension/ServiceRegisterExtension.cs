@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace Mi.Core.Extension
 {
@@ -37,6 +38,7 @@ namespace Mi.Core.Extension
             service.AddScoped<IMiUser, MiUser>();
             service.AddScoped<CreatorFactory>();
             service.AddScoped<CaptchaFactory>();
+            service.AddScoped<MemoryCacheFactory>();
         }
     }
 }

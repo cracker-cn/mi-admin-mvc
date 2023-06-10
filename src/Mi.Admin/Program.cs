@@ -11,7 +11,6 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-//string SerilogOutputTemplate = "{NewLine}时间:{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}日志等级:{Level}{NewLine}所在类:{SourceContext}{NewLine}日志信息:{Message}{NewLine}{Exception}";
 string SerilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,9 +84,8 @@ app.UseStaticFiles(options);
 app.UseRouting();
 
 app.UseAuthentication();
-
+app.UseFetchUser();
 app.UseAuthorization();
-//app.UseFetchUser();
 
 app.MapControllerRoute(
     name: "Area",
