@@ -1,7 +1,10 @@
-﻿using Mi.Core.Attributes;
+﻿using System.Security.Claims;
+
+using Mi.Core.Attributes;
 using Mi.Core.Enum;
 using Mi.Core.Models;
 using Mi.Core.Service;
+using Mi.Core.Toolkit.Helper;
 using Mi.IService.System;
 
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +16,7 @@ namespace Mi.Admin.WebComponent.Middleware
     {
         private readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
         private readonly ILogger<FuncAuthorizationMiddleware> _logger;
+        private readonly string[] IGNORE_CONTROLLERS = { "home" };
 
         public FuncAuthorizationMiddleware(ILogger<FuncAuthorizationMiddleware> logger)
         {
@@ -21,11 +25,13 @@ namespace Mi.Admin.WebComponent.Middleware
 
         public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
         {
-            var userModel = context.GetUser();
-            if (userModel != null && userModel.UserId > 0)
+            var permissionService = DotNetService.Get<IPermissionService>();
+            var userModel = await permissionService.QueryUserModelAsync(StringHelper.ToLong(context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+            var controllerName = (string?)context.Request.RouteValues["controller"] ?? "";
+
+            context.Features.Set(userModel);
+            if (!IGNORE_CONTROLLERS.Contains(controllerName.ToLower()) && userModel != null && userModel.UserId > 0)
             {
-                //var controllerName = (string?)context.Request.RouteValues["controller"];
-                //var actionName = (string?)context.Request.RouteValues["action"];
                 var path = context.Request.Path.Value;
                 if (!userModel.IsSuperAdmin)
                 {
@@ -42,11 +48,10 @@ namespace Mi.Admin.WebComponent.Middleware
                     if (!flag)
                     {
                         await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
-                        _logger.LogWarning($"'{userModel.UserName}'访问地址'{path}'权限不足");
+                        _logger.LogWarning($"'用户Id：{userModel.UserId}，用户名：{userModel.UserName}'访问地址`{path}`权限不足");
                         return;
                     }
                 }
-                context.Features.Set(userModel);
             }
             await defaultHandler.HandleAsync(next, context, policy, authorizeResult);
         }

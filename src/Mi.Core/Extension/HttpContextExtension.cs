@@ -12,9 +12,7 @@ namespace Mi.Core.Extension
     {
         public static UserModel GetUser(this HttpContext context)
         {
-            var userData = context.User.FindFirst(ClaimTypes.UserData)?.Value;
-            if (userData == null) return new UserModel();
-            return JsonConvert.DeserializeObject<UserModel>(userData) ?? new UserModel();
+            return context.Features.Get<UserModel>() ?? new UserModel();
         }
     }
 }

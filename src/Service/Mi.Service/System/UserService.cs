@@ -2,6 +2,9 @@
 using Mi.Core.Toolkit.API;
 using Mi.Entity.System;
 using Mi.Core.Toolkit.Helper;
+using Mi.Core.Service;
+using Mi.Repository.BASE;
+using System.Text;
 
 namespace Mi.Service.System
 {
@@ -21,14 +24,26 @@ namespace Mi.Service.System
 
         public async Task<MessageModel<string>> AddUserAsync(string userName)
         {
-            var user = new SysUser { UserName = userName, Id = IdHelper.SnowflakeId() };
-            user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
+            var user = new SysUser
+            {
+                UserName = userName,
+                Id = IdHelper.SnowflakeId(),
+                PasswordSalt = EncryptionHelper.GetPasswordSalt()
+            };
             var password = StringHelper.GetRandomString(6);
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
 
             var flag = await _userRepository.AddAsync(user);
 
             return new MessageModel<string>(flag, flag ? "操作成功" : "操作失败", password);
+        }
+
+        public async Task<IList<SysRole>> GetRolesAsync(long id)
+        {
+            var roleRepo = DotNetService.Get<Repository<SysRole>>();
+            var sql = new StringBuilder("select r.* from SysRole r,SysRoleFunction rf,SysUserRole ur where r.Id=rf.RoleId ");
+            sql.Append(" and ur.RoleId=r.Id and r.IsDeleted=0 and ur.UserId=@id group by r.Id");
+            return await roleRepo.GetListAsync(sql.ToString(), new {id});
         }
 
         public async Task<MessageModel<SysUser>> GetUserAsync(long userId)

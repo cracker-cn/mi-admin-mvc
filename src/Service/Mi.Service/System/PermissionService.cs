@@ -33,6 +33,7 @@ namespace Mi.Service.System
         private readonly HttpContext _context;
         private readonly IMemoryCache _memoryCache;
         private readonly IMiUser _miUser;
+        private readonly IUserService _userService;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
@@ -43,7 +44,8 @@ namespace Mi.Service.System
             , CaptchaFactory captchaFactory
             , IHttpContextAccessor httpContextAccessor
             , IMemoryCache memoryCache
-            , IMiUser miUser)
+            , IMiUser miUser
+            , IUserService userService)
         {
             _message = message;
             _permissionRepository = permissionRepository;
@@ -55,6 +57,7 @@ namespace Mi.Service.System
             _context = httpContextAccessor.HttpContext!;
             _memoryCache = memoryCache;
             _miUser = miUser;
+            _userService = userService;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -151,13 +154,12 @@ namespace Mi.Service.System
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             if (!flag) return _message.Fail("用户名或密码错误");
 
-            var userModel = await QueryUserModelAsync(user);
+            var roles = await _userService.GetRolesAsync(user.Id);
             var claims = new Claim[]
             {
                 new (ClaimTypes.Name,user.UserName),
                 new (ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new (ClaimTypes.Role,userModel.Roles),
-                new (ClaimTypes.UserData,JsonConvert.SerializeObject(userModel))
+                new (ClaimTypes.Role,string.Join(",",roles.Select(x=>x.RoleName)))
             };
             var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await _context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
@@ -165,8 +167,9 @@ namespace Mi.Service.System
             return _message.Success("登录成功");
         }
 
-        public async Task<UserModel> QueryUserModelAsync(SysUser? user)
+        public async Task<UserModel> QueryUserModelAsync(long id)
         {
+            var user = await _userRepository.GetAsync(id);
             if (user != null)
             {
                 var userModel = new UserModel

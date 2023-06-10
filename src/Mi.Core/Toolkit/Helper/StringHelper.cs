@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mi.Core.Toolkit.Helper
 {
@@ -14,16 +9,16 @@ namespace Mi.Core.Toolkit.Helper
         {
             string s = "123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ";
             string reValue = string.Empty;
-            Random rnd = new Random(getNewSeed());
+            Random rnd = new(GetNewSeed());
             while (reValue.Length < len)
             {
                 string s1 = s[rnd.Next(0, s.Length)].ToString();
-                if (reValue.IndexOf(s1) == -1) reValue += s1;
+                if (!reValue.Contains(s1, StringComparison.CurrentCulture)) reValue += s1;
             }
             return reValue;
         }
 
-        public static int getNewSeed()
+        public static int GetNewSeed()
         {
             byte[] rndBytes = new byte[4];
             var rng = RandomNumberGenerator.Create();
@@ -45,10 +40,17 @@ namespace Mi.Core.Toolkit.Helper
                 }
                 return string.Empty;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Ouch(ex.Message);
             }
+        }
+
+        public static long ToLong(string? str)
+        {
+            if (string.IsNullOrWhiteSpace(str)) return 0;
+            long.TryParse(str, out long result);
+            return result;
         }
     }
 }

@@ -15,5 +15,7 @@ namespace Mi.IService.System
 		Task<MessageModel<SysUser>> GetUserAsync(long userId);
 
 		Task<MessageModel> PassedUserAsync(long id);
+
+		Task<IList<SysRole>> GetRolesAsync(long id);
 	}
 }
