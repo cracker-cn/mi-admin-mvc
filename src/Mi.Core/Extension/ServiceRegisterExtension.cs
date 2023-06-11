@@ -25,7 +25,7 @@ namespace Mi.Core.Extension
             service.AutoInject();
             service.AddSingleton<MessageModel>();
             service.AddHttpContextAccessor();
-            service.AddMemoryCache();
+            //service.AddMemoryCache();
             service.AddSimpleCaptcha(builder =>
             {
                 builder.UseMemoryStore();

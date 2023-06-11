@@ -12,9 +12,12 @@ namespace Mi.Core.Factory
     {
         private readonly IMemoryCache _cache;
 
-        public MemoryCacheFactory(IMemoryCache cache)
+        /// <summary>
+        /// TODO: 直接注入IMemoryCache拿不到所有keys
+        /// </summary>
+        public MemoryCacheFactory()
         {
-            _cache = cache;
+            _cache = DotNetService.Get<IMemoryCache>();
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace Mi.Core.Factory
         /// </summary>
         /// <param name="key">缓存Key</param>
         /// <returns></returns>
-        public T? Get<T>(string key) where T : class,new()
+        public T? Get<T>(string key) where T : class, new()
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
