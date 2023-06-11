@@ -52,8 +52,13 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> RemoveRoleAsync(long id)
         {
+            var count = await _roleRepository.UsedRoleCountAsync(id);
+            if (count > 0) return _message.Fail("角色正在使用，请先移除角色下用户");
+
             await _roleRepository.UpdateAsync(id, node => node.MarkDeleted()
                 .ModifiedUser(_miUser.UserId).ModifiedTime());
+            //移除角色下功能
+            await _roleRepository.ExecuteAsync("delete from SysRoleFunction where RoleId=@id", new { id });
 
             return _message.Success();
         }
