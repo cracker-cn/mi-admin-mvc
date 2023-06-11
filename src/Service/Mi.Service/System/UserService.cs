@@ -13,13 +13,16 @@ namespace Mi.Service.System
         private readonly IUserRepository _userRepository;
         private readonly MessageModel _message;
         private readonly IMiUser _miUser;
+        private readonly IPermissionService _permissionService;
 
         public UserService(IUserRepository userRepository, MessageModel message
-            , IMiUser miUser)
+            , IMiUser miUser
+            , IPermissionService permissionService)
         {
             _userRepository = userRepository;
             _message = message;
             _miUser = miUser;
+            _permissionService = permissionService;
         }
 
         public async Task<MessageModel<string>> AddUserAsync(string userName)
@@ -43,12 +46,24 @@ namespace Mi.Service.System
             var roleRepo = DotNetService.Get<Repository<SysRole>>();
             var sql = new StringBuilder("select r.* from SysRole r,SysRoleFunction rf,SysUserRole ur where r.Id=rf.RoleId ");
             sql.Append(" and ur.RoleId=r.Id and r.IsDeleted=0 and ur.UserId=@id group by r.Id");
-            return await roleRepo.GetListAsync(sql.ToString(), new {id});
+            return await roleRepo.GetListAsync(sql.ToString(), new { id });
         }
 
         public async Task<MessageModel<SysUser>> GetUserAsync(long userId)
         {
             return new MessageModel<SysUser>(true, "查询成功", await _userRepository.GetAsync(userId));
+        }
+
+        public async Task<MessageModel<UserBaseInfo>> GetUserBaseInfoAsync()
+        {
+            var user = await _userRepository.GetAsync(_miUser.UserId);
+            return new MessageModel<UserBaseInfo>(new UserBaseInfo
+            {
+                Avatar = user.Avatar,
+                NickName = user.NickName,
+                Sex = user.Sex,
+                Signature = user.Signature
+            });
         }
 
         public async Task<MessageModel<PagingModel<UserItem>>> GetUserListAsync(UserSearch search)
@@ -83,6 +98,22 @@ namespace Mi.Service.System
                 .Set(x => x.ModifiedOn, TimeHelper.LocalTime()));
 
             return flag ? _message.Success() : _message.Fail();
+        }
+
+        public async Task<MessageModel> SetPasswordAsync(string password)
+        {
+            var user = await _userRepository.GetAsync(_miUser.UserId);
+            user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
+            user.Password = EncryptionHelper.GenEncodingPassword(user.Password,user.PasswordSalt);
+            await _userRepository.UpdateAsync(user);
+            await _permissionService.LogoutAsync();
+
+            return _message.Success("修改成功，请重新登录");
+        }
+
+        public Task<MessageModel> SetUserBaseInfoAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<MessageModel<string>> UpdatePasswordAsync(long userId)

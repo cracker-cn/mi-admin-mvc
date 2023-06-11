@@ -11,7 +11,7 @@ namespace Mi.IService.System
 
         Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search);
 
-        Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation);
+        Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation, bool addEnabled = true);
 
         Task<MessageModel> RemoveDictAsync(IList<string> ids);
 
@@ -20,5 +20,17 @@ namespace Mi.IService.System
         Task<List<Option>> GetParentListAsync();
 
         #endregion Admin_UI
+
+        #region 公共读写方法，带缓存
+
+        Task<T> GetAsync<T>(string parentKey) where T : class, new();
+
+        Task<bool> SetAsync<T>(T model) where T : class, new();
+
+        Task<string> GetStringAsync(string key);
+
+        Task<bool> SetAsync(string key, string value, bool autoCreate = true);
+
+        #endregion
     }
 }

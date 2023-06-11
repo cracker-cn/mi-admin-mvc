@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["PC"] = true;
+}
+
+@section Styles{
+    <link href="~/admin/css/other/person.css" rel="stylesheet" />
+}
+
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-body" style="padding: 25px;">
+                <div class="text-center layui-text">
+                    <div class="user-info-head" id="userInfoHead">
+                        <img src="../../admin/images/avatar.jpg" id="userAvatar" width="115" height="115" alt="">
+                    </div>
+                    <h2 style="padding-top: 20px;font-size: 20px;">就眠仪式</h2>
+                </div>
+            </div>
+            <div style="height: 45px;border-top: 1px whitesmoke solid;text-align: center;line-height: 45px;font-size: 13.5px;">
+                <span>今日事 ，今日毕</span>
+            </div>
+        </div>
+    </div>
+	<div class="layui-col-md9">
+		<div class="layui-card">
+			<div class="layui-card-header">
+				基本资料
+			</div>
+			<div class="layui-card-body">
+                <div class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="tt68d" value="男" title="男">
+                            <input type="radio" name="tt68d" value="女" title="女" checked>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">昵称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="203cn" required lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">个性签名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="quiv" required lay-verify="required" placeholder="请输入输入框内容" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="pear-btn pear-btn-primary" lay-submit lay-filter="infoSubmit">立即提交</button>
+                            <button type="reset" class="pear-btn">重置</button>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(infoSubmit)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+        });
+    </script>
+}

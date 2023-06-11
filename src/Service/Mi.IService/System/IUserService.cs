@@ -17,5 +17,11 @@ namespace Mi.IService.System
 		Task<MessageModel> PassedUserAsync(long id);
 
 		Task<IList<SysRole>> GetRolesAsync(long id);
+
+		Task<MessageModel<UserBaseInfo>> GetUserBaseInfoAsync();
+
+		Task<MessageModel> SetUserBaseInfoAsync();
+
+		Task<MessageModel> SetPasswordAsync(string password);
 	}
 }

@@ -17,6 +17,11 @@ namespace Mi.Admin.Areas.System.Controllers
             _permissionService = permissionService;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<List<PaMenuModel>> GetSiderMenu()
