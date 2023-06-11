@@ -1,4 +1,6 @@
-﻿using Mi.Core.Toolkit.API;
+﻿using Dapper;
+
+using Mi.Core.Toolkit.API;
 
 namespace Mi.Service.System
 {
@@ -17,7 +19,7 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> AddRoleAsync(string name, string remark)
         {
-            var isExist = (await _roleRepository.GetAllAsync(x=>x.RoleName.ToLower() == name.ToLower())).Count>0;
+            var isExist = (await _roleRepository.GetAllAsync(x => x.RoleName.ToLower() == name.ToLower())).Count > 0;
             if (isExist) return _message.Fail("角色名已存在");
 
             var role = new SysRole
@@ -42,10 +44,15 @@ namespace Mi.Service.System
 
         public async Task<MessageModel<PagingModel<SysRole>>> GetRoleListAsync(RoleSearch search)
         {
-            var exp = ExpressionCreator.New<SysRole>()
-                .AndIf(!string.IsNullOrEmpty(search.RoleName), x => x.RoleName.Contains(search.RoleName!));
+            var sql = "select * from SysRole where IsDeleted=0 ";
+            var parameter = new DynamicParameters();
+            if (!string.IsNullOrEmpty(search.RoleName))
+            {
+                sql += " and RoleName like @name ";
+                parameter.Add("name", "%" + search.RoleName + "%");
+            }
 
-            var pageModel = await _roleRepository.QueryPageAsync(search.Page, search.Size, exp);
+            var pageModel = await _roleRepository.QueryPageAsync(search.Page, search.Size, sql,parameter, "CreatedOn desc");
 
             return new MessageModel<PagingModel<SysRole>>(true, "查询成功", pageModel);
         }

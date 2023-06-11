@@ -2,7 +2,6 @@
 @{
     ViewData["PC"] = true;
 }
-@inject IDictService dictService
 
 <div class="layui-card">
     <div class="layui-card-body">
@@ -10,13 +9,7 @@
             <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">上级</label>
                 <div class="layui-input-inline">
-                    <select name="parentId">
-                        <option value="">全部</option>
-                        @foreach (var item in await dictService.GetParentListAsync())
-                        {
-                            <option value="@item.Value">@item.Name</option>
-                        }
-                    </select>
+                    <select name="parentId" lay-search></select>
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
@@ -75,6 +68,8 @@
             let $ = layui.jquery;
             let common = layui.common;
             let pageRootUrl = "/System/Dict/";
+
+            loadSelectOptions();
 
             table.render({
                 elem: '#dict-table',
@@ -179,6 +174,9 @@
 
             $("#btnReset").click(function () {
                 $("input[name='dictName']").val('');
+                $("input[name='remark']").val('');
+                $("select[name='parentId']").val('')
+                form.render();
                 table.reload('dict-table', {
                     where: {}
                 })
@@ -186,6 +184,7 @@
 
             window.refresh = function (param) {
                 table.reload('dict-table');
+                loadSelectOptions()
             }
 
             window.add = function () {
@@ -283,6 +282,20 @@
                         }
                     })
                 });
+            }
+
+            function loadSelectOptions(){
+                $.post(pageRootUrl + 'GetParentList', function (res) {
+                    if (res && res.length) {
+                        let arr = []
+                        arr.push(`<option value=''>全部<option>`)
+                        for(const item of res){
+                            arr.push(`<option valul='${item.value}'>${item.name}</option>`)
+                        }
+                        $("select[name='parentId']").html(arr.join(''))
+                        form.render()
+                    }
+                })
             }
         })
     </script>

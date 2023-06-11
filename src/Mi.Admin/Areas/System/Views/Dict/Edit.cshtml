@@ -11,8 +11,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">上级</label>
                     <div class="layui-input-block">
-                        <select name="parentId">
-                            <option value="0">请选择字典上级</option>
+                        <select name="parentId" lay-search>
+                            <option value="">请选择字典上级</option>
                             @foreach (var item in list.Where(x=>x.Id != Model.Id))
                             {
                                 @if(item.Id == Model.ParentId)
@@ -29,14 +29,14 @@
                 </div>
             }
             <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label mi-required-label">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" value="@Model.Name" lay-verify="required" autocomplete="off" placeholder="请输入字典名称"
                            class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">键名</label>
+                <label class="layui-form-label mi-required-label">键名</label>
                 <div class="layui-input-block">
                     <input type="text" name="key" value="@Model.Key" lay-verify="required" autocomplete="off" placeholder="请输入字典键名"
                            class="layui-input">

@@ -1,4 +1,5 @@
-﻿using Mi.Core.Models;
+﻿using Mi.Core.CommonOption;
+using Mi.Core.Models;
 using Mi.Core.Models.Paging;
 using Mi.IService.System;
 using Mi.IService.System.Models;
@@ -42,5 +43,9 @@ namespace Mi.Admin.Areas.System.Controllers
         [HttpPost]
         public async Task<MessageModel> RemoveDict(IList<string> ids)
             => await _dictService.RemoveDictAsync(ids);
+
+        [HttpPost]
+        public async Task<List<Option>> GetParentList()
+            => await _dictService.GetParentListAsync();
     }
 }

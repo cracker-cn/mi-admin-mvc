@@ -5,17 +5,9 @@ namespace Mi.IService.System
 {
     public interface IDictService
     {
-        Task<string> GetValueAsync(string key);
-
-        Task<bool> SetValueAsync(string key, string value);
-
-        Task<bool> UpdateAsync(Dictionary<string, string> keyValues);
-
-        Task<IList<Option>> GetOptionsAsync(string key);
+        #region Admin_UI
 
         List<SysDict> GetAll();
-
-        #region Admin_UI
 
         Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search);
 

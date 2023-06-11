@@ -26,6 +26,6 @@ namespace Mi.IService.System
 
         Task LogoutAsync();
 
-        Task<UserModel> QueryUserModelAsync(string userData);
+        Task<UserModel> QueryUserModelCacheAsync(string userData);
     }
 }

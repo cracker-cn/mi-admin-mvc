@@ -174,7 +174,7 @@ namespace Mi.Service.System
             return _message.Success("登录成功");
         }
 
-        public async Task<UserModel> QueryUserModelAsync(string userData)
+        public async Task<UserModel> QueryUserModelCacheAsync(string userData)
         {
             var arr = StringHelper.GetUserData(userData);
             var key = StringHelper.UserKey(arr.Item2,arr.Item3);

@@ -33,61 +33,6 @@ namespace Mi.Service.System
             _message = message;
         }
 
-        public async Task<IList<Option>> GetOptionsAsync(string key)
-        {
-            return await Task.FromResult(Options.Where(x => x.Name == key).ToList());
-        }
-
-        public async Task<string> GetValueAsync(string key)
-        {
-            var dict = await _dictRepository.GetAsync(x => x.Key == key);
-            return dict.Value ?? "";
-        }
-
-        public async Task<bool> SetValueAsync(string key, string value)
-        {
-            var dict = await _dictRepository.GetAsync(x => x.Key == key);
-            dict.Value = value;
-            dict.ModifiedOn = TimeHelper.LocalTime();
-            dict.ModifiedBy = _miUser.UserId;
-
-            if (await _dictRepository.UpdateAsync(dict))
-            {
-                _cache.Remove(CacheConst.DICT);
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> UpdateAsync(Dictionary<string, string> keyValues)
-        {
-            var list = new List<SysDict>();
-            var now = TimeHelper.LocalTime();
-            foreach (var kvp in keyValues)
-            {
-                var item = await _dictRepository.GetAsync(x => x.Key == kvp.Key);
-                item.Value = kvp.Value;
-                item.ModifiedOn = now;
-                item.ModifiedBy = _miUser.UserId;
-                list.Add(item);
-            }
-
-            if (await _dictRepository.UpdateManyAsync(list))
-            {
-                _cache.Remove(CacheConst.DICT);
-                return true;
-            }
-
-            return false;
-        }
-
-        private List<Option> GetOptions()
-        {
-            return GetAll().Select(x => new Option { Name = x.Key, Value = x.Value }).ToList();
-        }
-
-        private List<Option> Options => _cache.GetOrCreate(CacheConst.DICT, opt => GetOptions()) ?? GetOptions();
-
         #region Admin_UI
 
         public async Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search)

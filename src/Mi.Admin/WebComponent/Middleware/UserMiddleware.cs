@@ -25,7 +25,7 @@ namespace Mi.Admin.WebComponent.Middleware
             if (isLogin && !string.IsNullOrWhiteSpace(data))
             {
                 var permissionService = DotNetService.Get<IPermissionService>();
-                var userModel = await permissionService.QueryUserModelAsync(data);
+                var userModel = await permissionService.QueryUserModelCacheAsync(data);
 
                 context.Features.Set(userModel);
             }

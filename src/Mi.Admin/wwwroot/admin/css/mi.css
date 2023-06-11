@@ -1,7 +1,7 @@
 @import url("../../component/font/iconfont.css");
 
-.mt-1{
-    margin-top:15px !important;
+.mt-1 {
+    margin-top: 15px !important;
 }
 
 .my-1 {
@@ -17,4 +17,9 @@
 .mi-btn-green {
     background-color: #16baaa !important;
     color: #fff !important;
+}
+
+.mi-required-label:before {
+    content: " * ";
+    color: red;
 }

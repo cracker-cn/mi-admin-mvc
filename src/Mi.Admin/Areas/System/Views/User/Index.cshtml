@@ -86,6 +86,17 @@
                         }
                     },
                     {
+                        title: '角色/身份',
+                        field: 'roleNameString',
+                        align: 'center',
+                        templet: function (d) {
+                            if (d.roleNameString) {
+                                return d.roleNameString
+                            }
+                            return `--`
+                        }
+                    },
+                    {
                         title: '创建时间',
                         field: 'createdOn',
                         align: 'center'
