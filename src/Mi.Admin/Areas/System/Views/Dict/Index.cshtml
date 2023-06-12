@@ -290,7 +290,7 @@
                         let arr = []
                         arr.push(`<option value=''>全部<option>`)
                         for(const item of res){
-                            arr.push(`<option valul='${item.value}'>${item.name}</option>`)
+                            arr.push(`<option value='${item.value}'>${item.name}</option>`)
                         }
                         $("select[name='parentId']").html(arr.join(''))
                         form.render()

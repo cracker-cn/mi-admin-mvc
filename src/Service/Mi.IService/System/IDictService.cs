@@ -31,6 +31,10 @@ namespace Mi.IService.System
 
         Task<bool> SetAsync(string key, string value, bool autoCreate = true);
 
+        Task<IList<Option>> GetOptionsAsync(string parentKey);
+
+        IList<Option> GetOptions(string parentKey);
+
         #endregion
     }
 }

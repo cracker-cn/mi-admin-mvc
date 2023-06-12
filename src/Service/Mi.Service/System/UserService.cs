@@ -1,10 +1,10 @@
-﻿using Mi.Core.GlobalUser;
-using Mi.Core.Toolkit.API;
-using Mi.Entity.System;
-using Mi.Core.Toolkit.Helper;
+﻿using System.Text;
+
 using Mi.Core.Service;
 using Mi.Repository.BASE;
-using System.Text;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace Mi.Service.System
 {
@@ -13,16 +13,13 @@ namespace Mi.Service.System
         private readonly IUserRepository _userRepository;
         private readonly MessageModel _message;
         private readonly IMiUser _miUser;
-        private readonly IPermissionService _permissionService;
 
         public UserService(IUserRepository userRepository, MessageModel message
-            , IMiUser miUser
-            , IPermissionService permissionService)
+            , IMiUser miUser)
         {
             _userRepository = userRepository;
             _message = message;
             _miUser = miUser;
-            _permissionService = permissionService;
         }
 
         public async Task<MessageModel<string>> AddUserAsync(string userName)
@@ -104,16 +101,25 @@ namespace Mi.Service.System
         {
             var user = await _userRepository.GetAsync(_miUser.UserId);
             user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
-            user.Password = EncryptionHelper.GenEncodingPassword(user.Password,user.PasswordSalt);
+            user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             await _userRepository.UpdateAsync(user);
-            await _permissionService.LogoutAsync();
+            var context = DotNetService.Get<IHttpContextAccessor>().HttpContext;
+            await context.SignOutAsync();
 
             return _message.Success("修改成功，请重新登录");
         }
 
-        public Task<MessageModel> SetUserBaseInfoAsync()
+        public async Task<MessageModel> SetUserBaseInfoAsync(UserBaseInfo model)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetAsync(_miUser.UserId);
+            user.Avatar = model.Avatar;
+            user.NickName = model.NickName;
+            user.Signature = model.Signature;
+            user.Sex = model.Sex;
+            user.ModifiedBy = _miUser.UserId;
+            user.ModifiedOn = TimeHelper.LocalTime();
+            await _userRepository.UpdateAsync(user);
+            return _message.Success();
         }
 
         public async Task<MessageModel<string>> UpdatePasswordAsync(long userId)

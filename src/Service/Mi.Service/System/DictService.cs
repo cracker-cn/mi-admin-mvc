@@ -13,6 +13,7 @@ using Mi.IService.System.Models.Result;
 using Mi.Repository.BASE;
 
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 
 namespace Mi.Service.System
 {
@@ -39,7 +40,7 @@ namespace Mi.Service.System
         public async Task<MessageModel<PagingModel<DictItem>>> GetDictListAsync(DictSearch search)
         {
             var repo = DotNetService.Get<Repository<DictItem>>();
-            var sql = new StringBuilder(@"select d.*,(select count(*) from SysDict where id = d.ParentId) ChildCount,(select name from SysDict where id=d.ParentId) ParentName from SysDict d where d.IsDeleted = 0");
+            var sql = new StringBuilder(@"select d.*,(select count(*) from SysDict where id = d.ParentId) ChildCount,(select name from SysDict where id=d.ParentId) ParentName from SysDict d where d.IsDeleted = 0 ");
             var parameters = new DynamicParameters();
             if (!string.IsNullOrEmpty(search.Vague))
             {
@@ -51,11 +52,14 @@ namespace Mi.Service.System
                 sql.Append(" and d.remark like @remark ");
                 parameters.Add("remark", "%" + search.Remark + "%");
             }
+            var orderBy = "";
             if (search.ParentId.HasValue && search.ParentId > 0)
             {
                 sql.Append(" and d.ParentId = @parentId ");
+                orderBy = " Sort asc,";
                 parameters.Add("parentId", search.ParentId);
             }
+            sql.AppendFormat(" order by {0} CreatedOn desc ", orderBy);
 
             return new MessageModel<PagingModel<DictItem>>(true, await repo.GetPagingAsync(search, sql.ToString(), parameters));
         }
@@ -194,6 +198,26 @@ namespace Mi.Service.System
             var list = _dictRepository.GetAll().ToList();
             _cache.Set(CacheConst.DICT, list, CacheConst.Week);
             return list;
+        }
+
+        public async Task<IList<Option>> GetOptionsAsync(string parentKey)
+        {
+            var dict = GetDictionaryCache().Where(x => x.ParentKey == parentKey).Select(x => new Option
+            {
+                Name = x.Name,
+                Value = x.Value
+            }).ToList();
+            return await Task.FromResult(dict);
+        }
+
+        public IList<Option> GetOptions(string parentKey)
+        {
+            var dict = GetDictionaryCache().Where(x => x.ParentKey == parentKey).Select(x=>new Option
+            {
+                Name = x.Name,
+                Value = x.Value
+            });
+            return dict.ToList();
         }
 
         #endregion

@@ -20,7 +20,7 @@ namespace Mi.IService.System
 
 		Task<MessageModel<UserBaseInfo>> GetUserBaseInfoAsync();
 
-		Task<MessageModel> SetUserBaseInfoAsync();
+		Task<MessageModel> SetUserBaseInfoAsync(UserBaseInfo model);
 
 		Task<MessageModel> SetPasswordAsync(string password);
 	}
