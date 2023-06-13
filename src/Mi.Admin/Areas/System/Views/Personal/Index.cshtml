@@ -202,7 +202,10 @@
                         $('#sign_span').text(res.result.signature)
                         $('input[name=sex]').each(function (index, element) {
                             if ($(element).val() == res.result.sex) {
-                                $(element).attr('checked', true)
+                                $(element).prop('checked', true)
+                            }
+                            else{
+                                $(element).prop('checked', false)
                             }
                         })
 
