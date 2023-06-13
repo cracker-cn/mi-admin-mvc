@@ -138,6 +138,7 @@ namespace Mi.Service.System
             user.UserName = userName;
             user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
+            user.Avatar = StringHelper.DefaultAvatar();
             await _userRepository.AddAsync(user);
 
             return _message.Success("注册成功，请等待管理员审核！");

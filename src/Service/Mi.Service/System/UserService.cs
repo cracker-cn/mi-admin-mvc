@@ -1,5 +1,6 @@
 ﻿using System.Text;
 
+using Mi.Core.GlobalVar;
 using Mi.Core.Service;
 using Mi.Repository.BASE;
 
@@ -28,7 +29,8 @@ namespace Mi.Service.System
             {
                 UserName = userName,
                 Id = IdHelper.SnowflakeId(),
-                PasswordSalt = EncryptionHelper.GetPasswordSalt()
+                PasswordSalt = EncryptionHelper.GetPasswordSalt(),
+                Avatar = StringHelper.DefaultAvatar()
             };
             var password = StringHelper.GetRandomString(6);
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);

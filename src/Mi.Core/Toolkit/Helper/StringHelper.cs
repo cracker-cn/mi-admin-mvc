@@ -1,5 +1,8 @@
 ﻿using System.Net.NetworkInformation;
 using System.Security.Cryptography;
+using Mi.Core.Service;
+
+using Microsoft.Extensions.Options;
 
 namespace Mi.Core.Toolkit.Helper
 {
@@ -64,5 +67,12 @@ namespace Mi.Core.Toolkit.Helper
         }
 
         public static string UserCachePattern() => "\\.*(_function_){1}\\.*";
+
+        public static string DefaultAvatar()
+        {
+            var webRootPath = DotNetService.Get<IOptionsMonitor<EnvironmentHandler>>().CurrentValue.WebRootPath;
+            var path = Path.Combine(webRootPath, "admin", "images", "avatar.jpg");
+            return FileHelper.GetBase64(path);
+        }
     }
 }

@@ -55,6 +55,12 @@ builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthori
 var uiConfig = builder.Configuration.GetSection("AdminUI");
 builder.Services.Configure<PaConfigModel>(uiConfig);
 
+//EnvironmentHandler.cs
+builder.Services.Configure<EnvironmentHandler>(x =>
+{
+    x.WebRootPath = builder.Environment.WebRootPath;
+});
+
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 
