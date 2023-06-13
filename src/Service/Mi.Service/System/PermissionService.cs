@@ -130,7 +130,7 @@ namespace Mi.Service.System
 
         public async Task<MessageModel> RegisterAsync(string userName, string password)
         {
-            if (!userName.RegexValidate("[A-Za-z0-9]{4,12}")) return _message.Fail("用户名只支持大小写字母和数字，最短4位，最长12位");
+            if (!userName.RegexValidate(PatternConst.UserName)) return _message.Fail("用户名只支持大小写字母和数字，最短4位，最长12位");
             var count = _userRepository.ExecuteScalar<int>("select count(*) from SysUser where LOWER(UserName)=@name and IsDeleted=0", new { name = userName.ToLower() });
             if (count > 0) return _message.Fail("用户名已存在");
 

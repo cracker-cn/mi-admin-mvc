@@ -8,7 +8,7 @@
             <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="userName" class="layui-input">
+                    <input type="text" name="userName" placeholder="请输入用户名" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
@@ -72,7 +72,13 @@
                     {
                         title: '头像',
                         field: 'avatar',
-                        align: 'center'
+                        align: 'center',
+                        templet: function (d) {
+                            if (!d.avatar){
+                                return ""
+                            }
+                            return `<img src="${d.avatar}" width="50" height="50" />`
+                        }
                     },
                     {
                         title: '用户名',
@@ -87,7 +93,10 @@
                     {
                         title: '性别',
                         field: 'sex',
-                        align: 'center'
+                        align: 'center',
+                        templet: function (d) {
+                            return d.sex == 1 ? '男' : '女'
+                        }
                     },
                     {
                         title: '个性签名',
