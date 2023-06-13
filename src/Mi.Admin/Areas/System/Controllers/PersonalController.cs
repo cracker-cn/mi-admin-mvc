@@ -21,6 +21,7 @@ namespace Mi.Admin.Areas.System.Controllers
             _userService = userService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

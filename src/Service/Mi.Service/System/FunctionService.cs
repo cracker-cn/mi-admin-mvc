@@ -47,17 +47,25 @@ namespace Mi.Service.System
                 {
                     await UpdateParentNodeAsync(func.ParentId, func.Id);
                 }
+                if (string.IsNullOrWhiteSpace(func.Icon))
+                {
+                    func.Icon = "iconfont mi-iconfonticon";
+                }
                 await _functionRepository.AddAsync(func);
             }
             else
             {
                 var func = _functionRepository.Get(operation.Id);
+                func.Icon = operation.Icon;
                 if (operation.ParentId > 0 && operation.ParentId != func.ParentId)
                 {
                     await UpdateParentNodeAsync(operation.ParentId, func.Id, func.ParentId);
                 }
+                if (string.IsNullOrWhiteSpace(func.Icon))
+                {
+                    func.Icon = "iconfont mi-iconfonticon";
+                }
                 func.FunctionName = operation.FunctionName;
-                func.Icon = operation.Icon;
                 func.Url = operation.Url;
                 func.AuthorizationCode = operation.AuthorizationCode;
                 func.ParentId = operation.ParentId;

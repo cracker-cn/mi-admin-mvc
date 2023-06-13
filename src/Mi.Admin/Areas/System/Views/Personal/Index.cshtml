@@ -93,12 +93,11 @@
 
 @section Scripts{
     <script>
-        layui.use(['form', 'jquery', 'common', 'convert', 'toast'], function () {
+        layui.use(['form', 'jquery', 'common', 'convert'], function () {
             let form = layui.form;
             let $ = layui.jquery;
             let common = layui.common;
             let convert = layui.convert;
-            let toast = layui.toast;
 
             initData();
 
@@ -115,7 +114,7 @@
 
             form.on('submit(pwdSubmit)', function (data) {
                 if (data.field.pwd != data.field.sure_pwd) {
-                    toast.warning({ title: '提示', message: '两次输入密码不一致', position: 'topRight' });
+                    layer.msg('两次输入密码不一致',{icon:5});
                     return false;
                 }
                 layer.confirm('确定更新登录密码？', {

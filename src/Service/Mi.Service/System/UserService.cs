@@ -110,9 +110,9 @@ namespace Mi.Service.System
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             await _userRepository.UpdateAsync(user);
             var context = DotNetService.Get<IHttpContextAccessor>().HttpContext;
-            await context.SignOutAsync();
+            //await context.SignOutAsync();
 
-            return _message.Success("修改成功，请重新登录");
+            return _message.Success("修改成功，下次登录时请使用新密码");
         }
 
         public async Task<MessageModel> SetUserBaseInfoAsync(UserBaseInfo model)

@@ -45,7 +45,7 @@ namespace Mi.Admin.WebComponent.Middleware
                     }
                     if (!flag)
                     {
-                        await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问"));
+                        await context.Response.WriteAsJsonAsync(new MessageModel(EnumResponseCode.Forbidden, "权限不足，无法访问或操作"));
                         _logger.LogWarning($"'用户Id：{userModel.UserId}，用户名：{userModel.UserName}'访问地址`{path}`权限不足");
                         return;
                     }
