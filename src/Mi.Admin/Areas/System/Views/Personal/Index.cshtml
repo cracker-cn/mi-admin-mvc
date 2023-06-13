@@ -55,7 +55,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button class="pear-btn pear-btn-primary" lay-submit lay-filter="infoSubmit">确认修改</button>
-                            <button type="reset" class="pear-btn">重置</button>
+                            <button id="resetBtn" class="pear-btn">重置</button>
                         </div>
                     </div>
                 </div>
@@ -68,13 +68,13 @@
             <div class="layui-card-body">
                 <div class="layui-form" action="">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">新密码</label>
+                        <label class="layui-form-label mi-required-label">新密码</label>
                         <div class="layui-input-block">
                             <input type="password" name="pwd" required lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">确认密码</label>
+                        <label class="layui-form-label mi-required-label">确认密码</label>
                         <div class="layui-input-block">
                             <input type="password" name="sure_pwd" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
                         </div>
@@ -201,7 +201,7 @@
                         $('input[name="signature"]').val(res.result.signature)
                         $('#sign_span').text(res.result.signature)
                         $('input[name=sex]').each(function (index, element) {
-                            if (element.value == res.result.sex) {
+                            if ($(element).val() == res.result.sex) {
                                 $(element).attr('checked', true)
                             }
                         })
@@ -219,6 +219,11 @@
             $('#clearBtn').click(function () {
                 $('input[name="pwd"]').val('')
                 $('input[name="sure_pwd"]').val('')
+            })
+
+            //TODO: 重置单选按钮无效
+            $('#resetBtn').click(function(){
+                initData()
             })
         });
     </script>
