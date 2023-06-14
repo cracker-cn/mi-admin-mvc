@@ -34,7 +34,9 @@ namespace Mi.Service.System
                 UserName = userName,
                 Id = IdHelper.SnowflakeId(),
                 PasswordSalt = EncryptionHelper.GetPasswordSalt(),
-                Avatar = StringHelper.DefaultAvatar()
+                Avatar = StringHelper.DefaultAvatar(),
+                NickName = userName,
+                Signature = "请设置您的个性签名"
             };
             var password = StringHelper.GetRandomString(6);
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);

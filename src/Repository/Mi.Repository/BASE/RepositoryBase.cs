@@ -134,22 +134,22 @@ namespace Mi.Repository.BASE
 
         public IList<T> GetAll()
         {
-            return DB.Set<T>().ToList();
+            return DB.Set<T>().AsNoTracking().ToList();
         }
 
         public IList<T> GetAll(Expression<Func<T, bool>> exp)
         {
-            return DB.Set<T>().Where(exp).ToList();
+            return DB.Set<T>().AsNoTracking().Where(exp).ToList();
         }
 
         public async Task<IList<T>> GetAllAsync()
         {
-            return await DB.Set<T>().ToListAsync();
+            return await DB.Set<T>().AsNoTracking().ToListAsync();
         }
 
         public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> exp)
         {
-            return await DB.Set<T>().Where(exp).ToListAsync();
+            return await DB.Set<T>().AsNoTracking().Where(exp).ToListAsync();
         }
 
         public Task<T> GetAsync(object id)

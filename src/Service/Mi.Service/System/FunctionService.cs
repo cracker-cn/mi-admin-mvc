@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
@@ -19,7 +20,6 @@ namespace Mi.Service.System
         private readonly MessageModel _message;
         private readonly IMiUser _miUser;
         private readonly IFunctionRepository _functionRepository;
-        private readonly IList<SysFunction> _allFunctions;
         private readonly MemoryCacheFactory _cache;
 
         public FunctionService(IMapper mapper, MessageModel message, IMiUser miUser
@@ -31,11 +31,16 @@ namespace Mi.Service.System
             _miUser = miUser;
             _functionRepository = functionRepository;
             _cache = cache;
-            _allFunctions = GetFunctionsCache();
         }
+
+        private IList<SysFunction> _allFunctions => GetFunctionsCache();
 
         public async Task<MessageModel> AddOrUpdateFunctionAsync(FunctionOperation operation)
         {
+            if (string.IsNullOrWhiteSpace(operation.Icon) && operation.FunctionType == (int)EnumFunctionType.Menu)
+            {
+                operation.Icon = "iconfont mi-iconfonticon";
+            }
             if (operation.Id <= 0)
             {
                 var func = _mapper.Map<SysFunction>(operation);
@@ -47,10 +52,6 @@ namespace Mi.Service.System
                 {
                     await UpdateParentNodeAsync(func.ParentId, func.Id);
                 }
-                if (string.IsNullOrWhiteSpace(func.Icon))
-                {
-                    func.Icon = "iconfont mi-iconfonticon";
-                }
                 await _functionRepository.AddAsync(func);
             }
             else
@@ -60,10 +61,6 @@ namespace Mi.Service.System
                 if (operation.ParentId > 0 && operation.ParentId != func.ParentId)
                 {
                     await UpdateParentNodeAsync(operation.ParentId, func.Id, func.ParentId);
-                }
-                if (string.IsNullOrWhiteSpace(func.Icon))
-                {
-                    func.Icon = "iconfont mi-iconfonticon";
                 }
                 func.FunctionName = operation.FunctionName;
                 func.Url = operation.Url;
@@ -201,11 +198,21 @@ namespace Mi.Service.System
             return _message.Success();
         }
 
-        public IList<SysFunction> GetFunctionsCache() => _cache.Get<List<SysFunction>>(CacheConst.FUNCTION) ?? _functionRepository.GetAll();
+        public IList<SysFunction> GetFunctionsCache()
+        {
+            var data = _cache.Get<List<SysFunction>>(CacheConst.FUNCTION);
+            if(data == null)
+            {
+                var list = _functionRepository.GetAll();
+                _cache.Set(CacheConst.FUNCTION,list.ToList(),CacheConst.Week);
+                return list;
+            }
+            return data;
+        }
 
         private void RemoveCache()
         {
-            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) && x.Contains(AuthorizationConst.SUPER_ADMIN)).ToList();
+            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) || x.Contains(StringHelper.UserKey("",AuthorizationConst.SUPER_ADMIN))).ToList();
             keys.Add(CacheConst.FUNCTION);
             _cache.RemoveAll(keys);
         }

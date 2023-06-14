@@ -1,4 +1,5 @@
-﻿using Mi.Core.Models;
+﻿using Mi.Core.Attributes;
+using Mi.Core.Models;
 using Mi.Core.Models.UI;
 using Mi.IService.System;
 using Mi.IService.System.Models;
@@ -21,12 +22,13 @@ namespace Mi.Admin.Areas.System.Controllers
             _userService = userService;
         }
 
-        [AllowAnonymous]
+        [AuthorizeCode("System:Personal:Page")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AuthorizeCode("System:Personal:CutImage")]
         public IActionResult Profile()
         {
             return View();
@@ -37,12 +39,13 @@ namespace Mi.Admin.Areas.System.Controllers
         public async Task<List<PaMenuModel>> GetSiderMenu() => await _permissionService.GetSiderMenuAsync();
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<MessageModel<UserBaseInfo>> GetUserBaseInfo() => await _userService.GetUserBaseInfoAsync();
 
-        [HttpPost]
+        [HttpPost, AuthorizeCode("System:Personal:SetUserBaseInfo")]
         public async Task<MessageModel> SetUserBaseInfo([FromBody] UserBaseInfo model) => await _userService.SetUserBaseInfoAsync(model);
 
-        [HttpPost]
+        [HttpPost, AuthorizeCode("System:Personal:SetPassword")]
         public async Task<MessageModel> SetPassword(string password) => await _userService.SetPasswordAsync(password);
     }
 }

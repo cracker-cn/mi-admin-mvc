@@ -41,7 +41,7 @@
         <el-table-column prop="icon" label="图标">
             <template #default="scope">
                 <i v-if="scope.row.icon" :class="scope.row.icon"></i>
-                <span v-else></span>
+                <span v-else>--</span>
             </template>
         </el-table-column>
         <el-table-column prop="url" label="访问地址" min-width="150"></el-table-column>
@@ -82,7 +82,7 @@
         <el-form-item label="地址">
             <el-input v-model="editForm.url" />
         </el-form-item>
-        <el-form-item label="图标">
+        <el-form-item label="图标" v-if="editForm.functionType == 10">
             <el-input v-model="editForm.icon" />
         </el-form-item>
         <el-form-item label="排序">
@@ -110,7 +110,7 @@
                 return {
                     treeData,
                     form: {},
-                    emptyText:'无数据',
+                    emptyText: '无数据',
                     expandKeys: [],
                     allKeys: [],
                     tableData: [],
@@ -143,7 +143,7 @@
                 handleEdit(row) {
                     this.updateId = row.id
                     Object.assign(this.editForm, row)
-                    if(this.editForm.parentId == 0){
+                    if (this.editForm.parentId == 0) {
                         this.editForm.parentId = null
                     }
                     this.editDialog = true
@@ -218,7 +218,7 @@
                             if (res.data.code == 90001) {
                                 this.tableData = res.data.result
                                 this.allKeys = this.tableData.map(x => x.id)
-                            }else{
+                            } else {
                                 this.emptyText = res.data.message
                             }
                         })
