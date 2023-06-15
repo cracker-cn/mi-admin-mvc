@@ -18,11 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 /// Serilog»’÷æƒ£∞Â
 /// </summary>
 string serilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
-string serilogDebug = builder.Environment.WebRootPath + "\\log\\debug\\.log";
-string serilogInfo = builder.Environment.WebRootPath + "\\log\\info\\.log";
-string serilogWarn = builder.Environment.WebRootPath + "\\log\\warning\\.log";
+string serilogOther = builder.Environment.WebRootPath + "\\log\\other\\.log";
 string serilogError = builder.Environment.WebRootPath + "\\log\\error\\.log";
-string serilogFatal = builder.Environment.WebRootPath + "\\log\\fatal\\.log";
 
 builder.Services.AddControllersWithViews(opt =>
 {
@@ -42,11 +39,11 @@ builder.Host.UseSerilog((context, logger) =>
 {
 	logger.Enrich.FromLogContext();
 	logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
-	logger.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(a => a.File(serilogDebug, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(a => a.File(serilogInfo, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(a => a.File(serilogWarn, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+	logger.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(a => a.File(serilogOther, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(a => a.File(serilogOther, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(a => a.File(serilogOther, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
 								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Error).WriteTo.Async(a => a.File(serilogError, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogFatal, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)));
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogError, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)));
 
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
