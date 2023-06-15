@@ -18,7 +18,7 @@ namespace Mi.Core.Hubs
 		{
 			if (!disabledAutoSend)
 			{
-				var msg = ReadonlyDB.QueryFirstOrDefault<Option>("select Title as Name,Content as Value from SysMessage where IsDeleted=0 and Readed=0 order by CreatedOn asc limit 1;");
+				var msg = DapperDB.QueryFirstOrDefault<Option>("select Title as Name,Content as Value from SysMessage where IsDeleted=0 and Readed=0 order by CreatedOn asc limit 1;");
 				if(msg != null)
 				{
 					title = msg.Name!;

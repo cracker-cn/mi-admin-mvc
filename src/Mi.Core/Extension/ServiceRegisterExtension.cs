@@ -2,6 +2,7 @@
 using Mi.Core.Factory;
 using Mi.Core.GlobalUser;
 using Mi.Core.Models;
+using Mi.Core.Service;
 using Mi.Core.Toolkit.Extension;
 using Mi.Repository.DB;
 
@@ -35,6 +36,8 @@ namespace Mi.Core.Extension
 			service.AddScoped<CreatorFactory>();
 			service.AddScoped<CaptchaFactory>();
 			service.AddScoped<MemoryCacheFactory>();
+			//==HostService==
+			service.AddHostedService<SeedDataBackgroundService>();
 		}
 	}
 }

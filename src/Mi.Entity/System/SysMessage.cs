@@ -21,5 +21,10 @@
 		/// </summary>
 		[NotNull]
         public string? Content { get; set; }
+
+		/// <summary>
+		/// 接受用户
+		/// </summary>
+		public long ReceiveUser { get; set; }
     }
 }
