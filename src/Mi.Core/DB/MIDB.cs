@@ -31,6 +31,7 @@ namespace Mi.Repository.DB
             modelBuilder.Entity<SysRoleFunction>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysUser>().HasQueryFilter(x => x.IsDeleted == 0);
             modelBuilder.Entity<SysUserRole>().HasQueryFilter(x => x.IsDeleted == 0);
+            modelBuilder.Entity<SysMessage>().HasQueryFilter(x => x.IsDeleted == 0);
 
             #endregion System
         }

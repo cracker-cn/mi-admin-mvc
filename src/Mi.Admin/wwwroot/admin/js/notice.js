@@ -1,18 +1,15 @@
-"use strict";
+ï»¿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/noticeHub").build();
 
 connection.on("ReceiveMessage", function (title, content) {
-    if (title != null && title != undefined && title != "") {
-        //ÏûÏ¢ÍÆËÍ
-        layer.msg("¡¾ÏûÏ¢¡¿" + title + "£º" + content)
-    }
+    layer.msg("ã€æ¶ˆæ¯ã€‘" + title + "ï¼š" + content)
 });
 
 connection.start().then(() => {
-    let intervalTime = 1000 * 30;
+    let intervalTime = 1000 * 1;
     setInterval(function () {
-        connection.invoke("SendMessage").catch(function (err) {
+        connection.invoke("SendMessage", "", "", false).catch(function (err) {
             return console.error(err.toString());
         });
     }, intervalTime)

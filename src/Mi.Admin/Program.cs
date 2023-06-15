@@ -1,6 +1,6 @@
-using Mi.Admin.Hubs;
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
+using Mi.Core.Hubs;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
 
@@ -26,27 +26,27 @@ string serilogFatal = builder.Environment.WebRootPath + "\\log\\fatal\\.log";
 
 builder.Services.AddControllersWithViews(opt =>
 {
-    opt.Filters.Add<GlobalExceptionFilter>();
+	opt.Filters.Add<GlobalExceptionFilter>();
 }).AddJsonOptions(opt =>
 {
-    opt.JsonSerializerOptions.Converters.Add(new LongConverter());
-    opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+	opt.JsonSerializerOptions.Converters.Add(new LongConverter());
+	opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
 });
 
 builder.Services.AddAuthentication()
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+	.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddRequiredService();
 //ÈÕÖ¾
 builder.Host.UseSerilog((context, logger) =>
 {
-    logger.Enrich.FromLogContext();
-    logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
-    logger.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(a => a.File(serilogDebug, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(a => a.File(serilogInfo, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(a => a.File(serilogWarn, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Error).WriteTo.Async(a => a.File(serilogError, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
-                                .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogFatal, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)));
+	logger.Enrich.FromLogContext();
+	logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
+	logger.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(a => a.File(serilogDebug, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(a => a.File(serilogInfo, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(a => a.File(serilogWarn, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Error).WriteTo.Async(a => a.File(serilogError, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)))
+								.WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(a => a.File(serilogFatal, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate)));
 
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
@@ -58,7 +58,7 @@ builder.Services.Configure<PaConfigModel>(uiConfig);
 //EnvironmentHandler.cs
 builder.Services.Configure<EnvironmentHandler>(x =>
 {
-    x.WebRootPath = builder.Environment.WebRootPath;
+	x.WebRootPath = builder.Environment.WebRootPath;
 });
 
 builder.Services.AddSignalR();
@@ -67,8 +67,8 @@ DotNetService.Initialization(builder.Services);
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -83,8 +83,8 @@ contentTypeProvider.Mappings.Add(".less", "text/css");
 contentTypeProvider.Mappings.Add(".yml", "text/html");
 var options = new StaticFileOptions()
 {
-    ServeUnknownFileTypes = true,
-    ContentTypeProvider = contentTypeProvider
+	ServeUnknownFileTypes = true,
+	ContentTypeProvider = contentTypeProvider
 };
 app.UseStaticFiles(options);
 
@@ -95,12 +95,12 @@ app.UseFetchUser();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "Area",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+	name: "Area",
+	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<NoticeHub>("/noticeHub");
 app.Run();
