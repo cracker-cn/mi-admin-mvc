@@ -27,13 +27,16 @@ namespace Mi.Service.Public
 			_miUser = miUser;
 		}
 
-		public async Task<bool> PushMessageAsync(string title, string content)
+		public async Task<bool> PushMessageAsync(string title, string content, IList<long> receiveUsers)
 		{
 			if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(content)) throw new FriendlyException("消息的标题和内容不能为空");
+			if (receiveUsers == null || receiveUsers.Count == 0) throw new FriendlyException("接收消息用户不能为空");
 
 			var repo = DotNetService.Get<IRepositoryBase<SysMessage>>();
-			await repo.AddAsync(new SysMessage { Title = title, Content = content, Readed = 0, CreatedBy = _miUser.UserId, CreatedOn = TimeHelper.LocalTime() });
-			await _noticeHub.Clients.All.SendAsync("ReceiveMessage",title,content);
+			var now = TimeHelper.LocalTime();
+			var list = receiveUsers.Select(x => new SysMessage { Title = title, Content = content, Readed = 0, CreatedBy = _miUser.UserId, CreatedOn = now, ReceiveUser = x }).ToList();
+			await repo.AddManyAsync(list);
+			if(receiveUsers.Contains(_miUser.UserId)) await _noticeHub.Clients.All.SendAsync("ReceiveMessage",title,content);
 
 			return true;
 		}

@@ -1,5 +1,7 @@
 ﻿using Mi.Core.CommonOption;
 using Mi.Core.DB;
+using Mi.Core.GlobalUser;
+using Mi.Core.Service;
 
 using Microsoft.AspNetCore.SignalR;
 
@@ -18,7 +20,8 @@ namespace Mi.Core.Hubs
 		{
 			if (!disabledAutoSend)
 			{
-				var msg = DapperDB.QueryFirstOrDefault<Option>("select Title as Name,Content as Value from SysMessage where IsDeleted=0 and Readed=0 order by CreatedOn asc limit 1;");
+				var user = DotNetService.Get<IMiUser>();
+				var msg = DapperDB.QueryFirstOrDefault<Option>($"select Title as Name,Content as Value from SysMessage where IsDeleted=0 and Readed=0 and ReceiveUser='{user.UserId}' order by CreatedOn asc limit 1;");
 				if(msg != null)
 				{
 					title = msg.Name!;
