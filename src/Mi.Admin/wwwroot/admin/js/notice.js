@@ -7,7 +7,7 @@ connection.on("ReceiveMessage", function (title, content) {
 });
 
 connection.start().then(() => {
-    let intervalTime = 1000 * 1;
+    let intervalTime = 1000 * 60 * 5;
     setInterval(function () {
         connection.invoke("SendMessage", "", "", false).catch(function (err) {
             return console.error(err.toString());

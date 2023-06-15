@@ -14,7 +14,7 @@
             <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">发送时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="writeTime" placeholder="请输入消息标题" class="layui-input">
+                    <input type="text" name="writeTime" id="search-time" placeholder="请选择发送时间" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
@@ -41,20 +41,27 @@
     <script type="text/html" id="message-toolbar">
         <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="batch-readed">
             <i class="layui-icon layui-icon-read"></i>
-            批量已读
+            批量阅读
         </button>
     </script>
 
     <script type="text/html" id="message-bar">
+        {{#  if(d.readed === 0){ }}
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="readed"><i class="layui-icon layui-icon-read"></i></button>
+        {{#  } }}
     </script>
 
     <script>
-        layui.use(['table', 'form', 'jquery', 'common'], function () {
+        layui.use(['table', 'form', 'jquery', 'common', 'laydate'], function () {
             let table = layui.table;
             let form = layui.form;
             let $ = layui.jquery;
             let common = layui.common;
+            let laydate = layui.laydate;
+            laydate.render({
+                elem: '#search-time',
+                range: '~'
+            });
             let pageRootUrl = "/System/Message/";
 
             table.render({
@@ -68,7 +75,7 @@
                 method: 'post',
                 cols: [[
                     {
-                        type: 'numbers'
+                        type: 'checkbox'
                     },
                     {
                         type: 'numbers'
@@ -88,7 +95,7 @@
                         field: 'readed',
                         align: 'center',
                         templet:function(d){
-                            if (d.isEnabled === 1) {
+                            if (d.readed === 1) {
                                 return `<span class="layui-badge layui-bg-green">已读</span>`
                             }
                             return `<span class="layui-badge layui-bg-orange">未读</span>`
@@ -156,6 +163,7 @@
 
             $("#btnReset").click(function () {
                 $("input[name='title']").val('');
+                $('#search-time').val('');
                 table.reload('message-table', {
                     where: {}
                 })
