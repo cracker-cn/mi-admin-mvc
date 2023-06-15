@@ -1,8 +1,6 @@
-﻿@using Mi.IService.System;
-@{
+﻿@{
     Layout = "_ElementUiPlusLayout";
 }
-@inject IFunctionService funcService
 
 <el-card shadow="never">
     <el-form :inline="true" :model="form">
@@ -64,9 +62,9 @@
            align-center>
     <el-form :model="editForm" label-width="120px" :rules="rules" ref="editFormRef">
         <el-form-item label="上级">
-            <el-tree-select node-key="Value" value-key="Value" v-model="editForm.parentId" show-checkbox
+            <el-tree-select node-key="value" value-key="value" v-model="editForm.parentId" show-checkbox
                             :check-strictly=true clearable :filter-method="filterMethod" filterable
-                            :data="filterTree" :render-after-expand="false" :props="{label:'Name',children:'Children'}" />
+                            :data="filterTree" :render-after-expand="false" :props="{label:'name',children:'children'}" />
         </el-form-item>
         <el-form-item label="名称" prop="functionName">
             <el-input v-model="editForm.functionName" />
@@ -104,11 +102,10 @@
 @section Scripts{
     <script>
         const ROOT_PATH = '/System/Function/';
-        const treeData = @Html.Raw(JsonConvert.SerializeObject(funcService.GetFunctionTree()))
         const App = {
             data() {
                 return {
-                    treeData,
+                    treeData: [],
                     form: {},
                     emptyText: '无数据',
                     expandKeys: [],
@@ -223,9 +220,20 @@
                             }
                         })
                 },
+                fetchTreeData(){
+                    axios.post(ROOT_PATH + 'GetFunctionTree')
+                        .then(res => {
+                            if (res.status == 200) {
+                                this.treeData = res.data
+                            } else {
+                                console.error(res)
+                            }
+                        })
+                },
                 closeDialogAndRefresh() {
                     this.beforeClose()
                     this.fetchTableData();
+                    this.fetchTreeData();
                 },
                 beforeClose() {
                     if (this.$refs['editFormRef']) {
@@ -243,6 +251,7 @@
             },
             created() {
                 this.fetchTableData()
+                this.fetchTreeData()
             }
         };
     </script>

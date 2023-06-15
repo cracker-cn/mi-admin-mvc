@@ -1,4 +1,5 @@
 ﻿using Mi.Core.Attributes;
+using Mi.Core.CommonOption;
 using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
@@ -38,5 +39,8 @@ namespace Mi.Admin.Areas.System.Controllers
         [HttpPost, AuthorizeCode("System:Function:Remove")]
         public async Task<MessageModel> RemoveFunction([FromForm] IList<long> ids)
             => await _functionService.RemoveFunctionAsync(ids);
+
+        [HttpPost, AuthorizeCode("System:Function:GetFunctionTree")]
+        public IList<TreeOption> GetFunctionTree() => _functionService.GetFunctionTree();
     }
 }
