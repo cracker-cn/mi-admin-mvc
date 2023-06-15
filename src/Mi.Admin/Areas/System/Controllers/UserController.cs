@@ -21,17 +21,19 @@ namespace Mi.Admin.Areas.System.Controllers
             _permissionService = permissionService;
         }
 
-        [AuthorizeCode("System:User")]
+        [AuthorizeCode("System:User:Page")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AuthorizeCode("System:User:Add")]
         public async Task<IActionResult> Edit(long id)
         {
             return View((await _userService.GetUserAsync(id)).Result);
         }
 
+        [AuthorizeCode("System:User:SetUserRole")]
         public async Task<IActionResult> UserRole(long id)
         {
             ViewBag.Id = id;
@@ -46,28 +48,33 @@ namespace Mi.Admin.Areas.System.Controllers
         }
 
         [HttpPost]
+        [AuthorizeCode("System:User:Add")]
         public async Task<MessageModel> AddUser(string userName)
         {
             return await _userService.AddUserAsync(userName);
         }
 
         [HttpPost]
+        [AuthorizeCode("System:User:Remove")]
         public async Task<MessageModel> RemoveUser(long userId)
         {
             return await _userService.RemoveUserAsync(userId);
         }
 
         [HttpPost]
+        [AuthorizeCode("System:User:UpdatePassword")]
         public async Task<MessageModel> UpdatePassword(long userId)
         {
             return await _userService.UpdatePasswordAsync(userId);
         }
 
         [HttpPost]
+        [AuthorizeCode("System:User:SetUserRole")]
         public async Task<MessageModel> SetUserRole(long userId, List<long> roleIds)
             => await _permissionService.SetUserRoleAsync(userId, roleIds);
 
         [HttpPost]
+        [AuthorizeCode("System:User:Passed")]
         public async Task<MessageModel> PassedUser(long id)
             => await _userService.PassedUserAsync(id);
     }

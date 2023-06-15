@@ -9,7 +9,7 @@ namespace Mi.Admin.Areas.Workspace.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        [AuthorizeCode("Dashboard")]
+        [AuthorizeCode("Workspace:Dashboard:Page")]
         public IActionResult Index()
         {
             return View();

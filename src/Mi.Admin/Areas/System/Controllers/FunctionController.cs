@@ -1,4 +1,4 @@
-﻿using Mi.Core.CommonOption;
+﻿using Mi.Core.Attributes;
 using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
@@ -19,22 +19,23 @@ namespace Mi.Admin.Areas.System.Controllers
             _functionService = functionService;
         }
 
+        [AuthorizeCode("System:Function:Page")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, AuthorizeCode("System:Function:Query")]
         public async Task<MessageModel> GetFunctionList(FunctionSearch search)
         {
             return await _functionService.GetFunctionListAsync(search);
         }
 
-        [HttpPost]
+        [HttpPost, AuthorizeCode("System:Function:AddOrUpdate")]
         public async Task<MessageModel> AddOrUpdateFunction([FromBody] FunctionOperation operation)
             => await _functionService.AddOrUpdateFunctionAsync(operation);
 
-        [HttpPost]
+        [HttpPost, AuthorizeCode("System:Function:Remove")]
         public async Task<MessageModel> RemoveFunction([FromForm] IList<long> ids)
             => await _functionService.RemoveFunctionAsync(ids);
     }
