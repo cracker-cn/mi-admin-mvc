@@ -6,6 +6,6 @@ namespace Mi.IService.Public
     {
         PaConfigModel ReadConfig();
 
-        Task<bool> PushMessageAsync(string title,string content,IList<long> receiveUsers);
+        Task<bool> WriteMessageAsync(string title,string content,IList<long> receiveUsers);
     }
 }

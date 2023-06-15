@@ -66,7 +66,8 @@ namespace Mi.Service.System
                 Avatar = user.Avatar,
                 NickName = user.NickName,
                 Sex = user.Sex,
-                Signature = user.Signature
+                Signature = user.Signature,
+                UserId = _miUser.UserId
             });
         }
 

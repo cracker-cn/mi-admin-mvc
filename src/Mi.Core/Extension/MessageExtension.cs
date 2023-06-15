@@ -35,6 +35,17 @@ namespace Mi.Core.Extension
             return new MessageModel(EnumResponseCode.ParameterError, msg);
         }
 
+        public static MessageModel<T> As<T>(this MessageModel model,T? result)
+        {
+            return new MessageModel<T>(model.Code, model.Message ?? "", result);
+        }
+
+        public static MessageModel<T> As<T>(this MessageModel model)
+        {
+            var data = Activator.CreateInstance<T>();
+            return new MessageModel<T>(model.Code, model.Message ?? "",data);
+        }
+
         public static bool EnsureSuccess<T>(this MessageModel<T> model)
         {
             return model.Code == EnumResponseCode.Success && model.Result != null;

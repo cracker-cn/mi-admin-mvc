@@ -2,6 +2,8 @@
 {
     public class UserBaseInfo
     {
+        public long UserId { get; set; }
+
         public string? NickName { get; set; }
 
         public int Sex { get; set; }

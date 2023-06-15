@@ -3,6 +3,7 @@ using Mi.Core.Models;
 using Mi.Core.Models.UI;
 using Mi.IService.System;
 using Mi.IService.System.Models;
+using Mi.IService.System.Models.Result;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace Mi.Admin.Areas.System.Controllers
     {
         private readonly IPermissionService _permissionService;
         private readonly IUserService _userService;
+        private readonly IMessageService _msgService;
 
-        public PersonalController(IPermissionService permissionService, IUserService userService)
+        public PersonalController(IPermissionService permissionService, IUserService userService,IMessageService msgService)
         {
             _permissionService = permissionService;
             _userService = userService;
+            _msgService = msgService;   
         }
 
         [AuthorizeCode("System:Personal:Page")]
@@ -47,5 +50,9 @@ namespace Mi.Admin.Areas.System.Controllers
 
         [HttpPost, AuthorizeCode("System:Personal:SetPassword")]
         public async Task<MessageModel> SetPassword(string password) => await _userService.SetPasswordAsync(password);
-    }
+
+        [HttpGet]
+        public async Task<IList<HeaderMsg>> GetHeaderMsg() => await _msgService.GetHeaderMsgAsync();
+
+	}
 }

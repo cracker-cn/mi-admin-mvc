@@ -1,8 +1,9 @@
 ﻿using Mi.IRepository.BASE;
+using Mi.IService.System.Models.Result;
 
 namespace Mi.Service.System
 {
-	public class MessageService : IMessageService,IScoped
+	public class MessageService : IMessageService, IScoped
 	{
 		private readonly IRepositoryBase<SysMessage> _messageRepository;
 		private readonly IMiUser _miUser;
@@ -14,9 +15,39 @@ namespace Mi.Service.System
 			_msg = msg;
 		}
 
+		public async Task<IList<HeaderMsg>> GetHeaderMsgAsync()
+		{
+			var list = await _messageRepository.GetAllAsync(x => x.Readed == 0 && x.ReceiveUser == _miUser.UserId);
+			var result = new List<HeaderMsg>();
+			var msg = new HeaderMsg
+			{
+				Title = "未读消息",
+				Id = 1,
+				Children = list.Select(x => new HeaderMsgChild
+				{
+					Id = x.Id,
+					Title = x.Title,
+					Context = x.Content,
+					Time = ShowTime(x.CreatedOn)
+				}).ToList()
+			};
+			result.Add(msg);
+			return result;
+		}
+
+		private string ShowTime(DateTime time)
+		{
+			var now = TimeHelper.LocalTime();
+			var val = now.Subtract(time);
+			if (val.TotalSeconds <= 60) return "刚刚";
+			else if (val.TotalMinutes < 1) return $"{val.Minutes}分钟前";
+			else if (val.TotalHours >= 1 && val.TotalHours <= 23) return $"{val.Hours}小时前";
+			else return $"{val.TotalDays}天前";
+		}
+
 		public async Task<MessageModel<PagingModel<SysMessage>>> GetMessageListAsync(MessageSearch search)
 		{
-			var exp = ExpressionCreator.New<SysMessage>(x=>x.ReceiveUser == _miUser.UserId)
+			var exp = ExpressionCreator.New<SysMessage>(x => x.ReceiveUser == _miUser.UserId)
 				.AndIf(!string.IsNullOrEmpty(search.Title), x => x.Title.Contains(search.Title!));
 			if (!string.IsNullOrEmpty(search.WriteTime) && search.WriteTime.Contains("~"))
 			{

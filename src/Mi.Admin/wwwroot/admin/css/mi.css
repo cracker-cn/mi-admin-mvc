@@ -23,3 +23,7 @@
     content: " * ";
     color: red;
 }
+
+.pear-notice-item:hover{
+    cursor:pointer;
+}

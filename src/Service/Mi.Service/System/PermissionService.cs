@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
+using Mi.Core.Extension;
 using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
 using Mi.Core.Models.UI;
@@ -130,6 +131,8 @@ namespace Mi.Service.System
 
             var user = _creatorFactory.NewEntity<SysUser>();
             user.UserName = userName;
+            user.NickName = userName;
+            user.Signature = "个性签名";
             user.PasswordSalt = EncryptionHelper.GetPasswordSalt();
             user.Password = EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
             user.Avatar = StringHelper.DefaultAvatar();

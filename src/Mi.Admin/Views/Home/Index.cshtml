@@ -101,10 +101,13 @@
     <script src="~/component/microsoft/signalr/dist/browser/signalr.min.js"></script>
 	<!-- 框 架 初 始 化 -->
 	<script>
-		layui.use(['admin', 'jquery', 'popup', 'drawer'], function () {
+		layui.use(['admin', 'jquery', 'popup', 'drawer', 'common', 'toast', 'tab'], function () {
 			var $ = layui.jquery;
 			var admin = layui.admin;
 			var popup = layui.popup;
+			let common = layui.common;
+			let tab = layui.tab;
+			window.toast = layui.toast;
 
 			admin.setConfigType("json");
 			admin.setConfigPath("/api/public/config");
@@ -116,12 +119,31 @@
 				popup.success("注销成功", function () {
 					location.href = "/Account/Login/Exit";
 				})
-				// 注销逻辑 返回 true / false
+				localStorage.removeItem('mi-user')
 				return true;
 			})
 
 			// 消息点击回调
-			admin.message(function (id, title, context, form) { });
+			admin.message(function (id, title, context, form) { 
+				layer.msg(id);
+				tab.addTabOnlyByElem('content', { id: 'demo', title: '消息中心', url: '/html/code.html', close: true })
+			});
+
+			getLoginUser()
+
+			//获取登录用户
+			function getLoginUser(){
+				$.post('/System/Personal/GetUserBaseInfo', function (res) {
+					if (common.ajaxSuccess(res.code)) {
+						localStorage.setItem("mi-user", JSON.stringify(res.result));
+					} else {
+						layer.msg(res.message, {
+							icon: 2,
+							time: 1000
+						});
+					}
+				})
+			}
 		})
 	</script>
 	<script src="~/admin/js/notice.js"></script>
