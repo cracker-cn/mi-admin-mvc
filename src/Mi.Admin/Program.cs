@@ -1,3 +1,4 @@
+using Mi.Admin.Hubs;
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
 using Mi.Core.Models.UI;
@@ -60,6 +61,7 @@ builder.Services.Configure<EnvironmentHandler>(x =>
     x.WebRootPath = builder.Environment.WebRootPath;
 });
 
+builder.Services.AddSignalR();
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 
@@ -100,4 +102,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapHub<NoticeHub>("/noticeHub");
 app.Run();
