@@ -16,7 +16,7 @@ namespace Mi.Service.System
 
 		public async Task<MessageModel<PagingModel<SysMessage>>> GetMessageListAsync(MessageSearch search)
 		{
-			var exp = ExpressionCreator.New<SysMessage>()
+			var exp = ExpressionCreator.New<SysMessage>(x=>x.ReceiveUser == _miUser.UserId)
 				.AndIf(!string.IsNullOrEmpty(search.Title), x => x.Title.Contains(search.Title!));
 			if (!string.IsNullOrEmpty(search.WriteTime) && search.WriteTime.Contains("~"))
 			{
@@ -29,9 +29,10 @@ namespace Mi.Service.System
 			return new MessageModel<PagingModel<SysMessage>>(result);
 		}
 
-		public async Task<MessageModel> ReadedAsync(long msgId)
+		public async Task<MessageModel> ReadedAsync(IList<long> msgIds)
 		{
-			await _messageRepository.UpdateAsync(msgId, node => node.ModifiedTime().ModifiedUser(_miUser.UserId).Set(x => x.Readed, 1));
+			if (msgIds.Count == 0) return _msg.ParameterError(nameof(msgIds));
+			await _messageRepository.ExecuteAsync("update SysMessage set ModifiedOn=@time,ModifiedBy=@user,Readed=1 where Id in @ids", new { time = TimeHelper.LocalTime(), user = _miUser.UserId, ids = msgIds });
 			return _msg.Success();
 		}
 	}

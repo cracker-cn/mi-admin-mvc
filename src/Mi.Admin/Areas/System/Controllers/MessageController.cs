@@ -27,7 +27,7 @@ namespace Mi.Admin.Areas.System.Controllers
 		}
 
 		[HttpPost, AuthorizeCode("System:Message:Readed")]
-		public async Task<MessageModel> Readed(long msgId) => await _messageService.ReadedAsync(msgId);
+		public async Task<MessageModel> Readed(IList<long> ids) => await _messageService.ReadedAsync(ids);
 
 		[HttpPost, AuthorizeCode("System:Message:Query")]
 		public async Task<MessageModel<PagingModel<SysMessage>>> GetMessageList([FromBody] MessageSearch search) => await _messageService.GetMessageListAsync(search);
