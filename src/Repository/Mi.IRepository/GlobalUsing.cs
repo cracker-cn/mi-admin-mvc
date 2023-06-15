@@ -1,3 +1,4 @@
-﻿global using Mi.Entity.System;
+﻿global using System.Diagnostics.CodeAnalysis;
+
 global using Mi.Core.Models.Paging;
-global using System.Diagnostics.CodeAnalysis;
+global using Mi.Entity.System;

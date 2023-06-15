@@ -1,7 +1,5 @@
 ﻿using Dapper;
 
-using Mi.Core.Toolkit.API;
-
 namespace Mi.Service.System
 {
     public class RoleService : IRoleService, IScoped
@@ -52,7 +50,7 @@ namespace Mi.Service.System
                 parameter.Add("name", "%" + search.RoleName + "%");
             }
 
-            var pageModel = await _roleRepository.QueryPageAsync(search.Page, search.Size, sql,parameter, "CreatedOn desc");
+            var pageModel = await _roleRepository.QueryPageAsync(search.Page, search.Size, sql, parameter, "CreatedOn desc");
 
             return new MessageModel<PagingModel<SysRole>>(true, "查询成功", pageModel);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Net.NetworkInformation;
 using System.Security.Cryptography;
+
 using Mi.Core.Service;
 
 using Microsoft.Extensions.Options;
@@ -58,7 +59,7 @@ namespace Mi.Core.Toolkit.Helper
 
         public static string UserKey(string userName, string roleName) => $"{userName}_function_{roleName}";
 
-        public static string UserDataString(long id, string userName, string roleName) => $"{id}_{userName}_{roleName.Replace(',','&')}";
+        public static string UserDataString(long id, string userName, string roleName) => $"{id}_{userName}_{roleName.Replace(',', '&')}";
 
         public static (long, string, string) GetUserData(string str)
         {

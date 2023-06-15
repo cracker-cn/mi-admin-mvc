@@ -1,9 +1,7 @@
 ﻿using Dapper;
+
 using Mi.Core.Toolkit.API;
 using Mi.Repository.Extension;
-using Mi.Core.Toolkit.Extension;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Mi.Repository.System
 {

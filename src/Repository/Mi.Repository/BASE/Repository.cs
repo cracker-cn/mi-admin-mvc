@@ -19,9 +19,9 @@ namespace Mi.Repository.BASE
             return result;
         }
 
-        public async Task<List<T>> GetListAsync(string sql,object? param = default)
+        public async Task<List<T>> GetListAsync(string sql, object? param = default)
         {
-            return (await _db.Connection.QueryAsync<T>(sql,param)).ToList();
+            return (await _db.Connection.QueryAsync<T>(sql, param)).ToList();
         }
     }
 }

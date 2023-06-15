@@ -1,5 +1,4 @@
-﻿using Mi.Core.CommonOption;
-using Mi.Entity.Field;
+﻿using Mi.Entity.Field;
 
 namespace Mi.IService.System.Models.Result
 {

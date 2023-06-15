@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -7,18 +6,13 @@ using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
-using Mi.Entity.System;
 using Mi.Entity.System.Enum;
 using Mi.IRepository.BASE;
 using Mi.IService.System.Models.Result;
-using Mi.Repository.BASE;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
-
-using Newtonsoft.Json;
 
 namespace Mi.Service.System
 {
@@ -157,7 +151,7 @@ namespace Mi.Service.System
             if (!flag) return _message.Fail("用户名或密码错误");
 
             var roleNameArray = (await _userService.GetRolesAsync(user.Id)).Select(x => x.RoleName).ToList();
-            if(user.IsSuperAdmin == 1)
+            if (user.IsSuperAdmin == 1)
             {
                 roleNameArray.Add(AuthorizationConst.SUPER_ADMIN);
             }
@@ -178,7 +172,7 @@ namespace Mi.Service.System
         public async Task<UserModel> QueryUserModelCacheAsync(string userData)
         {
             var arr = StringHelper.GetUserData(userData);
-            var key = StringHelper.UserKey(arr.Item2,arr.Item3);
+            var key = StringHelper.UserKey(arr.Item2, arr.Item3);
             var cacheData = _cache.Get<UserModel>(key);
             if (cacheData != null) return cacheData;
             var user = await _userRepository.GetAsync(x => x.UserName.ToLower() == arr.Item2.ToLower());
@@ -212,7 +206,7 @@ namespace Mi.Service.System
                     Url = x.Url,
                     AuthCode = x.AuthorizationCode
                 }).ToList();
-                _cache.Set(key,userModel,CacheConst.Week);
+                _cache.Set(key, userModel, CacheConst.Week);
 
                 return userModel;
             }
@@ -239,7 +233,7 @@ namespace Mi.Service.System
 
             if (powers.Count > 0) await repo.AddManyAsync(powers);
             //正则移除角色功能缓存
-            var keys = _cache.GetCacheKeys().Where(x=>Regex.IsMatch(x,StringHelper.UserCachePattern()) && x.Contains(role.RoleName));
+            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) && x.Contains(role.RoleName));
             _cache.RemoveAll(keys);
 
             return _message.Success();

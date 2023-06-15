@@ -1,10 +1,4 @@
-﻿using System.Linq.Expressions;
-
-using Dapper;
-
-using Mi.Core.Models;
-using Mi.Core.Toolkit.API;
-using Mi.Repository.Extension;
+﻿using Mi.Core.Toolkit.API;
 
 namespace Mi.Repository.System
 {

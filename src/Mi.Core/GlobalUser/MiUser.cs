@@ -1,12 +1,7 @@
-﻿using System.Net.Http;
-using System.Reflection.Metadata;
-
-using Mi.Core.Extension;
-using Mi.Core.Factory;
+﻿using Mi.Core.Extension;
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Mi.Core.GlobalUser
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
@@ -9,8 +8,6 @@ using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
 using Mi.Entity.System.Enum;
 using Mi.IService.System.Models.Result;
-
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Mi.Service.System
 {
@@ -123,9 +120,9 @@ namespace Mi.Service.System
                 .AndIf(!string.IsNullOrEmpty(search.FunctionName), x => x.FunctionName.Contains(search.FunctionName!))
                 .AndIf(!string.IsNullOrEmpty(search.Url), x => x.Url != null && x.Url.Contains(search.Url!));
 
-            var searchList = _allFunctions.Where(exp.Compile()).OrderBy(x=>x.Sort);
+            var searchList = _allFunctions.Where(exp.Compile()).OrderBy(x => x.Sort);
             var flag = exp.Body.NodeType == ExpressionType.AndAlso;
-            var topLevel = flag ? searchList : _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
+            var topLevel = flag ? searchList : _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x => x.Sort);
             var list = topLevel.Select(x => new FunctionItem
             {
                 FunctionName = x.FunctionName,
@@ -161,7 +158,7 @@ namespace Mi.Service.System
 
         public IList<TreeOption> GetFunctionTree()
         {
-            var topLevels = _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x=>x.Sort);
+            var topLevels = _allFunctions.Where(x => x.Node == EnumTreeNode.RootNode).OrderBy(x => x.Sort);
             return topLevels.Select(x => new TreeOption
             {
                 Name = x.FunctionName,
@@ -172,7 +169,7 @@ namespace Mi.Service.System
 
         private IList<TreeOption> GetFunctionChildNode(long id)
         {
-            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id).OrderBy(x=>x.Sort);
+            var children = _allFunctions.Where(x => x.Node != EnumTreeNode.RootNode && x.ParentId == id).OrderBy(x => x.Sort);
             return children.Select(x => new TreeOption
             {
                 Name = x.FunctionName,
@@ -185,7 +182,7 @@ namespace Mi.Service.System
         {
             if (ids.Count <= 0) return _message.Fail("id不能为空");
 
-            var funcs = await _functionRepository.GetAllAsync(x=>ids.Contains(x.Id));
+            var funcs = await _functionRepository.GetAllAsync(x => ids.Contains(x.Id));
             foreach (var item in funcs)
             {
                 item.IsDeleted = 1;
@@ -201,10 +198,10 @@ namespace Mi.Service.System
         public IList<SysFunction> GetFunctionsCache()
         {
             var data = _cache.Get<List<SysFunction>>(CacheConst.FUNCTION);
-            if(data == null)
+            if (data == null)
             {
                 var list = _functionRepository.GetAll();
-                _cache.Set(CacheConst.FUNCTION,list.ToList(),CacheConst.Week);
+                _cache.Set(CacheConst.FUNCTION, list.ToList(), CacheConst.Week);
                 return list;
             }
             return data;
@@ -212,7 +209,7 @@ namespace Mi.Service.System
 
         private void RemoveCache()
         {
-            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) || x.Contains(StringHelper.UserKey("",AuthorizationConst.SUPER_ADMIN))).ToList();
+            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) || x.Contains(StringHelper.UserKey("", AuthorizationConst.SUPER_ADMIN))).ToList();
             keys.Add(CacheConst.FUNCTION);
             _cache.RemoveAll(keys);
         }

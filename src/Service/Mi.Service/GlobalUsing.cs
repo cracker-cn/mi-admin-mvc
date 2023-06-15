@@ -13,5 +13,3 @@ global using Mi.IService.System;
 global using Mi.IService.System.Models;
 
 global using Microsoft.Extensions.DependencyInjection;
-
-global using Ouch = Mi.Core.Abnormal.FriendlyException;

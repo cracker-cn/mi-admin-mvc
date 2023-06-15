@@ -2,7 +2,7 @@
 
 namespace Mi.Admin.Requirements
 {
-    public class LoginRequirement: IAuthorizationRequirement
+    public class LoginRequirement : IAuthorizationRequirement
     {
     }
 

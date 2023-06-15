@@ -1,7 +1,4 @@
-﻿using Dapper;
-
-using Mi.IRepository.BASE;
-using Mi.IRepository.System.QueryModels;
+﻿using Mi.IRepository.BASE;
 
 namespace Mi.IRepository.System
 {

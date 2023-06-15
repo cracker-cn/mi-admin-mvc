@@ -75,7 +75,7 @@ namespace Mi.Core.Models.UI
             Children = children;
         }
 
-        public PaMenuModel(long id, int type, string? title, string? href,string? icon, List<PaMenuModel> children)
+        public PaMenuModel(long id, int type, string? title, string? href, string? icon, List<PaMenuModel> children)
         {
             Id = id;
             Type = type;

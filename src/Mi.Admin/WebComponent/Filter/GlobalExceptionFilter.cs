@@ -1,5 +1,4 @@
 ﻿using Mi.Core.Enum;
-using Mi.Core.Extension;
 using Mi.Core.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +21,15 @@ namespace Mi.Admin.WebComponent.Filter
         {
             if (!context.ExceptionHandled)
             {
-                if(context.Exception is Ouch)
+                if (context.Exception is Ouch)
                 {
                     context.Result = new ObjectResult(_message.Fail(context.Exception.Message));
                 }
                 else
                 {
-                    context.Result = new ObjectResult(new MessageModel(EnumResponseCode.Error,context.Exception.Message));
+                    context.Result = new ObjectResult(new MessageModel(EnumResponseCode.Error, context.Exception.Message));
                 }
-                _logger.LogError(context.Exception,context.Exception.Message);
+                _logger.LogError(context.Exception, context.Exception.Message);
             }
             context.ExceptionHandled = true;
         }

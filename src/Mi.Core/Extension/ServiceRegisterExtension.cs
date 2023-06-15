@@ -2,14 +2,12 @@
 using Mi.Core.GlobalUser;
 using Mi.Core.Models;
 using Mi.Core.Service;
-using Mi.Repository.DB;
 using Mi.Core.Toolkit.Extension;
+using Mi.Repository.DB;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
 
 namespace Mi.Core.Extension
 {
@@ -21,7 +19,7 @@ namespace Mi.Core.Extension
             {
                 opt.UseSqlite(DotNetService.Get<IConfiguration>().GetConnectionString("Sqlite"))
                 .EnableSensitiveDataLogging();
-            },ServiceLifetime.Scoped);
+            }, ServiceLifetime.Scoped);
             service.AutoInject();
             service.AddSingleton<MessageModel>();
             service.AddHttpContextAccessor();

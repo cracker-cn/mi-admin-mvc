@@ -1,14 +1,8 @@
-﻿using System.Reflection;
-
-using Mi.Core.Models.UI;
-using Mi.Core.Service;
+﻿using Mi.Core.Models.UI;
 using Mi.IService.Public;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-
-using Newtonsoft.Json.Linq;
 
 namespace Mi.Service.Public
 {

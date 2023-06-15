@@ -13,7 +13,7 @@ namespace Mi.Core.Service
 
         public static TService Get<TService>() where TService : class
         {
-            return Provider.GetRequiredService<TService>(); 
+            return Provider.GetRequiredService<TService>();
         }
 
         public static void Initialization(IServiceCollection services)

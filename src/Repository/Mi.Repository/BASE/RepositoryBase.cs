@@ -6,7 +6,6 @@ using Dapper;
 
 using Mi.Core.DB;
 using Mi.Entity.BASE;
-using Mi.Entity.Field;
 using Mi.IRepository.BASE;
 using Mi.Repository.Extension;
 

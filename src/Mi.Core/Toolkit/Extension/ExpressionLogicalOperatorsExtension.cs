@@ -3,93 +3,93 @@ using System.Linq.Expressions;
 
 namespace Mi.Core.Toolkit.Extension
 {
-	public static class ExpressionLogicalOperatorsExtension
-	{
-		// https://stackoverflow.com/questions/457316/combining-two-expressions-expressionfunct-bool/457328#457328
-		public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> firstExpr, Expression<Func<T, bool>> expr)
-		{
-			var parameter = Expression.Parameter(typeof(T));
+    public static class ExpressionLogicalOperatorsExtension
+    {
+        // https://stackoverflow.com/questions/457316/combining-two-expressions-expressionfunct-bool/457328#457328
+        public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> firstExpr, Expression<Func<T, bool>> expr)
+        {
+            var parameter = Expression.Parameter(typeof(T));
 
-			var leftVisitor = new ReplaceExpressionVisitor(firstExpr.Parameters[0], parameter);
-			var left = leftVisitor.Visit(firstExpr.Body);
-			var rightVisitor = new ReplaceExpressionVisitor(expr.Parameters[0], parameter);
-			var right = rightVisitor.Visit(expr.Body);
+            var leftVisitor = new ReplaceExpressionVisitor(firstExpr.Parameters[0], parameter);
+            var left = leftVisitor.Visit(firstExpr.Body);
+            var rightVisitor = new ReplaceExpressionVisitor(expr.Parameters[0], parameter);
+            var right = rightVisitor.Visit(expr.Body);
 
-			if (left is null || right is null)
-				return firstExpr;
+            if (left is null || right is null)
+                return firstExpr;
 
-			return Expression.Lambda<Func<T, bool>>(
-				Expression.OrElse(left, right), parameter);
-		}
+            return Expression.Lambda<Func<T, bool>>(
+                Expression.OrElse(left, right), parameter);
+        }
 
-		public static Expression<Func<T, bool>> OrIf<T>(this Expression<Func<T, bool>> firstExpr, bool condition, Expression<Func<T, bool>> expr) =>
-		   condition ? Or<T>(firstExpr, expr) : firstExpr;
+        public static Expression<Func<T, bool>> OrIf<T>(this Expression<Func<T, bool>> firstExpr, bool condition, Expression<Func<T, bool>> expr) =>
+           condition ? Or<T>(firstExpr, expr) : firstExpr;
 
-		public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> firstExpr, Expression<Func<T, bool>> expr)
-		{
-			var parameter = Expression.Parameter(typeof(T));
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> firstExpr, Expression<Func<T, bool>> expr)
+        {
+            var parameter = Expression.Parameter(typeof(T));
 
-			var leftVisitor = new ReplaceExpressionVisitor(firstExpr.Parameters[0], parameter);
-			var left = leftVisitor.Visit(firstExpr.Body);
-			var rightVisitor = new ReplaceExpressionVisitor(expr.Parameters[0], parameter);
-			var right = rightVisitor.Visit(expr.Body);
+            var leftVisitor = new ReplaceExpressionVisitor(firstExpr.Parameters[0], parameter);
+            var left = leftVisitor.Visit(firstExpr.Body);
+            var rightVisitor = new ReplaceExpressionVisitor(expr.Parameters[0], parameter);
+            var right = rightVisitor.Visit(expr.Body);
 
-			if (left is null || right is null)
-				return firstExpr;
+            if (left is null || right is null)
+                return firstExpr;
 
-			return Expression.Lambda<Func<T, bool>>(
-				Expression.AndAlso(left, right), parameter);
-		}
+            return Expression.Lambda<Func<T, bool>>(
+                Expression.AndAlso(left, right), parameter);
+        }
 
-		public static Expression<Func<T, bool>> AndIf<T>([NotNull] this Expression<Func<T, bool>> firstExpr, bool condition, Expression<Func<T, bool>> expr) =>
-			condition ? And<T>(firstExpr, expr) : firstExpr;
+        public static Expression<Func<T, bool>> AndIf<T>([NotNull] this Expression<Func<T, bool>> firstExpr, bool condition, Expression<Func<T, bool>> expr) =>
+            condition ? And<T>(firstExpr, expr) : firstExpr;
 
-		private static MemberExpression? ExtractMemberExpression(Expression expression)
-		{
-			if (expression.NodeType == ExpressionType.MemberAccess)
-			{
-				return (MemberExpression)expression;
-			}
+        private static MemberExpression? ExtractMemberExpression(Expression expression)
+        {
+            if (expression.NodeType == ExpressionType.MemberAccess)
+            {
+                return (MemberExpression)expression;
+            }
 
-			if (expression.NodeType == ExpressionType.Convert)
-			{
-				var operand = ((UnaryExpression)expression).Operand;
-				return ExtractMemberExpression(operand);
-			}
+            if (expression.NodeType == ExpressionType.Convert)
+            {
+                var operand = ((UnaryExpression)expression).Operand;
+                return ExtractMemberExpression(operand);
+            }
 
-			return default;
-		}
+            return default;
+        }
 
-		private class ReplaceExpressionVisitor : ExpressionVisitor
-		{
-			private readonly Expression _oldValue;
-			private readonly Expression _newValue;
+        private class ReplaceExpressionVisitor : ExpressionVisitor
+        {
+            private readonly Expression _oldValue;
+            private readonly Expression _newValue;
 
-			public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
-			{
-				_oldValue = oldValue;
-				_newValue = newValue;
-			}
+            public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
+            {
+                _oldValue = oldValue;
+                _newValue = newValue;
+            }
 
-			public override Expression? Visit(Expression? node)
-			{
-				if (node == _oldValue)
-					return _newValue;
+            public override Expression? Visit(Expression? node)
+            {
+                if (node == _oldValue)
+                    return _newValue;
 
-				return base.Visit(node);
-			}
-		}
-	}
+                return base.Visit(node);
+            }
+        }
+    }
 
-	public static class ExpressionCreator
-	{
-		public static Expression<Func<T, bool>> New<T>(Expression<Func<T, bool>>? expr = null)
-			=> expr ?? (x => true);
+    public static class ExpressionCreator
+    {
+        public static Expression<Func<T, bool>> New<T>(Expression<Func<T, bool>>? expr = null)
+            => expr ?? (x => true);
 
-		public static Expression<Func<T1, T2, bool>> New<T1, T2>(Expression<Func<T1, T2, bool>>? expr = null)
-			=> expr ?? ((x, y) => true);
+        public static Expression<Func<T1, T2, bool>> New<T1, T2>(Expression<Func<T1, T2, bool>>? expr = null)
+            => expr ?? ((x, y) => true);
 
-		public static Expression<Func<T1, T2, T3, bool>> New<T1, T2, T3>(Expression<Func<T1, T2, T3, bool>>? expr = null)
-			=> expr ?? ((x, y, z) => true);
-	}
+        public static Expression<Func<T1, T2, T3, bool>> New<T1, T2, T3>(Expression<Func<T1, T2, T3, bool>>? expr = null)
+            => expr ?? ((x, y, z) => true);
+    }
 }

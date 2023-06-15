@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-
-using Mi.Core.Service;
-using Mi.Core.Toolkit.Helper;
+﻿using Mi.Core.Service;
 using Mi.IService.System;
 
 namespace Mi.Admin.WebComponent.Middleware

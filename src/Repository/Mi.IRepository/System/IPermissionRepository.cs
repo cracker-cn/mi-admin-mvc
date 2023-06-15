@@ -1,5 +1,4 @@
 ﻿using Mi.IRepository.BASE;
-using Mi.Repository.DB;
 
 namespace Mi.IRepository.System
 {

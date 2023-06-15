@@ -13,7 +13,7 @@ namespace Mi.Repository.System
             var sql = @"select count(*) from SysRole r
                         inner join SysUserRole rf on r.Id=rf.RoleId and rf.IsDeleted=0
                         where r.IsDeleted=0 and r.Id=@id";
-            return base.ExecuteScalarAsync<int>(sql, new {id});
+            return base.ExecuteScalarAsync<int>(sql, new { id });
         }
     }
 }

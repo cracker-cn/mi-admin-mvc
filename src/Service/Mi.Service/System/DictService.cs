@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 using AutoMapper;
@@ -11,9 +10,6 @@ using Mi.Core.GlobalVar;
 using Mi.Core.Service;
 using Mi.IService.System.Models.Result;
 using Mi.Repository.BASE;
-
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
 
 namespace Mi.Service.System
 {
@@ -64,7 +60,7 @@ namespace Mi.Service.System
             return new MessageModel<PagingModel<DictItem>>(true, await repo.GetPagingAsync(search, sql.ToString(), parameters));
         }
 
-        public async Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation,bool addEnabled = true)
+        public async Task<MessageModel> AddOrUpdateDictAsync(DictOperation operation, bool addEnabled = true)
         {
             if (operation.Id <= 0 && addEnabled)
             {
@@ -158,8 +154,8 @@ namespace Mi.Service.System
             var list = GetDictionaryCache();
             foreach (PropertyInfo prop in typeof(T).GetProperties())
             {
-                var item = list.FirstOrDefault(x=>x.Key==prop.Name);
-                if(item != null)
+                var item = list.FirstOrDefault(x => x.Key == prop.Name);
+                if (item != null)
                 {
                     item.Value = (string?)prop.GetValue(prop.Name);
                     dict.Add(item);
@@ -212,7 +208,7 @@ namespace Mi.Service.System
 
         public IList<Option> GetOptions(string parentKey)
         {
-            var dict = GetDictionaryCache().Where(x => x.ParentKey == parentKey).Select(x=>new Option
+            var dict = GetDictionaryCache().Where(x => x.ParentKey == parentKey).Select(x => new Option
             {
                 Name = x.Name,
                 Value = x.Value

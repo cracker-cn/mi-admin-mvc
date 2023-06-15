@@ -1,6 +1,4 @@
-﻿using Mi.Entity.System.Enum;
-
-namespace Mi.IService.System.Models
+﻿namespace Mi.IService.System.Models
 {
     public class FunctionSearch
     {

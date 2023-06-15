@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Security.Claims;
 
 using Mi.Core.Attributes;
 using Mi.Core.Enum;
@@ -7,8 +6,6 @@ using Mi.Core.Factory;
 using Mi.Core.GlobalVar;
 using Mi.Core.Models;
 using Mi.Core.Service;
-using Mi.Core.Toolkit.Helper;
-using Mi.IService.System;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
@@ -85,7 +82,7 @@ namespace Mi.Admin.WebComponent.Middleware
             {
                 var assembly = Assembly.Load("Mi.Admin");
                 types = assembly?.GetTypes().Where(x => x.BaseType != null && CONTROLLER_TYPES.Contains(x.BaseType)).ToList() ?? new List<Type>();
-                cache.Set(CacheConst.CONTROLLER_TYPES,types,CacheConst.Year);
+                cache.Set(CacheConst.CONTROLLER_TYPES, types, CacheConst.Year);
             }
             return types;
         }

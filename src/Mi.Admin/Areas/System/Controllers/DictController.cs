@@ -43,7 +43,7 @@ namespace Mi.Admin.Areas.System.Controllers
         public async Task<MessageModel> AddOrUpdateDict([FromBody] DictOperation operation)
             => await _dictService.AddOrUpdateDictAsync(operation);
 
-        [HttpPost,AuthorizeCode("System:Dict:Remove")]
+        [HttpPost, AuthorizeCode("System:Dict:Remove")]
         public async Task<MessageModel> RemoveDict(IList<string> ids)
             => await _dictService.RemoveDictAsync(ids);
 

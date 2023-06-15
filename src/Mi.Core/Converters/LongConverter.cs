@@ -4,7 +4,7 @@
     {
         public override long Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            long.TryParse(reader.GetString(),out var number);
+            long.TryParse(reader.GetString(), out var number);
             return number;
         }
 

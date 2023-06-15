@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mi.Core.Enum
+﻿namespace Mi.Core.Enum
 {
     public enum EnumResponseCode
     {
@@ -47,5 +41,5 @@ namespace Mi.Core.Enum
         /// 参数错误
         /// </summary>
         ParameterError = 90008
-	}
+    }
 }

@@ -16,14 +16,14 @@ namespace Mi.Core.Extension
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
             var fields = cache.GetType().GetField("_entries", flags);
-            if(fields == null) return new List<string>();
+            if (fields == null) return new List<string>();
             var entries = fields.GetValue(cache);
             var keys = new List<string>();
             if (entries is not IDictionary cacheItems) return keys;
             foreach (DictionaryEntry cacheItem in cacheItems)
             {
                 var key = cacheItem.Key.ToString();
-                if(!string.IsNullOrEmpty(key) ) keys.Add(key);
+                if (!string.IsNullOrEmpty(key)) keys.Add(key);
             }
             return keys;
         }

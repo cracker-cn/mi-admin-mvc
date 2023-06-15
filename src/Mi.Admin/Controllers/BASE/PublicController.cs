@@ -6,8 +6,6 @@ using Mi.IService.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Newtonsoft.Json.Linq;
-
 namespace Mi.Admin.Controllers.BASE
 {
     [Route("api/[controller]")]
@@ -18,7 +16,7 @@ namespace Mi.Admin.Controllers.BASE
         private readonly CaptchaFactory _captchaFactory;
         private readonly IPublicService _publicService;
 
-        public PublicController(CaptchaFactory captchaFactory,IPublicService publicService)
+        public PublicController(CaptchaFactory captchaFactory, IPublicService publicService)
         {
             _captchaFactory = captchaFactory;
             _publicService = publicService;
@@ -28,7 +26,7 @@ namespace Mi.Admin.Controllers.BASE
         public FileResult LoginCaptcha()
         {
             var id = StringHelper.GetMacAddress();
-            return File(_captchaFactory.NewByte(id),"image/png");
+            return File(_captchaFactory.NewByte(id), "image/png");
         }
 
         [HttpGet("config")]

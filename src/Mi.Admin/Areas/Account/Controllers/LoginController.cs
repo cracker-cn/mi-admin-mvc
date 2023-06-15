@@ -1,7 +1,6 @@
 ﻿using Mi.Core.Models;
 using Mi.IService.System;
 
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.Account.Controllers

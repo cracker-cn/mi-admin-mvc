@@ -3,7 +3,6 @@
 using Dapper;
 
 using Mi.Entity.BASE;
-using Mi.Entity.Field;
 using Mi.IRepository.BASE;
 
 using Microsoft.EntityFrameworkCore;

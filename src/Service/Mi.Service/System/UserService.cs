@@ -4,7 +4,6 @@ using Mi.Core.GlobalVar;
 using Mi.Core.Service;
 using Mi.Repository.BASE;
 
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace Mi.Service.System
@@ -25,7 +24,7 @@ namespace Mi.Service.System
 
         public async Task<MessageModel<string>> AddUserAsync(string userName)
         {
-            if (!userName.RegexValidate(PatternConst.UserName)) return new MessageModel<string>(false,"用户名只支持大小写字母和数字，最短4位，最长12位",null);
+            if (!userName.RegexValidate(PatternConst.UserName)) return new MessageModel<string>(false, "用户名只支持大小写字母和数字，最短4位，最长12位", null);
             var count = _userRepository.ExecuteScalar<int>("select count(*) from SysUser where LOWER(UserName)=@name and IsDeleted=0", new { name = userName.ToLower() });
             if (count > 0) return new MessageModel<string>(false, "用户名已存在", null);
 

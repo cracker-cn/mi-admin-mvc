@@ -1,5 +1,4 @@
 ﻿using Mi.Core.Models.UI;
-using Mi.Entity.System;
 using Mi.IService.System.Models.Result;
 
 namespace Mi.IService.System
@@ -18,7 +17,7 @@ namespace Mi.IService.System
 
         Task<MessageModel<IList<long>>> GetRoleFunctionIdsAsync(long id);
 
-        Task<MessageModel> SetRoleFunctionsAsync(long id,IList<long> funcIds);
+        Task<MessageModel> SetRoleFunctionsAsync(long id, IList<long> funcIds);
 
         Task<MessageModel> RegisterAsync(string userName, string password);
 

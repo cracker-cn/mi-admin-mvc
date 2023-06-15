@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-using SimpleCaptcha;
+﻿using SimpleCaptcha;
 
 namespace Mi.Core.Factory
 {

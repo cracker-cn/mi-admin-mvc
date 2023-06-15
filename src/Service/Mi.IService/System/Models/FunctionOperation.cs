@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Mi.Entity.System.Enum;
-
 namespace Mi.IService.System.Models
 {
     public class FunctionOperation
