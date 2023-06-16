@@ -6,9 +6,25 @@
     <div class="layui-card-body">
         <div class="layui-form">
             <div class="layui-form-item layui-inline">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="no" placeholder="请输入编号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">标题</label>
                 <div class="layui-input-inline">
                     <input type="text" name="title" placeholder="请输入消息标题" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline">
+                    <select name="readed" id="statusSelect">
+                        <option value="-1">全部</option>
+                        <option value="0">未读</option>
+                        <option value="1">已读</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
@@ -64,12 +80,17 @@
             });
             let pageRootUrl = "/Workspace/Message/";
 
+            $('input[name="no"]').val(MiUtils.getGlobalParams('messageNo'))
+
             table.render({
                 elem: '#message-table',
                 url: pageRootUrl + 'GetMessageList',
                 page: true,
                 request: {
                     limitName: 'size'
+                },
+                where:{
+                    no: $('input[name="no"]').val()
                 },
                 contentType: 'application/json',
                 method: 'post',
@@ -79,6 +100,11 @@
                     },
                     {
                         type: 'numbers'
+                    },
+                    {
+                        title: '编号',
+                        field: 'id',
+                        align: 'center'
                     },
                     {
                         title: '标题',
@@ -110,7 +136,7 @@
                         title: '操作',
                         toolbar: '#message-bar',
                         align: 'center',
-                        width: 180
+                        width: 100
                     }
                 ]],
                 skin: 'line',
@@ -163,7 +189,11 @@
 
             $("#btnReset").click(function () {
                 $("input[name='title']").val('');
+                $("input[name='no']").val('');
+                MiUtils.removeGlobalParams('messageNo')
                 $('#search-time').val('');
+                $('#statusSelect').val(-1)
+                form.render()
                 table.reload('message-table', {
                     where: {}
                 })

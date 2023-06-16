@@ -8,9 +8,9 @@
         Success = 90001,
 
         /// <summary>
-        ///     错误请求，参数验证失败
+        /// 参数错误
         /// </summary>
-        BadRequest = 90002,
+        ParameterError = 90002,
 
         /// <summary>
         ///     未登录
@@ -35,11 +35,6 @@
         /// <summary>
         ///     失败
         /// </summary>
-        Fail = 90007,
-
-        /// <summary>
-        /// 参数错误
-        /// </summary>
-        ParameterError = 90008
+        Fail = 90007
     }
 }

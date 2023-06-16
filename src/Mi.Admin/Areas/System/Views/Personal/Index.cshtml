@@ -14,7 +14,7 @@
             <div class="layui-card-body" style="padding: 25px;">
                 <div class="text-center layui-text">
                     <div class="user-info-head" id="userInfoHead">
-                        <img src="#" id="userAvatar" width="115" height="115" alt="">
+                        <img src="#" id="userAvatar" width="115" height="115" alt="头像">
                     </div>
                     <h2 id="nickname_h2" style="padding-top: 20px;font-size: 20px;">xxx</h2>
                 </div>
@@ -194,11 +194,11 @@
             function initData() {
                 $.post('/System/Personal/GetUserBaseInfo', function (res) {
                     if (common.ajaxSuccess(res.code)) {
-                        $('#userAvatar').attr('src', res.result.avatar)
-                        $('input[name="nickName"]').val(res.result.nickName)
-                        $('#nickname_h2').text(res.result.nickName)
-                        $('input[name="signature"]').val(res.result.signature)
-                        $('#sign_span').text(res.result.signature)
+                        $('#userAvatar').attr('src', res.result.avatar ?? '#')
+                        $('input[name="nickName"]').val(res.result.nickName ?? '')
+                        $('#nickname_h2').text(res.result.nickName ?? '')
+                        $('input[name="signature"]').val(res.result.signature ?? '')
+                        $('#sign_span').text(res.result.signature ?? '')
                         $('input[name=sex]').each(function (index, element) {
                             if ($(element).val() == res.result.sex) {
                                 $(element).prop('checked', true)
