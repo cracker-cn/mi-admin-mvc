@@ -157,7 +157,7 @@ namespace Mi.Service.System
                 var item = list.FirstOrDefault(x => x.Key == prop.Name);
                 if (item != null)
                 {
-                    item.Value = Convert.ToString(prop.GetValue(prop.Name));
+                    item.Value = Convert.ToString(prop.GetValue(model));
                     dict.Add(item);
                 }
             }

@@ -2,73 +2,159 @@
     Layout = "_ElementUiPlusLayout";
 }
 
-<el-form :model="form" label-width="120px" ref="form">
-    <el-form-item label="首页地址" prop="home_page_url">
-        <el-input v-model="form.home_page_url" />
-    </el-form-item>
-    <el-form-item label="首页名称" prop="home_page_name">
-        <el-input v-model="form.home_page_name" />
-    </el-form-item>
-    <el-form-item label="分页行数下拉选项" prop="default_size_array">
-        <el-input v-model="form.default_size_array" />
-    </el-form-item>
-    <el-form-item label="默认页行数" prop="default_page_size">
-        <el-input v-model="form.default_page_size" />
-    </el-form-item>
-    <el-form-item label="登录页底部显示文本" prop="login_footer_word">
-        <el-input v-model="form.login_footer_word" />
-    </el-form-item>
-    <el-form-item label="登录页中间显示名称" prop="login_middle_name">
-        <el-input v-model="form.login_middle_name" />
-    </el-form-item>
-    <el-form-item label="进入后侧边栏显示名称" prop="header_name">
-        <el-input v-model="form.header_name" />
-    </el-form-item>
-    <el-form-item label="进入后侧边栏Logo" prop="logo">
-        <el-input v-model="form.logo" />
-    </el-form-item>
-    <el-form-item label="站点ico" prop="site_icon">
-        <el-input v-model="form.site_icon" />
-    </el-form-item>
-    <el-form-item label="站点标题" prop="site_title">
-        <el-input v-model="form.site_title" />
-    </el-form-item>
-    <el-form-item>
-        <el-button type="primary" @@click="onSubmit">提交</el-button>
-        <el-button @@click="resetForm">重置</el-button>
-    </el-form-item>
-</el-form>
+<el-card shadow="never">
+    <template #header>
+        <div class="card-header">
+            <span>站点Tab</span>
+        </div>
+    </template>
+    <el-form :model="siteForm" :inline="true" :label-width="labelWidth" ref="siteForm" :rules="rules">
+        <el-form-item label="站点ico" prop="site_icon">
+            <el-input v-model="siteForm.site_icon" />
+        </el-form-item>
+        <el-form-item label="站点标题" prop="site_title">
+            <el-input v-model="siteForm.site_title" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @@click="siteFormSure">确定</el-button>
+            <el-button @@click="siteFormReset">重置</el-button>
+        </el-form-item>
+    </el-form>
+</el-card>
+
+<el-card shadow="never" class="mt-1">
+    <template #header>
+        <div class="card-header">
+            <span>登录页</span>
+        </div>
+    </template>
+    <el-form :model="loginForm" :inline="true" :label-width="labelWidth" ref="loginForm" :rules="rules">
+        <el-form-item label="登录标题" prop="login_middle_name">
+            <el-input v-model="loginForm.login_middle_name" />
+        </el-form-item>
+        <el-form-item label="版权信息" prop="login_footer_word">
+            <el-input v-model="loginForm.login_footer_word" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @@click="loginFormSure">确定</el-button>
+            <el-button @@click="loginFormReset">重置</el-button>
+        </el-form-item>
+    </el-form>
+</el-card>
+
+<el-card shadow="never" class="mt-1">
+    <template #header>
+        <div class="card-header">
+            <span>首页</span>
+        </div>
+    </template>
+    <el-form :model="homeForm" :inline="true" :label-width="labelWidth" ref="homeForm" :rules="rules">
+        <el-form-item label="地址" prop="home_page_url">
+            <el-input v-model="homeForm.home_page_url" />
+        </el-form-item>
+        <el-form-item label="名称" prop="home_page_name">
+            <el-input v-model="homeForm.home_page_name" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @@click="homeFormSure">确定</el-button>
+            <el-button @@click="homeFormReset">重置</el-button>
+        </el-form-item>
+    </el-form>
+</el-card>
+
+<el-card shadow="never" class="mt-1">
+    <template #header>
+        <div class="card-header">
+            <span>系统</span>
+        </div>
+    </template>
+    <el-form :model="sysForm" :inline="true" :label-width="labelWidth" ref="sysForm" :rules="rules">
+        <el-form-item label="名称" prop="header_name">
+            <el-input v-model="sysForm.header_name" />
+        </el-form-item>
+        <el-form-item label="Logo" prop="logo">
+            <el-input v-model="sysForm.logo" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @@click="sysFormSure">确定</el-button>
+            <el-button @@click="sysFormReset">重置</el-button>
+        </el-form-item>
+    </el-form>
+</el-card>
 
 @section Scripts{
-<script>
+    <script>
         const ROOT_PATH = '/System/UiConfig/';
         const App = {
-            data(){
-                return{
-                    form:{}
+            data() {
+                return {
+                    labelWidth: '120px',
+                    sysForm: {},
+                    homeForm: {},
+                    loginForm: {},
+                    siteForm: {},
+                    form: {},
+                    rules: {
+                        home_page_url: [
+                            { required: true, message: '首页地址不能为空', trigger: 'blur' }
+                        ],
+                        home_page_name: [
+                            { required: true, message: '首页名称不能为空', trigger: 'blur' }
+                        ],
+                        header_name: [
+                            { required: true, message: '系统名称不能为空', trigger: 'blur' }
+                        ],
+                        logo: [
+                            { required: true, message: '系统Logo不能为空', trigger: 'blur' }
+                        ]
+                    }
                 }
             },
-            methods:{
-                initData(){
-                    axios.post(ROOT_PATH + "GetUiConfig").then(res=>{
-                        if (MiUtils.ajaxSucceed(res.data.code)){
+            methods: {
+                sysFormSure() { },
+                sysFormReset() { },
+                homeFormSure() { },
+                homeFormReset() { },
+                loginFormSure() { },
+                loginFormReset() { },
+                siteFormReset() { },
+                siteFormSure() { },
+                initData() {
+                    axios.post(ROOT_PATH + "GetUiConfig").then(res => {
+                        if (MiUtils.ajaxSucceed(res.data.code)) {
                             this.form = res.data.result
-                        }else{
+                        } else {
                             ElementPlus.ElMessage.error(res.data.message)
                         }
                     })
                 },
-                onSubmit(){
+                onSubmit() {
                     this.$refs['form'].validate((valid, fields) => {
                         if (valid) {
-                            axios.post(ROOT_PATH + 'SetUiConfig', this.form)
-                                .then(res => {
-                                    if (MiUtils.ajaxSucceed(res.data.code)) {
-                                        ElementPlus.ElMessage.success(res.data.message)
-                                        this.initData()
-                                    } else {
-                                        ElementPlus.ElMessage.error(res.data.message)
-                                    }
+                            ElementPlus.ElMessageBox.confirm(
+                                'UI配置影响全局，是否继续？',
+                                '提示',
+                                {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning',
+                                }
+                            )
+                                .then(() => {
+                                    axios.post(ROOT_PATH + 'SetUiConfig', this.form)
+                                        .then(res => {
+                                            if (MiUtils.ajaxSucceed(res.data.code)) {
+                                                ElementPlus.ElMessage.success(res.data.message)
+                                                this.initData()
+                                            } else {
+                                                ElementPlus.ElMessage.error(res.data.message)
+                                            }
+                                        })
+                                }).catch(() => {
+                                    ElementPlus.ElMessage({
+                                        type: 'info',
+                                        message: '取消操作',
+                                    })
                                 })
                         } else {
                             console.log(fields)
@@ -76,13 +162,13 @@
                         }
                     })
                 },
-                resetForm(){
-                    this.$refs['form'].resetFields();
+                resetForm() {
+                    this.initData()
                 }
             },
-            created(){
+            created() {
                 this.initData()
             }
         }
-</script>
+    </script>
 }

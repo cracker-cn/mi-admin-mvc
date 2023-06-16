@@ -38,20 +38,6 @@ namespace Mi.Core.Models
         public string? login_footer_word { get; set; }
 
         /// <summary>
-        /// 默认页行数
-        /// </summary>
-        [NotNull]
-        [Required]
-        public int default_page_size { get; set; } = 10;
-
-        /// <summary>
-        /// 分页行数下拉选项 例：10,20,40,80
-        /// </summary>
-        [NotNull]
-        [Required]
-        public string? default_size_array { get; set; }
-
-        /// <summary>
         /// 首页名称
         /// </summary>
         [NotNull]

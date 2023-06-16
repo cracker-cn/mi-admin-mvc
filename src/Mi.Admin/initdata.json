@@ -12,8 +12,6 @@
     "header_name": "MI Admin", //进入后侧边栏显示名称
     "login_middle_name": "MI Admin登录", //登录页中间显示名称
     "login_footer_word": "版权所有，翻版必究", //登录页底部显示文本
-    "default_page_size": "10", //默认页行数
-    "default_size_array": "10,20,40,80", //分页行数下拉选项
     "home_page_name": "首页", //首页名称
     "home_page_url": "/html/weclome.html" //首页地址
   }

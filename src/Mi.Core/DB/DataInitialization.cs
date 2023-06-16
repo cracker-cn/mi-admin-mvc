@@ -39,8 +39,6 @@ namespace Mi.Core.DB
                 sql.Append(GenValueSql("进入后侧边栏显示名称", nameof(config.header_name), config.header_name));
                 sql.Append(GenValueSql("登录页中间显示名称", nameof(config.login_middle_name), config.login_middle_name));
                 sql.Append(GenValueSql("登录页底部显示文本", nameof(config.login_footer_word), config.login_footer_word));
-                sql.Append(GenValueSql("默认页行数", nameof(config.default_page_size), config.default_page_size.ToString()));
-                sql.Append(GenValueSql("分页行数下拉选项", nameof(config.default_size_array), config.default_size_array));
                 sql.Append(GenValueSql("首页名称", nameof(config.home_page_name), config.home_page_name));
                 sql.Append(GenValueSql("首页地址", nameof(config.home_page_url), config.home_page_url));
                 await DapperDB.ExecuteAsync(sql.ToString().Trim(','));
