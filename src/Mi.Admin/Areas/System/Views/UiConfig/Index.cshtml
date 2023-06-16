@@ -1,0 +1,88 @@
+﻿@{
+    Layout = "_ElementUiPlusLayout";
+}
+
+<el-form :model="form" label-width="120px" ref="form">
+    <el-form-item label="首页地址" prop="home_page_url">
+        <el-input v-model="form.home_page_url" />
+    </el-form-item>
+    <el-form-item label="首页名称" prop="home_page_name">
+        <el-input v-model="form.home_page_name" />
+    </el-form-item>
+    <el-form-item label="分页行数下拉选项" prop="default_size_array">
+        <el-input v-model="form.default_size_array" />
+    </el-form-item>
+    <el-form-item label="默认页行数" prop="default_page_size">
+        <el-input v-model="form.default_page_size" />
+    </el-form-item>
+    <el-form-item label="登录页底部显示文本" prop="login_footer_word">
+        <el-input v-model="form.login_footer_word" />
+    </el-form-item>
+    <el-form-item label="登录页中间显示名称" prop="login_middle_name">
+        <el-input v-model="form.login_middle_name" />
+    </el-form-item>
+    <el-form-item label="进入后侧边栏显示名称" prop="header_name">
+        <el-input v-model="form.header_name" />
+    </el-form-item>
+    <el-form-item label="进入后侧边栏Logo" prop="logo">
+        <el-input v-model="form.logo" />
+    </el-form-item>
+    <el-form-item label="站点ico" prop="site_icon">
+        <el-input v-model="form.site_icon" />
+    </el-form-item>
+    <el-form-item label="站点标题" prop="site_title">
+        <el-input v-model="form.site_title" />
+    </el-form-item>
+    <el-form-item>
+        <el-button type="primary" @@click="onSubmit">提交</el-button>
+        <el-button @@click="resetForm">重置</el-button>
+    </el-form-item>
+</el-form>
+
+@section Scripts{
+<script>
+        const ROOT_PATH = '/System/UiConfig/';
+        const App = {
+            data(){
+                return{
+                    form:{}
+                }
+            },
+            methods:{
+                initData(){
+                    axios.post(ROOT_PATH + "GetUiConfig").then(res=>{
+                        if (MiUtils.ajaxSucceed(res.data.code)){
+                            this.form = res.data.result
+                        }else{
+                            ElementPlus.ElMessage.error(res.data.message)
+                        }
+                    })
+                },
+                onSubmit(){
+                    this.$refs['form'].validate((valid, fields) => {
+                        if (valid) {
+                            axios.post(ROOT_PATH + 'SetUiConfig', this.form)
+                                .then(res => {
+                                    if (MiUtils.ajaxSucceed(res.data.code)) {
+                                        ElementPlus.ElMessage.success(res.data.message)
+                                        this.initData()
+                                    } else {
+                                        ElementPlus.ElMessage.error(res.data.message)
+                                    }
+                                })
+                        } else {
+                            console.log(fields)
+                            ElementPlus.ElMessage.warning('表单项验证失败')
+                        }
+                    })
+                },
+                resetForm(){
+                    this.$refs['form'].resetFields();
+                }
+            },
+            created(){
+                this.initData()
+            }
+        }
+</script>
+}

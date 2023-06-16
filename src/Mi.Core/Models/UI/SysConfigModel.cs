@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mi.Core.Models
 {
@@ -23,6 +24,7 @@ namespace Mi.Core.Models
         /// 进入后侧边栏显示名称
         /// </summary>
         [NotNull]
+        [Required]
         public string? header_name { get; set; }
 
         /// <summary>
@@ -39,18 +41,21 @@ namespace Mi.Core.Models
         /// 默认页行数
         /// </summary>
         [NotNull]
+        [Required]
         public int default_page_size { get; set; } = 10;
 
         /// <summary>
         /// 分页行数下拉选项 例：10,20,40,80
         /// </summary>
         [NotNull]
+        [Required]
         public string? default_size_array { get; set; }
 
         /// <summary>
         /// 首页名称
         /// </summary>
         [NotNull]
+        [Required]
         public string? home_page_name { get; set; }
 
         /// <summary>

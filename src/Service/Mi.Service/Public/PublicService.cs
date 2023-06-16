@@ -63,7 +63,7 @@ namespace Mi.Service.Public
 
         public async Task<MessageModel<SysConfigModel>> GetUiConfigAsync()
         {
-            var config = await _dictService.GetAsync<SysConfigModel>("UiConfig");
+            var config = await _dictService.GetAsync<SysConfigModel>(DictKeyConst.UiConfig);
             return _msg.Success("查询成功").As(config);
         }
     }
