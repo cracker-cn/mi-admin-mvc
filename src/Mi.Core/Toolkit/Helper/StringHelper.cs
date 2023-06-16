@@ -1,5 +1,6 @@
 ﻿using System.Net.NetworkInformation;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 using Mi.Core.Service;
 
@@ -74,6 +75,27 @@ namespace Mi.Core.Toolkit.Helper
             var webRootPath = DotNetService.Get<IOptionsMonitor<EnvironmentHandler>>().CurrentValue.WebRootPath;
             var path = Path.Combine(webRootPath, "admin", "images", "avatar.jpg");
             return FileHelper.GetBase64(path);
+        }
+
+        /// <summary>
+        /// 命名变更
+        /// </summary>
+        /// <param name="str">源字符串</param>
+        /// <param name="flag">true 大驼峰转小写+下划线,false 反之</param>
+        /// <returns></returns>
+        public static string NameChanged(string str, bool flag = true)
+        {
+            string strItemTarget = "";
+            for (int j = 0; j < str.Length; j++)
+            {
+                string temp = str[j].ToString();
+                if (Regex.IsMatch(temp, "[A-Z]"))
+                {
+                    temp = "_" + temp.ToLower();
+                }
+                strItemTarget += temp;
+            }
+            return strItemTarget;
         }
     }
 }

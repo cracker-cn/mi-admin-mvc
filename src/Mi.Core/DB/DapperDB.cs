@@ -71,5 +71,21 @@ namespace Mi.Core.DB
 				return await conn.ExecuteAsync(sql, param) > 0;
 			}
 		}
-	}
+
+        public static TKey ExecuteScalar<TKey>(string sql, object? param = null)
+        {
+            using (var conn = new SqliteConnection(DBConfig.ConnectionString))
+            {
+                return conn.ExecuteScalar<TKey>(sql, param);
+            }
+        }
+
+        public async static Task<TKey> ExecuteScalarAsync<TKey>(string sql, object? param = null)
+        {
+            using (var conn = new SqliteConnection(DBConfig.ConnectionString))
+            {
+                return await conn.ExecuteScalarAsync<TKey>(sql, param);
+            }
+        }
+    }
 }
