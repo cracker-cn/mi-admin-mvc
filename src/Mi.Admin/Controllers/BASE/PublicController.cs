@@ -30,9 +30,9 @@ namespace Mi.Admin.Controllers.BASE
         }
 
         [HttpGet("config")]
-        public PaConfigModel Config()
+        public async Task<PaConfigModel> Config()
         {
-            return _publicService.ReadConfig();
+            return await _publicService.ReadConfigAsync();
         }
     }
 }

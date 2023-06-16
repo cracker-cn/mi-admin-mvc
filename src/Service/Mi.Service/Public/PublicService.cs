@@ -1,4 +1,5 @@
 ﻿using Mi.Core.Abnormal;
+using Mi.Core.GlobalVar;
 using Mi.Core.Hubs;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
@@ -43,9 +44,15 @@ namespace Mi.Service.Public
             return true;
         }
 
-        public PaConfigModel ReadConfig()
+        public async Task<PaConfigModel> ReadConfigAsync()
         {
-            return _uiConfig;
+            var config = await _dictService.GetAsync<SysConfigModel>(DictKeyConst.UiConfig);
+            var result = _uiConfig;
+            result.logo.title = config.header_name;
+            result.logo.image = config.logo ?? "";
+            result.tab.index.title = config.home_page_name;
+            result.tab.index.href = config.home_page_url;
+            return result;
         }
 
         public async Task<MessageModel> SetUiConfigAsync(SysConfigModel operation)

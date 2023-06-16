@@ -14,7 +14,7 @@
     "login_footer_word": "版权所有，翻版必究", //登录页底部显示文本
     "default_page_size": "10", //默认页行数
     "default_size_array": "10,20,40,80", //分页行数下拉选项
-    "home_page_name": "/html/weclome.html", //首页名称
-    "home_page_url": "首页" //首页地址
+    "home_page_name": "首页", //首页名称
+    "home_page_url": "/html/weclome.html" //首页地址
   }
 }

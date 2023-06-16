@@ -4,7 +4,7 @@ namespace Mi.IService.Public
 {
     public interface IPublicService
     {
-        PaConfigModel ReadConfig();
+        Task<PaConfigModel> ReadConfigAsync();
 
         Task<MessageModel> SetUiConfigAsync(SysConfigModel operation);
 

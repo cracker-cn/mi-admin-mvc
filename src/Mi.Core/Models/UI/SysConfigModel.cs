@@ -22,6 +22,7 @@ namespace Mi.Core.Models
         /// <summary>
         /// 进入后侧边栏显示名称
         /// </summary>
+        [NotNull]
         public string? header_name { get; set; }
 
         /// <summary>
