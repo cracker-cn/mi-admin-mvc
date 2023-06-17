@@ -1,4 +1,5 @@
 ﻿using Mi.Core.Service;
+using Mi.Core.Toolkit.Helper;
 using Mi.IService.System;
 
 namespace Mi.Admin.WebComponent.Middleware
@@ -7,7 +8,6 @@ namespace Mi.Admin.WebComponent.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<UserMiddleware> _logger;
-        private readonly string[] IGNORE_CONTROLLERS = { "home", "public", "personal" };
 
         public UserMiddleware(RequestDelegate next, ILogger<UserMiddleware> logger)
         {
@@ -23,7 +23,6 @@ namespace Mi.Admin.WebComponent.Middleware
             {
                 var permissionService = DotNetService.Get<IPermissionService>();
                 var userModel = await permissionService.QueryUserModelCacheAsync(data);
-
                 context.Features.Set(userModel);
             }
 

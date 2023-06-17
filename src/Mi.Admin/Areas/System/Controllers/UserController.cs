@@ -1,10 +1,12 @@
 ﻿using Mi.Core.Attributes;
+using Mi.Core.Hubs;
 using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Mi.Admin.Areas.System.Controllers
 {

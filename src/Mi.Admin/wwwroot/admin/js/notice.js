@@ -7,7 +7,7 @@ connection.on("ReceiveMessage", function (title, content) {
 });
 
 connection.start().then(() => {
-    let intervalTime = 1000 * 60 * 1;//1minute
+    let intervalTime = 1000 * 60 * 5;//minute
     let miUser = JSON.parse(localStorage.getItem('mi-user'))
     if (miUser && miUser.userId) {
         setInterval(function () {
