@@ -1,4 +1,5 @@
 ﻿using Mi.Core.Models;
+using Mi.Core.Service;
 using Mi.IService.System;
 
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,12 @@ namespace Mi.Admin.Areas.Account.Controllers
 
         [HttpPost]
         public async Task<MessageModel> Do(string userName, string password, string code)
-            => await _permissionService.LoginAsync(userName, password, code);
+        {
+            var result = await _permissionService.LoginAsync(userName, password, code);
+            var logService = DotNetService.Get<ILogService>();
+            await logService.WriteLogAsync(userName, result.EnsureSuccess(), result.Message ?? "");
+            return result;
+        }
 
         [HttpPost]
         public async Task<MessageModel> New(string userName, string password)

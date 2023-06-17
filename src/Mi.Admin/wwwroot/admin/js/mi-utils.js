@@ -7,6 +7,7 @@ const MiUtils = {
     setGlobalParams: (obj) => setParams(obj),
     getGlobalParams: (obj) => getParams(obj),
     removeGlobalParams: (obj) => removeParams(obj),
+    header: () => genMiHeader()
 }
 
 /**
@@ -85,4 +86,34 @@ function removeParams(key) {
         delete json[key]
         localStorage.setItem('mi-params', JSON.stringify(json))
     }
+}
+
+function genMiHeader() {
+    let xhr = new XMLHttpRequest()
+    xhr.open('get', 'http://ip-api.com/json/?lang=zh-CN', false)
+    xhr.send()
+    if (xhr.status == 200) {
+        let data = JSON.parse(xhr.responseText)
+        return `${data.country}-${data.regionName}-${data.city}&${data.query}`
+    } else {
+        console.error(xhr.responseText)
+    }
+}
+
+/**
+ * base64加密
+ * @param {any} str
+ * @returns
+ */
+function base64Encryption(str) {
+    return window.btoa(encodeURI(str))
+}
+
+/**
+ * base64解密
+ * @param {any} str
+ * @returns
+ */
+function base64Decrypt(str) {
+    return decodeURI(window.atob(str))
 }

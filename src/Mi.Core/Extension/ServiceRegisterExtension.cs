@@ -6,8 +6,11 @@ using Mi.Core.Service;
 using Mi.Core.Toolkit.Extension;
 using Mi.Repository.DB;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
+using Newtonsoft.Json;
 
 namespace Mi.Core.Extension
 {
@@ -33,6 +36,15 @@ namespace Mi.Core.Extension
 				});
 			});
 			service.AddScoped<IMiUser, MiUser>();
+			//header
+			service.AddSingleton<MiHeader>(p => {
+				var httpContext = p.GetRequiredService<IHttpContextAccessor>().HttpContext!;
+				if(httpContext.Items.TryGetValue(MiHeader.MIHEADER, out var str))
+				{
+                    return JsonConvert.DeserializeObject<MiHeader>((string)str) ?? new MiHeader();
+                }
+				return new MiHeader();
+            });
 			service.AddScoped<CreatorFactory>();
 			service.AddScoped<CaptchaFactory>();
 			service.AddScoped<MemoryCacheFactory>();

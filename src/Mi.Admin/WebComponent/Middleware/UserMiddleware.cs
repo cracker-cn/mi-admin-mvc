@@ -29,13 +29,4 @@ namespace Mi.Admin.WebComponent.Middleware
             await _next(context);
         }
     }
-
-    public static class UserMiddlewareExtension
-    {
-        public static IApplicationBuilder UseFetchUser(
-            this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<UserMiddleware>();
-        }
-    }
 }

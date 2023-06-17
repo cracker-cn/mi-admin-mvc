@@ -52,6 +52,7 @@ namespace Mi.Admin.Areas.System.Controllers
         public async Task<MessageModel> SetPassword(string password) => await _userService.SetPasswordAsync(password);
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IList<HeaderMsg>> GetHeaderMsg() => await _msgService.GetHeaderMsgAsync();
 
 	}

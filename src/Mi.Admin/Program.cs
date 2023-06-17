@@ -1,3 +1,4 @@
+using Mi.Admin.WebComponent;
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
 using Mi.Core.Hubs;
@@ -88,7 +89,7 @@ app.UseStaticFiles(options);
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseFetchUser();
+app.AddCustomerMiddleware();
 app.UseAuthorization();
 
 app.MapControllerRoute(
