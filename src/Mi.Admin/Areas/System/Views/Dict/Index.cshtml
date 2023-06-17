@@ -167,7 +167,10 @@
 
             form.on('submit(dict-query)', function (data) {
                 table.reload('dict-table', {
-                    where: data.field
+                    where: data.field,
+                    page:{
+                        curr:1
+                    }
                 })
                 return false;
             });

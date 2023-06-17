@@ -35,6 +35,8 @@ namespace Mi.IService.System
 
         IList<Option> GetOptions(string parentKey);
 
+        Task<MessageModel> SetAsync(Dictionary<string, string> dict);
+
         #endregion
     }
 }

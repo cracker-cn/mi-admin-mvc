@@ -216,6 +216,24 @@ namespace Mi.Service.System
             return dict.ToList();
         }
 
+        public async Task<MessageModel> SetAsync(Dictionary<string, string> dict)
+        {
+            var updateList = new List<SysDict>();
+            var list = GetDictionaryCache();
+            foreach (var item in dict)
+            {
+                var model = list.FirstOrDefault(x => x.Key == item.Key);
+                if(model != null)
+                {
+                    model.Value = item.Value;
+                    updateList.Add(model);
+                }
+            }
+            if(updateList.Count > 0) await _dictRepository.UpdateManyAsync(updateList);
+            _cache.Remove(CacheConst.FUNCTION);
+            return _message.Success();
+        }
+
         #endregion
     }
 }

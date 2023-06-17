@@ -1,6 +1,7 @@
 ﻿using Mi.Core.Attributes;
 using Mi.Core.Models;
 using Mi.IService.Public;
+using Mi.IService.System;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace Mi.Admin.Areas.System.Controllers
     public class UiConfigController : Controller
     {
         private readonly IPublicService _publicService;
+        private readonly IDictService _dictService;
 
-        public UiConfigController(IPublicService publicService)
+        public UiConfigController(IPublicService publicService, IDictService dictService)
         {
             _publicService = publicService;
+            _dictService = dictService;
         }
 
         [AuthorizeCode("Sytem:UiConfig")]
@@ -24,8 +27,8 @@ namespace Mi.Admin.Areas.System.Controllers
             return View();
         }
 
-        [HttpPost,AuthorizeCode("System:SetConfig")]
-        public async Task<MessageModel> SetUiConfig([FromBody] SysConfigModel operation) => await _publicService.SetUiConfigAsync(operation);
+        [HttpPost, AuthorizeCode("System:SetConfig")]
+        public async Task<MessageModel> SetUiConfig([FromBody] Dictionary<string, string> operation) => await _dictService.SetAsync(operation);
 
         [HttpPost, AuthorizeCode("System:GetConfig")]
         public async Task<MessageModel<SysConfigModel>> GetUiConfig() => await _publicService.GetUiConfigAsync();
