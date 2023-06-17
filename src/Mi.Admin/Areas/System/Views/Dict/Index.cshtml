@@ -228,7 +228,7 @@
                         data: param,
                         success: function (result) {
                             layer.close(loading);
-                            if (common.ajaxSuccess(result.code)) {
+                            if (MiUtils.ajaxSucceed(result.code)) {
                                 layer.msg(result.message, {
                                     icon: 1,
                                     time: 1000
@@ -269,7 +269,7 @@
                         type: 'post',
                         success: function (result) {
                             layer.close(loading);
-                            if (common.ajaxSuccess(result.code)) {
+                            if (MiUtils.ajaxSucceed(result.code)) {
                                 layer.msg(result.message, {
                                     icon: 1,
                                     time: 1000

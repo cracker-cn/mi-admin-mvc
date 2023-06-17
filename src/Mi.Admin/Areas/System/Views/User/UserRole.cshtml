@@ -53,7 +53,7 @@
                     dataType: 'json',
                     type: 'post',
                     success: function (result) {
-                        if (common.ajaxSuccess(result.code)) {
+                        if (MiUtils.ajaxSucceed(result.code)) {
                             layer.msg(result.message, {
                                 icon: 1,
                                 time: 1000

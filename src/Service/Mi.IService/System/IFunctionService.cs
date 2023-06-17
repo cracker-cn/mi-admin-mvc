@@ -19,5 +19,7 @@ namespace Mi.IService.System
         Task<MessageModel> RemoveFunctionAsync(IList<long> ids);
 
         IList<SysFunction> GetFunctionsCache();
+
+        IList<string> GetAllIds();
     }
 }

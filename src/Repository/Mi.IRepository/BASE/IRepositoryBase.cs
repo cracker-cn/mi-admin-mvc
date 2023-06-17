@@ -90,7 +90,7 @@ namespace Mi.IRepository.BASE
 
         Task<PagingModel<T>> QueryPageAsync(int page, int size, Expression<Func<T, bool>>? exp = default);
 
-		Task<PagingModel<T>> QueryPageAsync<TKey>(int page, int size, Expression<Func<T, bool>>? exp = default, bool asc = true, params Expression<Func<T, TKey>>[] keySelectors);
+		Task<PagingModel<T>> QueryPageAsync<TKey>(int page, int size, Expression<Func<T, TKey>> keySelector,Expression<Func<T, bool>>? exp = default, bool asc = true);
 
 		PagingModel<T> QueryPage(int page, int size, string sql, DynamicParameters parameters, string? orderBy = default);
 

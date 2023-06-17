@@ -40,7 +40,7 @@ namespace Mi.Admin.Areas.System.Controllers
         public async Task<MessageModel> RemoveFunction([FromForm] IList<long> ids)
             => await _functionService.RemoveFunctionAsync(ids);
 
-        [HttpPost, AuthorizeCode("System:Function:GetFunctionTree")]
+        [HttpPost, AuthorizeCode("System:Function:Query")]
         public IList<TreeOption> GetFunctionTree() => _functionService.GetFunctionTree();
     }
 }

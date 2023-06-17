@@ -213,5 +213,10 @@ namespace Mi.Service.System
             keys.Add(CacheConst.FUNCTION);
             _cache.RemoveAll(keys);
         }
+
+        public IList<string> GetAllIds()
+        {
+            return GetFunctionsCache().Select(x=>x.Id.ToString()).ToList();
+        }
     }
 }

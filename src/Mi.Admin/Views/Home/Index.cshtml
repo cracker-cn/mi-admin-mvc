@@ -1,19 +1,22 @@
 ﻿@{
     Layout = null;
 }
+@inject IDictService dictService
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>主页</title>
+    <title>@await dictService.GetStringAsync("site_title")</title>
     <!-- 依 赖 样 式 -->
     <link rel="stylesheet" href="~/component/pear/css/pear.css" />
     <!-- 加 载 样 式 -->
     <link rel="stylesheet" href="~/admin/css/loader.css" />
     <!-- 布 局 样 式 -->
     <link rel="stylesheet" href="~/admin/css/admin.css" />
+    <!-- ico -->
+    <link href="/favicon.ico" rel="shortcut icon" />
 </head>
 <!-- 结 构 代 码 -->
 <body class="layui-layout-body pear-admin">

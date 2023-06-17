@@ -47,7 +47,7 @@ namespace Mi.Admin.Areas.System.Controllers
         public async Task<MessageModel> RemoveDict(IList<string> ids)
             => await _dictService.RemoveDictAsync(ids);
 
-        [HttpPost, AuthorizeCode("System:Dict:GetParentList")]
+        [HttpPost, AuthorizeCode("System:Dict:Query")]
         public async Task<List<Option>> GetParentList()
             => await _dictService.GetParentListAsync();
     }

@@ -37,7 +37,7 @@
                     dataType: 'json',
                     type: 'post',
                     success: function (result) {
-                        if (common.ajaxSuccess(result.code)) {
+                        if (MiUtils.ajaxSucceed(result.code)) {
                             layer.alert('生成用户密码：'+result.result, {
                                 time: 10 * 1000,
                                 success: function (layero, index) {

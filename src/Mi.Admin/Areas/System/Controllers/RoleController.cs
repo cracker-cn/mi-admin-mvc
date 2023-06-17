@@ -33,7 +33,7 @@ namespace Mi.Admin.Areas.System.Controllers
             return View((await _roleService.GetRoleAsync(id)).Result);
         }
 
-        [AuthorizeCode("System:Role:Authorization")]
+        [AuthorizeCode("System:Role:AssignFunctions")]
         public IActionResult RoleAuthorization(long id)
         {
             ViewBag.Id = id;
@@ -64,7 +64,7 @@ namespace Mi.Admin.Areas.System.Controllers
             return await _permissionService.SetRoleFunctionsAsync(id, funcIds);
         }
 
-        [HttpPost, AuthorizeCode("System:Role:GetRoleFunctionIds")]
+        [HttpPost, AuthorizeCode("System:Role:AssignFunctions")]
         public async Task<MessageModel<IList<long>>> GetRoleFunctionIds(long id)
             => await _permissionService.GetRoleFunctionIdsAsync(id);
     }

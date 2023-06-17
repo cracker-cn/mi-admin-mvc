@@ -176,9 +176,9 @@ namespace Mi.Repository.BASE
 			return DB.QueryPageAsync<T>(page, size, exp);
 		}
 
-		public Task<PagingModel<T>> QueryPageAsync<TKey>(int page, int size, Expression<Func<T, bool>>? exp = null, bool asc = true, params Expression<Func<T, TKey>>[] keySelectors)
+		public Task<PagingModel<T>> QueryPageAsync<TKey>(int page, int size, Expression<Func<T, TKey>> keySelector,Expression<Func<T, bool>>? exp = null, bool asc = true)
 		{
-			return DB.QueryPageAsync<T, TKey>(page, size, exp, asc, keySelectors);
+			return DB.QueryPageAsync<T, TKey>(page, size, keySelector,exp, asc);
 		}
 
 		public Task<PagingModel<T>> QueryPageAsync(int page, int size, string sql, DynamicParameters parameters, string? orderBy = null)

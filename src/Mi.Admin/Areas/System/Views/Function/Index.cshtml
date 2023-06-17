@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Mi.IService.System;
+@{
     Layout = "_ElementUiPlusLayout";
 }
+@inject IFunctionService funcService
 
 <el-card shadow="never">
     <el-form :inline="true" :model="form">
@@ -45,7 +47,7 @@
         <el-table-column prop="url" label="访问地址" min-width="150"></el-table-column>
         <el-table-column prop="authorizationCode" label="授权码"></el-table-column>
         <el-table-column prop="sort" label="排序"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" fixed="right" width="135px">
             <template #default="scope">
                 <el-button size="small" @@click="handleEdit(scope.row)">编辑</el-button>
                 <el-button size="small"
@@ -102,14 +104,16 @@
 @section Scripts{
     <script>
         const ROOT_PATH = '/System/Function/';
+        const allKeys = @Html.Raw(JsonConvert.SerializeObject(funcService.GetAllIds()))
         const App = {
             data() {
                 return {
+                    allKeys,
                     treeData: [],
                     form: {},
                     emptyText: '无数据',
                     expandKeys: [],
-                    allKeys: [],
+                    //allKeys: [],
                     tableData: [],
                     updateId: 0,
                     editDialog: false,
@@ -158,9 +162,10 @@
                         .then(() => {
                             axios.post(ROOT_PATH + 'RemoveFunction', Qs.stringify({ ids: row.id || ids }))
                                 .then(res => {
-                                    if (res.data.code === 90001) {
+                                    if (MiUtils.ajaxSucceed(res.data.code)) {
                                         ElementPlus.ElMessage.success(res.data.message)
                                         this.fetchTableData();
+                                        this.fetchTreeData();
                                     } else {
                                         ElementPlus.ElMessage.error(res.data.message)
                                     }
@@ -188,7 +193,7 @@
                         if (valid) {
                             axios.post(ROOT_PATH + 'AddOrUpdateFunction', this.editForm)
                                 .then(res => {
-                                    if (res.data.code === 90001) {
+                                    if (MiUtils.ajaxSucceed(res.data.code)) {
                                         ElementPlus.ElMessage.success(res.data.message)
                                         this.closeDialogAndRefresh()
                                     } else {
@@ -212,9 +217,9 @@
                 fetchTableData() {
                     axios.get(ROOT_PATH + 'GetFunctionList?' + Qs.stringify(this.form))
                         .then(res => {
-                            if (res.data.code == 90001) {
+                            if (MiUtils.ajaxSucceed(res.data.code)) {
                                 this.tableData = res.data.result
-                                this.allKeys = this.tableData.map(x => x.id)
+                                //this.allKeys = this.tableData.map(x => x.id)
                             } else {
                                 this.emptyText = res.data.message
                             }
@@ -232,8 +237,10 @@
                 },
                 closeDialogAndRefresh() {
                     this.beforeClose()
-                    this.fetchTableData();
-                    this.fetchTreeData();
+                    setTimeout(()=>{
+                        this.fetchTableData();
+                        this.fetchTreeData();
+                    },800)
                 },
                 beforeClose() {
                     if (this.$refs['editFormRef']) {

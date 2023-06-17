@@ -47,13 +47,13 @@ namespace Mi.Repository.Extension
 			return result;
 		}
 
-		public static async Task<PagingModel<T>> QueryPageAsync<T, TKey>(this MIDB db, int page, int size,Expression<Func<T, bool>>? exp = null, bool asc = true, params Expression<Func<T, TKey>>[] keySelectors) where T : class, new()
+		public static async Task<PagingModel<T>> QueryPageAsync<T, TKey>(this MIDB db, int page, int size, Expression<Func<T, TKey>> keySelector,Expression<Func<T, bool>>? exp = null, bool asc = true) where T : class, new()
 		{
 			exp ??= x => true;
 			var result = new PagingModel<T>();
 			result.Total = await db.Set<T>().CountAsync(exp);
-			if(asc) result.Rows = await db.Set<T>().Where(exp).OrderBy(keySelectors[0]).Skip((page - 1) * size).Take(size).ToListAsync();
-			else result.Rows = await db.Set<T>().Where(exp).OrderByDescending(keySelectors[0]).Skip((page - 1) * size).Take(size).ToListAsync();
+			if(asc) result.Rows = await db.Set<T>().Where(exp).OrderBy(keySelector).Skip((page - 1) * size).Take(size).ToListAsync();
+			else result.Rows = await db.Set<T>().Where(exp).OrderByDescending(keySelector).Skip((page - 1) * size).Take(size).ToListAsync();
 			return result;
 		}
 

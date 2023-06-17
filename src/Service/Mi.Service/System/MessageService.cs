@@ -1,4 +1,6 @@
-﻿using Mi.IRepository.BASE;
+﻿using Dapper;
+
+using Mi.IRepository.BASE;
 using Mi.IService.System.Models.Result;
 
 namespace Mi.Service.System
@@ -47,18 +49,37 @@ namespace Mi.Service.System
 
         public async Task<MessageModel<PagingModel<SysMessage>>> GetMessageListAsync(MessageSearch search)
         {
-            var exp = ExpressionCreator.New<SysMessage>(x => x.ReceiveUser == _miUser.UserId)
-                .AndIf(!string.IsNullOrEmpty(search.Title), x => x.Title.Contains(search.Title!))
-                .AndIf(search.No.HasValue && search.No.Value > 0, x => x.Id == search.No.GetValueOrDefault())
-                .AndIf(search.Readed.HasValue && search.Readed >= 0, x => x.Readed == search.Readed.GetValueOrDefault());
+            var sql = "select * from SysMessage where IsDeleted=0 and ReceiveUser=@userId";
+            var parameter = new DynamicParameters();
+            parameter.Add("userId",_miUser.UserId);
+            if (!string.IsNullOrEmpty(search.Title))
+            {
+                sql += " and Title like @title";
+                parameter.Add("title", "%" + search.Title + "%");
+            }
+            if(search.No.HasValue && search.No.Value > 0)
+            {
+                sql += " and Id=@id";
+                parameter.Add("id", search.No.GetValueOrDefault());
+            }
+            if(search.Readed.HasValue && search.Readed >= 0)
+            {
+                sql += " and Readed=@readed";
+                parameter.Add("readed", search.Readed.GetValueOrDefault());
+            }
             if (!string.IsNullOrEmpty(search.WriteTime) && search.WriteTime.Contains("~"))
             {
                 var v1 = DateTime.TryParse(search.WriteTime.Split("~")[0], out var start);
                 var v2 = DateTime.TryParse(search.WriteTime.Split("~")[1], out var end);
-                if (v1 && v2) exp = exp.And(x => x.CreatedOn >= start.Date && x.CreatedOn <= end.Date.AddDays(1).AddSeconds(-1));
+                if(v1 && v2)
+                {
+                    sql += " and CreatedOn >= @start and CreatedOn <= @end";
+                    parameter.Add("start", start.Date.ToString("yyyy-MM-dd"));
+                    parameter.Add("end", end.Date.ToString("yyyy-MM-dd") + " 23:59:59");
+                }
             }
 
-            var result = await _messageRepository.QueryPageAsync(search.Page, search.Size, exp, true, x => x.Readed);
+            var result = await _messageRepository.QueryPageAsync(search.Page, search.Size, sql,parameter, " Readed asc,CreatedOn desc ");
             return new MessageModel<PagingModel<SysMessage>>(result);
         }
 

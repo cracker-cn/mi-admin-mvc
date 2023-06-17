@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Mi.IService.System;
+@{
     Layout = null;
 }
+@inject IDictService dictService 
 
 <!DOCTYPE html>
 <html>
@@ -206,7 +208,7 @@
     <!--正文结束-->
 
     <div class="footer" style="color:black">
-        &#xa9; 2022 <a href="#" target="_self">版权所有，翻版必究</a>
+        @Html.Raw(await dictService.GetStringAsync("login_footer_word"))
     </div>
 
     <script src="~/component/login/js/ax.min.js" type="text/javascript"></script>

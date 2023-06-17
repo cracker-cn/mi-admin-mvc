@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject IDictService dictService
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Mi.Admin</title>
+    <title>@await dictService.GetStringAsync("site_title")</title>
     <link rel="stylesheet" href="~/component/pear/css/pear.css" />
     <link href="~/admin/css/mi.css" rel="stylesheet" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)

@@ -177,7 +177,7 @@
                     }, function (index) {
                         layer.close(index);
                         $.post(pageRootUrl + 'PassedUser?id=' + obj.data['userId'], function (res) {
-                            if (common.ajaxSuccess(res.code)) {
+                            if (MiUtils.ajaxSucceed(res.code)) {
                                 layer.msg(res.message, {
                                     icon: 1,
                                     time: 1000
@@ -197,7 +197,10 @@
 
             form.on('submit(user-query)', function (data) {
                 table.reload('user-table', {
-                    where: data.field
+                    where: data.field,
+                    page: {
+                        curr: 1
+                    }
                 })
                 return false;
             });
@@ -240,7 +243,7 @@
                 }, function (index) {
                     layer.close(index);
                     $.post(pageRootUrl + 'UpdatePassword?userId=' + obj.data['userId'], function (res) {
-                        if (common.ajaxSuccess(res.code)) {
+                        if (MiUtils.ajaxSucceed(res.code)) {
                             layer.alert('更新后用户密码：' + res.result, {
                                 time: 10 * 1000,
                                 success: function (layero, index) {
@@ -278,7 +281,7 @@
                         type: 'post',
                         success: function (result) {
                             layer.close(loading);
-                            if (common.ajaxSuccess(result.code)) {
+                            if (MiUtils.ajaxSucceed(result.code)) {
                                 layer.msg(result.message, {
                                     icon: 1,
                                     time: 1000

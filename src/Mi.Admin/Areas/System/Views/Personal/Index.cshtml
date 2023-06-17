@@ -130,7 +130,7 @@
                         contentType: 'application/json',
                         success: function (result) {
                             layer.close(loading);
-                            if (common.ajaxSuccess(result.code)) {
+                            if (MiUtils.ajaxSucceed(result.code)) {
                                 layer.msg(result.message, {
                                     icon: 1,
                                     time: 1000
@@ -159,7 +159,7 @@
                     data: JSON.stringify(param),
                     contentType: 'application/json',
                     success: function (result) {
-                        if (common.ajaxSuccess(result.code)) {
+                        if (MiUtils.ajaxSucceed(result.code)) {
                             layer.msg(result.message, {
                                 icon: 1,
                                 time: 1000
