@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mi.IService\Mi.IService.csproj" />
+    <ProjectReference Include="..\Mi.Repository\Mi.Repository.csproj" />
   </ItemGroup>
 
 </Project>

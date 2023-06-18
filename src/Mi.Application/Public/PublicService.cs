@@ -7,7 +7,7 @@ using Mi.IService.Public;
 
 using Microsoft.Extensions.Options;
 
-namespace Mi.Service.Public
+namespace Mi.Application.Public
 {
     public class PublicService : IPublicService, IScoped
     {

@@ -3,7 +3,7 @@
 using Mi.IRepository.BASE;
 using Mi.IService.System.Models.Result;
 
-namespace Mi.Service.System
+namespace Mi.Application.System
 {
     public class MessageService : IMessageService, IScoped
     {

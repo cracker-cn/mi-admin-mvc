@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Repository\Mi.Repository\Mi.Repository.csproj" />
+    <Folder Include="Public\Models\Result\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Public\Models\Result\" />
+    <ProjectReference Include="..\Mi.Repository\Mi.Repository.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using Mi.Repository.BASE;
 
 using Microsoft.AspNetCore.Http;
 
-namespace Mi.Service.System
+namespace Mi.Application.System
 {
     public class UserService : IUserService, IScoped
     {

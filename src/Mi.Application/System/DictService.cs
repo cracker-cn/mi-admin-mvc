@@ -11,7 +11,7 @@ using Mi.Core.Service;
 using Mi.IService.System.Models.Result;
 using Mi.Repository.BASE;
 
-namespace Mi.Service.System
+namespace Mi.Application.System
 {
     public class DictService : IDictService, IScoped
     {

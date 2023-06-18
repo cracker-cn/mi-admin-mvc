@@ -1,6 +1,6 @@
 ﻿using Dapper;
 
-namespace Mi.Service.System
+namespace Mi.Application.System
 {
     public class RoleService : IRoleService, IScoped
     {

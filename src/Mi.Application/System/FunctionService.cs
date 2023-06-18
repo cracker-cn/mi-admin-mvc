@@ -9,7 +9,7 @@ using Mi.Core.GlobalVar;
 using Mi.Entity.System.Enum;
 using Mi.IService.System.Models.Result;
 
-namespace Mi.Service.System
+namespace Mi.Application.System
 {
     public class FunctionService : IFunctionService, IScoped
     {

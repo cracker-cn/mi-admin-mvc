@@ -1,6 +1,6 @@
 ﻿using Mi.IService.System.Models.Result;
 
-namespace Mi.Service
+namespace Mi.Application
 {
     internal class ServiceRegister : IServiceRegistrar
     {
