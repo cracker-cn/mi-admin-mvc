@@ -6,6 +6,8 @@ namespace Mi.Core.Toolkit.Extension
     {
         public static bool RegexValidate(this string str, string pattern)
         {
+            if (string.IsNullOrEmpty(str)) return false;
+            if (string.IsNullOrEmpty(pattern)) return false;
             return new Regex(pattern).IsMatch(str);
         }
     }

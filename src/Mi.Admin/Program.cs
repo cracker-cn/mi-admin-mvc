@@ -25,6 +25,7 @@ string serilogError = builder.Environment.WebRootPath + "\\log\\error\\.log";
 builder.Services.AddControllersWithViews(opt =>
 {
 	opt.Filters.Add<GlobalExceptionFilter>();
+	opt.Filters.Add<ParameterValidationFilterAttribute>();
 }).AddJsonOptions(opt =>
 {
 	opt.JsonSerializerOptions.Converters.Add(new LongConverter());

@@ -7,6 +7,7 @@ using Mi.Core.Toolkit.Extension;
 using Mi.Repository.DB;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,14 +19,22 @@ namespace Mi.Core.Extension
 	{
 		public static void AddRequiredService(this IServiceCollection service)
 		{
+			//EFCore
 			service.AddDbContext<MIDB>(opt =>
 			{
 				opt.UseSqlite(DBConfig.ConnectionString)
 				.EnableSensitiveDataLogging();
 			}, ServiceLifetime.Scoped);
+			//自动注入
 			service.AutoInject();
-			service.AddSingleton<MessageModel>();
+            //关闭参数自动校验,我们需要返回自定义的格式
+            service.Configure<ApiBehaviorOptions>((o) =>
+            {
+                o.SuppressModelStateInvalidFilter = true;
+            });
+            service.AddSingleton<MessageModel>();
 			service.AddHttpContextAccessor();
+			//验证码
 			service.AddSimpleCaptcha(builder =>
 			{
 				builder.UseMemoryStore();
@@ -37,7 +46,7 @@ namespace Mi.Core.Extension
 			});
 			service.AddScoped<IMiUser, MiUser>();
 			//header
-			service.AddTransient<MiHeader>(p => {
+			service.AddTransient(p => {
 				var httpContext = p.GetRequiredService<IHttpContextAccessor>().HttpContext!;
 				if(httpContext.Items.TryGetValue(MiHeader.MIHEADER, out var str))
 				{
@@ -50,6 +59,6 @@ namespace Mi.Core.Extension
 			service.AddScoped<MemoryCacheFactory>();
 			//==HostService==
 			service.AddHostedService<SeedDataBackgroundService>();
-		}
+        }
 	}
 }

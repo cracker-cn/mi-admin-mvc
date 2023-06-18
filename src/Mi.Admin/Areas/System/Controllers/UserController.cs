@@ -1,12 +1,12 @@
-﻿using Mi.Core.Attributes;
-using Mi.Core.Hubs;
+﻿using System.ComponentModel.DataAnnotations;
+
+using Mi.Core.Attributes;
 using Mi.Core.Models;
 using Mi.IService.System;
 using Mi.IService.System.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Mi.Admin.Areas.System.Controllers
 {
@@ -51,7 +51,7 @@ namespace Mi.Admin.Areas.System.Controllers
 
         [HttpPost]
         [AuthorizeCode("System:User:Add")]
-        public async Task<MessageModel> AddUser(string userName)
+        public async Task<MessageModel> AddUser([Required(ErrorMessage = "用户名不能为空")] string userName)
         {
             return await _userService.AddUserAsync(userName);
         }

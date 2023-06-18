@@ -1,5 +1,4 @@
 ﻿using Mi.Core.Service;
-using Mi.Core.Toolkit.Helper;
 using Mi.IService.System;
 
 namespace Mi.Admin.WebComponent.Middleware
@@ -7,12 +6,10 @@ namespace Mi.Admin.WebComponent.Middleware
     public class UserMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<UserMiddleware> _logger;
 
-        public UserMiddleware(RequestDelegate next, ILogger<UserMiddleware> logger)
+        public UserMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
