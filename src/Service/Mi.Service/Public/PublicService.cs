@@ -61,5 +61,11 @@ namespace Mi.Service.Public
             var config = await _dictService.GetAsync<SysConfigModel>(DictKeyConst.UiConfig);
             return _msg.Success("查询成功").As(config);
         }
+
+        public MessageModel HasPermission(string authCode)
+        {
+            var flag = _miUser.AuthCodes.Contains(authCode);
+            return flag ? _msg.Success("有") : _msg.Fail("无");
+        }
     }
 }

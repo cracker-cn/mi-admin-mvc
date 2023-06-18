@@ -35,5 +35,8 @@ namespace Mi.Admin.Controllers.BASE
         {
             return await _publicService.ReadConfigAsync();
         }
+
+        [HttpPost("has-permission")]
+        public MessageModel HasPermission(string authCode) => _publicService.HasPermission(authCode);
     }
 }

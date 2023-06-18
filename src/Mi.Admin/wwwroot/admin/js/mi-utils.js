@@ -7,7 +7,16 @@ const MiUtils = {
     setGlobalParams: (obj) => setParams(obj),
     getGlobalParams: (obj) => getParams(obj),
     removeGlobalParams: (obj) => removeParams(obj),
-    header: () => genMiHeader()
+    header: () => genMiHeader(),
+    setItem: function (key, val) {
+        localStorage.setItem(key,val)
+    },
+    removeItem: function (key) {
+        localStorage.removeItem(key)
+    },
+    getItem: function (key) {
+        return localStorage.getItem(key)
+    }
 }
 
 /**

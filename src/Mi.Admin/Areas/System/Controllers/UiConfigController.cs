@@ -21,7 +21,7 @@ namespace Mi.Admin.Areas.System.Controllers
             _dictService = dictService;
         }
 
-        [AuthorizeCode("Sytem:UiConfig")]
+        [AuthorizeCode("System:UiConfig")]
         public IActionResult Index()
         {
             return View();

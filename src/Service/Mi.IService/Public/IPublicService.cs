@@ -11,5 +11,7 @@ namespace Mi.IService.Public
         Task<MessageModel<SysConfigModel>> GetUiConfigAsync();
 
         Task<bool> WriteMessageAsync(string title,string content,IList<long> receiveUsers);
+
+        MessageModel HasPermission(string authCode);
     }
 }

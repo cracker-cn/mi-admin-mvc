@@ -13,16 +13,16 @@
             <el-input v-model="form.url" placeholder="请输入访问地址" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @@click="onQuery"><el-icon><Search /></el-icon>&nbsp;查询</el-button>
-            <el-button @@click="resetQuery"><el-icon><Refresh /></el-icon>&nbsp;重置</el-button>
+            <el-button v-permission="'System:Function:Query'" type="primary" @@click="onQuery"><el-icon><Search /></el-icon>&nbsp;查询</el-button>
+            <el-button v-permission="'System:Function:Query'" @@click="resetQuery"><el-icon><Refresh /></el-icon>&nbsp;重置</el-button>
         </el-form-item>
     </el-form>
 </el-card>
 
 <el-card class="mt-1" shadow="never">
     <el-row class="mb-4">
-        <el-button type="primary" @@click="editDialog=true"><el-icon><Plus /></el-icon>&nbsp;新增</el-button>
-        <el-button type="danger" @@click="batchRemove"><el-icon><Delete /></el-icon>&nbsp;批量删除</el-button>
+        <el-button v-permission="'System:Function:AddOrUpdate'" type="primary" @@click="editDialog=true"><el-icon><Plus /></el-icon>&nbsp;新增</el-button>
+        <el-button v-permission="'System:Function:Remove'" type="danger" @@click="batchRemove"><el-icon><Delete /></el-icon>&nbsp;批量删除</el-button>
         <el-button type="primary" @@click="expand(true)"><el-icon><Expand /></el-icon>&nbsp;展开</el-button>
         <el-button type="primary" @@click="expand(false)"><el-icon><Fold /></el-icon>&nbsp;折叠</el-button>
     </el-row>
@@ -49,10 +49,8 @@
         <el-table-column prop="sort" label="排序"></el-table-column>
         <el-table-column label="操作" fixed="right" width="150px">
             <template #default="scope">
-                <el-button size="small" @@click="handleEdit(scope.row)">编辑</el-button>
-                <el-button size="small"
-                           type="danger"
-                           @@click="handleDelete(scope.row)">删除</el-button>
+                <el-button type="primary" v-permission="'System:Function:AddOrUpdate'" size="small" @@click="handleEdit(scope.row)"><el-icon><Edit /></el-icon></el-button>
+                <el-button size="small" v-permission="'System:Function:Remove'" type="danger" @@click="handleDelete(scope.row)"><el-icon><Delete /></el-icon></el-button>
             </template>
         </el-table-column>
     </el-table>

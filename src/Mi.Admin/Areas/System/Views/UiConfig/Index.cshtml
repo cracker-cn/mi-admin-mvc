@@ -16,7 +16,7 @@
             <el-input v-model="siteForm.site_title" placeholder="请输入站点标题" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @@click="onSubmit('siteForm',siteForm)">确定</el-button>
+            <el-button v-permission="'System:SetConfig'" type="primary" @@click="onSubmit('siteForm',siteForm)">确定</el-button>
         </el-form-item>
     </el-form>
 </el-card>
@@ -35,7 +35,7 @@
             <el-input v-model="loginForm.login_footer_word" placeholder="请输入版权信息" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @@click="onSubmit('loginForm',loginForm)">确定</el-button>
+            <el-button v-permission="'System:SetConfig'" type="primary" @@click="onSubmit('loginForm',loginForm)">确定</el-button>
         </el-form-item>
     </el-form>
 </el-card>
@@ -54,7 +54,7 @@
             <el-input v-model="homeForm.home_page_name" placeholder="请输入首页名称" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @@click="onSubmit('homeForm',homeForm)">确定</el-button>
+            <el-button v-permission="'System:SetConfig'" type="primary" @@click="onSubmit('homeForm',homeForm)">确定</el-button>
         </el-form-item>
     </el-form>
 </el-card>
@@ -73,7 +73,7 @@
             <el-input v-model="sysForm.logo" placeholder="请输入系统Logo" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @@click="onSubmit('sysForm',sysForm)">确定</el-button>
+            <el-button v-permission="'System:SetConfig'" type="primary" @@click="onSubmit('sysForm',sysForm)">确定</el-button>
         </el-form-item>
     </el-form>
 </el-card>

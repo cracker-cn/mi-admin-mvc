@@ -33,7 +33,7 @@ namespace Mi.Core.GlobalUser
             get
             {
                 if (_user.PowerItems == null) return new List<string?>();
-                return _user.PowerItems.Select(x => x.AuthCode).ToList();
+                return _user.PowerItems.Select(x => x.AuthCode).Where(x=>!string.IsNullOrEmpty(x)).ToList();
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Mi.Core.GlobalUser;
+@inject IMiUser miUser
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +9,7 @@
     <link href="~/component/eleui-plus/css/index.css" rel="stylesheet" />
     <link href="~/admin/css/mi.css" rel="stylesheet" />
     <style>
-        body{
+        body {
             margin: 10px !important;
             background-color: whitesmoke;
             width: calc(100vw - 20px);
@@ -27,11 +29,20 @@
     <script src="~/admin/js/mi-utils.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
+        const allPowers = @Html.Raw(JsonConvert.SerializeObject(miUser.AuthCodes))
         const app = Vue.createApp(App);
         for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
             app.component(key, component)
         }
         app.use(ElementPlus);
+        //自定义指令，判断用户是否有按钮权限
+        app.directive('permission', {
+            beforeMount(el, binding, vnode, prevVnode) {
+                if (!allPowers.some(x => x == binding.value)) {
+                    el.style.display = 'none'
+                }
+            }
+        })
         app.mount("#app");
     </script>
 </body>
