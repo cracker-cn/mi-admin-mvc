@@ -147,7 +147,7 @@ namespace Mi.Service.System
             if (!_captchaFactory.Validate(mac, verifyCode)) return _message.Fail("验证码错误");
 
             var user = _userRepository.Get(x => x.UserName.ToLower() == userName.ToLower());
-            if (user == null) return _message.Fail("用户名不存在");
+            if (user.Id <= 0) return _message.Fail("用户名不存在");
             if (user.IsEnabled == 0) return _message.Fail("没有登录权限，请联系管理员");
 
             var flag = user.Password == EncryptionHelper.GenEncodingPassword(password, user.PasswordSalt);
