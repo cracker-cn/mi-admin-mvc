@@ -242,8 +242,8 @@ namespace Mi.Service.System
             }
 
             if (powers.Count > 0) await repo.AddManyAsync(powers);
-            //正则移除角色功能缓存
-            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()) && x.Contains(role.RoleName));
+            //正则移除所有角色功能缓存
+            var keys = _cache.GetCacheKeys().Where(x => Regex.IsMatch(x, StringHelper.UserCachePattern()));
             _cache.RemoveAll(keys);
 
             return _message.Success();

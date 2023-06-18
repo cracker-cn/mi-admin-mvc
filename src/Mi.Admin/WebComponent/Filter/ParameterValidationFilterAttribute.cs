@@ -22,7 +22,7 @@ namespace Mi.Admin.WebComponent.Filter
                 var result = context.ModelState.Keys.Where(key => context.ModelState[key] != null).Select(key => new Option { Name = key, Value = context.ModelState[key]!.Errors.FirstOrDefault()?.ErrorMessage });
                 if (result != null)
                 {
-                    var msg = result.FirstOrDefault()?.Value;
+                    var msg = result.Where(x=>!string.IsNullOrEmpty(x.Value)).FirstOrDefault()?.Value;
                     context.Result = new ObjectResult(new MessageModel(Core.Enum.EnumResponseCode.ParameterError, msg));
                     _logger.LogWarning($"请求地址：{context.HttpContext.Request.Path}，参数验证错误：{msg}");
                 }

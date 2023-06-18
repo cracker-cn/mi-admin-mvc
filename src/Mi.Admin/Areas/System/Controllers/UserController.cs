@@ -43,7 +43,7 @@ namespace Mi.Admin.Areas.System.Controllers
         }
 
         [HttpPost]
-        [AuthorizeCode("System:User:List")]
+        [AuthorizeCode("System:User:Query")]
         public async Task<MessageModel> GetUserList([FromBody] UserSearch search)
         {
             return await _userService.GetUserListAsync(search);

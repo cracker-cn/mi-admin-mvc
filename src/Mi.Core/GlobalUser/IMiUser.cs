@@ -6,5 +6,7 @@
         string UserName { get; }
         bool IsSuperAdmin { get; }
         IList<long> FuncIds { get; }
+
+        IList<string?> AuthCodes { get; }
     }
 }

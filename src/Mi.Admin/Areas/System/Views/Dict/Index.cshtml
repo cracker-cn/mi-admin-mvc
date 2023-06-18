@@ -25,14 +25,14 @@
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="dict-query">
+                <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="dict-query" auth-code="System:Dict:Query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
-                </button>
-                <button class="pear-btn pear-btn-md" id="btnReset">
+                </permission-button>
+                <permission-button class-name="pear-btn pear-btn-md" id="btnReset" auth-code="System:Dict:Query">
                     <i class="layui-icon layui-icon-refresh"></i>
                     重置
-                </button>
+                </permission-button>
             </div>
         </div>
     </div>
@@ -46,19 +46,23 @@
 
 @section Scripts{
     <script type="text/html" id="dict-toolbar">
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-event="add" auth-code="System:Dict:AddOrUpdate">
             <i class="layui-icon layui-icon-add-1"></i>
             新增
-        </button>
-        <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="remove-many">
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-danger pear-btn-md" lay-event="remove-many" auth-code="System:Dict:Remove">
             <i class="layui-icon layui-icon-delete"></i>
             批量删除
-        </button>
+        </permission-button>
     </script>
 
     <script type="text/html" id="dict-bar">
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" auth-code="System:Dict:AddOrUpdate">
+            <i class="layui-icon layui-icon-edit"></i>
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove" auth-code="System:Dict:Remove">
+            <i class="layui-icon layui-icon-delete"></i>
+        </permission-button>
     </script>
 
     <script>
@@ -168,8 +172,8 @@
             form.on('submit(dict-query)', function (data) {
                 table.reload('dict-table', {
                     where: data.field,
-                    page:{
-                        curr:1
+                    page: {
+                        curr: 1
                     }
                 })
                 return false;
@@ -211,7 +215,7 @@
                 }
                 let param = {}
                 let ids = checkIds.split(',')
-                for(let i=0;i<ids.length;i++){
+                for (let i = 0; i < ids.length; i++) {
                     param[`ids[${i}]`] = ids[i]
                 }
 
@@ -287,12 +291,12 @@
                 });
             }
 
-            function loadSelectOptions(){
+            function loadSelectOptions() {
                 $.post(pageRootUrl + 'GetParentList', function (res) {
                     if (res && res.length) {
                         let arr = []
                         arr.push(`<option value=''>全部<option>`)
-                        for(const item of res){
+                        for (const item of res) {
                             arr.push(`<option value='${item.value}'>${item.name}</option>`)
                         }
                         $("select[name='parentId']").html(arr.join(''))

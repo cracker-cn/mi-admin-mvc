@@ -42,7 +42,7 @@ namespace Mi.Admin.Areas.System.Controllers
 
         [HttpPost]
         [AuthorizeCode("System:Role:AddOrUpdate")]
-        public async Task<MessageModel> AddRole(string name, string remark)
+        public async Task<MessageModel> AddRole(string name, string? remark)
             => await _roleService.AddRoleAsync(name, remark);
 
         [HttpPost, AuthorizeCode("System:Role:Remove")]

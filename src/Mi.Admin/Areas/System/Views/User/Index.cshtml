@@ -12,14 +12,14 @@
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="user-query" auth-code="System:User:Query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
-                </button>
-                <button class="pear-btn pear-btn-md" id="btnReset">
+                </permission-button>
+                <permission-button class-name="pear-btn pear-btn-md" id="btnReset" auth-code="System:User:Query">
                     <i class="layui-icon layui-icon-refresh"></i>
                     重置
-                </button>
+                </permission-button>
             </div>
         </div>
     </div>
@@ -33,19 +33,27 @@
 
 @section Scripts{
     <script type="text/html" id="user-toolbar">
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-event="add" auth-code="System:User:Add">
             <i class="layui-icon layui-icon-add-1"></i>
             新增
-        </button>
+        </permission-button>
     </script>
 
     <script type="text/html" id="user-bar">
         {{#  if(d.isEnabled === 0){ }}
-            <button type="button" class="pear-btn mi-btn-green pear-btn-sm" lay-event="audit"><i class="layui-icon layui-icon-ok"></i></button>
+         <permission-button class-name="pear-btn mi-btn-green pear-btn-md" lay-event="audit" auth-code="System:User:Passed">
+            <i class="layui-icon layui-icon-ok"></i>
+        </permission-button>
         {{#  } }}
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="has-role"><i class="layui-icon layui-icon-username"></i></button>
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="gen"><i class="layui-icon layui-icon-password"></i></button>
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-event="has-role" auth-code="System:User:SetUserRole">
+            <i class="layui-icon layui-icon-username"></i>
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-event="gen" auth-code="System:User:UpdatePassword">
+            <i class="layui-icon layui-icon-password"></i>
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-danger pear-btn-md" lay-event="remove" auth-code="System:User:Remove">
+            <i class="layui-icon layui-icon-delete"></i>
+        </permission-button>
     </script>
 
     <script>

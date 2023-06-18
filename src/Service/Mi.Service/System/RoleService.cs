@@ -15,7 +15,7 @@ namespace Mi.Service.System
             _message = message;
         }
 
-        public async Task<MessageModel> AddRoleAsync(string name, string remark)
+        public async Task<MessageModel> AddRoleAsync(string name, string? remark)
         {
             var isExist = (await _roleRepository.GetAllAsync(x => x.RoleName.ToLower() == name.ToLower())).Count > 0;
             if (isExist) return _message.Fail("角色名已存在");

@@ -27,5 +27,14 @@ namespace Mi.Core.GlobalUser
                 return _user.PowerItems.Select(x => x.Id).ToList();
             }
         }
+
+        public IList<string?> AuthCodes
+        {
+            get
+            {
+                if (_user.PowerItems == null) return new List<string?>();
+                return _user.PowerItems.Select(x => x.AuthCode).ToList();
+            }
+        }
     }
 }

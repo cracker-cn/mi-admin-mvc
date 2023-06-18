@@ -4,7 +4,7 @@ namespace Mi.IService.System
 {
     public interface IRoleService
     {
-        Task<MessageModel> AddRoleAsync(string name, string remark);
+        Task<MessageModel> AddRoleAsync(string name, string? remark);
 
         Task<MessageModel> RemoveRoleAsync(long id);
 

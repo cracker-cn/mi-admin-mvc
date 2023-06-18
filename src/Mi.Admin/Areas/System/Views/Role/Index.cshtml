@@ -12,14 +12,14 @@
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
+                <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="role-query" auth-code="System:Role:Query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
-                </button>
-                <button class="pear-btn pear-btn-md" id="btnReset">
+                </permission-button>
+                <permission-button class-name="pear-btn pear-btn-md" id="btnReset" auth-code="System:Role:Query">
                     <i class="layui-icon layui-icon-refresh"></i>
                     重置
-                </button>
+                </permission-button>
             </div>
         </div>
     </div>
@@ -33,16 +33,22 @@
 
 @section Scripts{
     <script type="text/html" id="role-toolbar">
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-            <i class="layui-icon layui-icon-add-1"></i>
-            新增
-        </button>
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" auth-code="System:Role:AddOrUpdate" lay-event="add">
+             <i class="layui-icon layui-icon-add-1"></i>
+             新增
+        </permission-button>
     </script>
 
     <script type="text/html" id="role-bar">
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
-        <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+        <permission-button class-name="pear-btn pear-btn-primary pear-btn-sm" auth-code="System:Role:AddOrUpdate" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-warming pear-btn-sm" auth-code="System:Role:AssignFunctions" lay-event="power">
+            <i class="layui-icon layui-icon-vercode"></i>
+        </permission-button>
+        <permission-button class-name="pear-btn pear-btn-danger pear-btn-sm" auth-code="System:Role:Remove" lay-event="remove">
+            <i class="layui-icon layui-icon-delete"></i>
+        </permission-button>
     </script>
 
     <script>
@@ -119,7 +125,7 @@
                     window.remove(obj);
                 } else if (obj.event === 'edit') {
                     window.edit(obj);
-                }else if(obj.event === 'power'){
+                } else if (obj.event === 'power') {
                     layer.open({
                         type: 2,
                         title: '授权',

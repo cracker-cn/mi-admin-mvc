@@ -54,8 +54,10 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <button class="pear-btn pear-btn-primary" lay-submit lay-filter="infoSubmit">确认修改</button>
-                            <button id="resetBtn" class="pear-btn">重置</button>
+                            <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="infoSubmit" auth-code="System:Personal:SetUserBaseInfo">
+                                确认修改
+                            </permission-button>
+                            <button id="resetBtn" class="pear-btn pear-btn-md">重置</button>
                         </div>
                     </div>
                 </div>
@@ -81,8 +83,10 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <button class="pear-btn pear-btn-primary" lay-submit lay-filter="pwdSubmit">确认修改</button>
-                            <button id="clearBtn" class="pear-btn">清空</button>
+                            <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="pwdSubmit" auth-code="System:Personal:SetPassword">
+                                确认修改
+                            </permission-button>
+                            <button id="clearBtn" class="pear-btn pear-btn-md">清空</button>
                         </div>
                     </div>
                 </div>
