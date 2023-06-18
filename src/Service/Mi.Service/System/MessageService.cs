@@ -29,12 +29,19 @@ namespace Mi.Service.System
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Context = x.Content,
+                    Context = ShowContent(x.Content),
                     Time = ShowTime(x.CreatedOn)
                 }).ToList()
             };
             result.Add(msg);
             return result;
+        }
+
+        private string ShowContent(string? content)
+        {
+            if (string.IsNullOrEmpty(content)) return "无内容";
+            else if (content.Length >= 10) return content.Substring(0,10) + "...";
+            else return content;
         }
 
         private string ShowTime(DateTime time)
@@ -52,10 +59,10 @@ namespace Mi.Service.System
             var sql = "select * from SysMessage where IsDeleted=0 and ReceiveUser=@userId";
             var parameter = new DynamicParameters();
             parameter.Add("userId",_miUser.UserId);
-            if (!string.IsNullOrEmpty(search.Title))
+            if (!string.IsNullOrEmpty(search.Vague))
             {
-                sql += " and Title like @title";
-                parameter.Add("title", "%" + search.Title + "%");
+                sql += " and (Title like @vague or Content like @vague) ";
+                parameter.Add("vague", "%" + search.Vague + "%");
             }
             if(search.No.HasValue && search.No.Value > 0)
             {

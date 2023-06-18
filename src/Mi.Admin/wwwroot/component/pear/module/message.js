@@ -105,7 +105,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
                 if (note.avatar)
 					noticeContent +='<img src="' + note.avatar + '"/>';
 
-				noticeContent +='<div style="display:inline-block;">' + note.title + '</div>' +
+				noticeContent += '<div style="display:inline-block;">【' + note.title + "】" + note.context + '</div>' +
 					'<div class="pear-notice-end">' + note.time + '</div>' +
 					'</div>';
 			})

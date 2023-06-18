@@ -1,4 +1,6 @@
-﻿using Mi.Core.Toolkit.API;
+﻿using Dapper;
+
+using Mi.Core.Toolkit.API;
 using Mi.IRepository.BASE;
 using Mi.Repository.Extension;
 
@@ -16,6 +18,22 @@ namespace Mi.Repository.System
         }
 
         public IRepositoryBase<SysUserRole> UserRoleRepo => _db.GetRepository<SysUserRole>();
+
+        public async Task<IList<long>> GetUserIdInAuthorizationCodesAsync(string[] codes)
+        {
+            var sql = @"select a.UserId from SysUserRole a join SysRoleFunction b on b.RoleId=a.RoleId 
+                        join SysFunction c on c.Id=b.FunctionId and b.IsDeleted=0 and a.IsDeleted=0 and c.IsDeleted=0 and c.AuthorizationCode in @codes
+                        union select Id from SysUser where IsDeleted=0 and IsSuperAdmin=1 ";
+            var list = await _db.Connection.QueryAsync<long>(sql, new { codes });
+            return list.Distinct().ToList();
+        }
+
+        public async Task<IList<long>> GetUserIdInRolesAsync(string[] roleNames)
+        {
+            var sql = "select a.UserId from SysUserRole a join SysRole b on a.RoleId=b.Id and b.IsDeleted=0 and a.IsDeleted=0 and b.RoleName in @names";
+            var list = await _db.Connection.QueryAsync<long>(sql, new { name = roleNames });
+            return list.Distinct().ToList();
+        }
 
         public async Task<List<SysRole>> QueryUserRolesAsync(long userId)
         {

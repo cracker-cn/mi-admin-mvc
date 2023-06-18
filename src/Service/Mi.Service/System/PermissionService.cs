@@ -9,6 +9,7 @@ using Mi.Core.Models.UI;
 using Mi.Core.Service;
 using Mi.Entity.System.Enum;
 using Mi.IRepository.BASE;
+using Mi.IService.Public;
 using Mi.IService.System.Models.Result;
 
 using Microsoft.AspNetCore.Authentication;
@@ -30,6 +31,7 @@ namespace Mi.Service.System
         private readonly MemoryCacheFactory _cache;
         private readonly IMiUser _miUser;
         private readonly IUserService _userService;
+        private readonly IPublicService _publicService;
 
         public PermissionService(MessageModel message
             , IPermissionRepository permissionRepository
@@ -41,7 +43,8 @@ namespace Mi.Service.System
             , IHttpContextAccessor httpContextAccessor
             , MemoryCacheFactory cache
             , IMiUser miUser
-            , IUserService userService)
+            , IUserService userService
+            , IPublicService publicService)
         {
             _message = message;
             _permissionRepository = permissionRepository;
@@ -54,6 +57,7 @@ namespace Mi.Service.System
             _cache = cache;
             _miUser = miUser;
             _userService = userService;
+            _publicService = publicService;
         }
 
         public async Task<List<PaMenuModel>> GetSiderMenuAsync()
@@ -138,7 +142,10 @@ namespace Mi.Service.System
             user.Avatar = StringHelper.DefaultAvatar();
             await _userRepository.AddAsync(user);
 
-            return _message.Success("注册成功，请等待管理员审核！");
+            var result = _message.Success("注册成功，请等待管理员审核！");
+            var ids = await _permissionRepository.GetUserIdInAuthorizationCodesAsync(new string[] { "System:User:Passed" });
+            await _publicService.WriteMessageAsync("审核", $"系统有新用户('{userName}')注册，需要您及时审核！", ids);
+            return result;
         }
 
         public async Task<MessageModel> LoginAsync(string userName, string password, string verifyCode)

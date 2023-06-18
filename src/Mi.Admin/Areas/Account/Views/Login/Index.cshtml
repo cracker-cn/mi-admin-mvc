@@ -215,9 +215,9 @@
     <script src="~/component/layui/layui.js"></script>
     <script src="~/admin/js/mi-utils.js"></script>
     <script>
-        layui.use(['form','jquery'],function(){
+        layui.use(['form', 'jquery'], function () {
             let $ = layui.$;
-            let form = layui.form
+            let form = layui.form;
 
             $('.toggle-item').click(function(){
                 $('.toggle-item').removeClass('mi-active')
@@ -241,9 +241,14 @@
                     url: '/Account/Login/Do',
                     data: loginData.field,
                     beforeSend: function (request) {
+                        //layer.msg('登录中...', {
+                        //    icon: 16,
+                        //    shade: 0.01
+                        //});
                         request.setRequestHeader("Mi-Header", base64Encryption(MiUtils.header()))
                     },
                     success: function (res) {
+                        //layer.closeAll();
                         if (MiUtils.ajaxSucceed(res.code)) {
                             window.location.href = '/'
                         } else {

@@ -12,9 +12,9 @@
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <label class="layui-form-label">标题</label>
+                <label class="layui-form-label">模糊匹配</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="title" placeholder="请输入消息标题" class="layui-input">
+                    <input type="text" name="vague" placeholder="请输入消息标题/内容" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
@@ -188,7 +188,7 @@
             });
 
             $("#btnReset").click(function () {
-                $("input[name='title']").val('');
+                $("input[name='vague']").val('');
                 $("input[name='no']").val('');
                 MiUtils.removeGlobalParams('messageNo')
                 $('#search-time').val('');

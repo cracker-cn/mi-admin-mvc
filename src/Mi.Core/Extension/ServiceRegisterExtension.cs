@@ -37,7 +37,7 @@ namespace Mi.Core.Extension
 			});
 			service.AddScoped<IMiUser, MiUser>();
 			//header
-			service.AddSingleton<MiHeader>(p => {
+			service.AddTransient<MiHeader>(p => {
 				var httpContext = p.GetRequiredService<IHttpContextAccessor>().HttpContext!;
 				if(httpContext.Items.TryGetValue(MiHeader.MIHEADER, out var str))
 				{
