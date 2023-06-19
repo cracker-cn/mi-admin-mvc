@@ -25,6 +25,8 @@ namespace Mi.IService.System
 
         Task<T> GetAsync<T>(string parentKey) where T : class, new();
 
+        T Get<T>(string parentKey) where T : class, new();
+
         Task<bool> SetAsync<T>(T model) where T : class, new();
 
         Task<string> GetStringAsync(string key);

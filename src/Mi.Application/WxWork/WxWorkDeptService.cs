@@ -28,7 +28,7 @@ namespace Mi.Application.WxWork
 
         public async Task<MessageModel<IList<DepartmentItem>>> GetDeptListAsync(DepartmentSearch search)
         {
-            var result = await _request.SendAsync<WxWorkDept>("user/simplelist", _config.wx_work_contact_list_secret, HttpMethod.Post);
+            var result = await _request.SendAsync<WxWorkDept>("department/list", _config.wx_work_contact_list_secret, HttpMethod.Post);
             var list = new List<DepartmentItem>();
             if (result.Succeed() && result.department != null)
             {

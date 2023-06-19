@@ -92,7 +92,7 @@ namespace Mi.Core.Others
                 {"corpid",WxWorkConst.corpid},
                 {"corpsecret",corpSecret}
             };
-            var url = "cgi-bin/gettoken" + StringHelper.ParamString(dict);
+            var url = "gettoken" + StringHelper.ParamString(dict);
             using (var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME))
             {
                 var resMessage = await httpClient.GetAsync(url);

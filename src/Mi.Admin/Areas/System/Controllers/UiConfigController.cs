@@ -1,5 +1,6 @@
 ﻿using Mi.Core.Attributes;
 using Mi.Core.Models;
+using Mi.Core.Models.WxWork;
 using Mi.IService.Public;
 using Mi.IService.System;
 

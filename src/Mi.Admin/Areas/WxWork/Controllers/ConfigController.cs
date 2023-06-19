@@ -1,0 +1,34 @@
+﻿using Mi.Core.Attributes;
+using Mi.Core.Models;
+using Mi.Core.Models.WxWork;
+using Mi.IService.System;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Mi.Admin.Areas.WxWork.Controllers
+{
+    [Area("WxWork")]
+    public class ConfigController : Controller
+    {
+        private readonly IDictService _dictService;
+        private readonly WxWorkConfig _config;
+
+        public ConfigController(IDictService dictService, WxWorkConfig config)
+        {
+            _dictService = dictService;
+            _config = config;
+        }
+
+        [AuthorizeCode("WxWork:GetConfig")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost, AuthorizeCode("WxWork:SetConfig")]
+        public async Task<MessageModel> SetConfig([FromBody] Dictionary<string, string> operation) => await _dictService.SetAsync(operation);
+
+        [HttpPost, AuthorizeCode("WxWork:GetConfig")]
+        public MessageModel GetConfig() => new MessageModel<WxWorkConfig>(_config);
+    }
+}

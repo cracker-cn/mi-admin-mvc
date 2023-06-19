@@ -133,6 +133,13 @@ namespace Mi.Application.System
 
         public Task<T> GetAsync<T>(string parentKey) where T : class, new()
         {
+            var model = Get<T>(parentKey);
+
+            return Task.FromResult(model);
+        }
+
+        public T Get<T>(string parentKey) where T : class, new()
+        {
             var dict = GetDictionaryCache().Where(x => x.ParentKey == parentKey);
             var model = Activator.CreateInstance<T>();
 
@@ -141,11 +148,11 @@ namespace Mi.Application.System
                 var item = dict.FirstOrDefault(x => x.Key == prop.Name);
                 if (item != null)
                 {
-                    prop.SetValue(model, Convert.ChangeType(item.Value,prop.PropertyType));
+                    prop.SetValue(model, Convert.ChangeType(item.Value, prop.PropertyType));
                 }
             }
 
-            return Task.FromResult(model);
+            return model;
         }
 
         public async Task<bool> SetAsync<T>(T model) where T : class, new()

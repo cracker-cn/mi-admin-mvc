@@ -69,7 +69,6 @@ namespace Mi.Core.Extension
             });
 			//Request
 			service.AddScoped<WxWorkRequest>();
-			service.AddScoped<WxWorkConfig>();
         }
 	}
 }

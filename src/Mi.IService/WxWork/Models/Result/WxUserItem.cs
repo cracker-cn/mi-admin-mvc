@@ -1,15 +1,9 @@
-﻿namespace Mi.IService.WxWork.Models.Result
+﻿using Mi.Core.Models.WxWork;
+
+namespace Mi.IService.WxWork.Models.Result
 {
-    public class WxUserItem
+    public class WxUserItem: WxDeptUser
     {
-        public string? userid { get; set; }
-
-        public string? name { get; set; }
-
-        public IList<int>? department { get; set; }
-
-        public string? open_userid { get; set; }
-
         /// <summary>
         /// 关系用户
         /// </summary>

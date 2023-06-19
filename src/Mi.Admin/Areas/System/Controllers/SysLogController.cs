@@ -10,11 +10,11 @@ using Mi.IService.System;
 namespace Mi.Admin.Areas.System.Controllers
 {
     [Area("System")]
-    public class LogController : Controller
+    public class SysLogController : Controller
     {
         private readonly ILogService _logService;
 
-        public LogController(ILogService logService)
+        public SysLogController(ILogService logService)
         {
             _logService = logService;
         }

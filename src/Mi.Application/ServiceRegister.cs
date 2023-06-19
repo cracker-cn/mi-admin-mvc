@@ -1,4 +1,8 @@
-﻿using Mi.IService.System.Models.Result;
+﻿using Mi.Core.GlobalVar;
+using Mi.Core.Models.WxWork;
+using Mi.Core.Service;
+using Mi.IService.System.Models.Result;
+using Mi.IService.WxWork.Models.Result;
 
 namespace Mi.Application
 {
@@ -11,6 +15,12 @@ namespace Mi.Application
                 cfg.CreateMap<SysDict, DictItem>();
                 cfg.CreateMap<DictOperation, SysDict>();
                 cfg.CreateMap<FunctionOperation, SysFunction>();
+                cfg.CreateMap<WxUserItem, WxDeptUser>();
+            });
+            service.AddScoped<WxWorkConfig>(p =>
+            {
+                var dictService = DotNetService.Get<IDictService>();
+                return dictService.Get<WxWorkConfig>(DictKeyConst.WxWork);
             });
         }
     }

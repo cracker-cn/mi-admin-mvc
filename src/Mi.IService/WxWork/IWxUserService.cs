@@ -4,8 +4,6 @@ namespace Mi.IService.WxWork
 {
     public interface IWxUserService
     {
-        Task<MessageModel<WxUserItem>> GetDeptMemberListAsync(long deptId);
-
-
+        Task<MessageModel<IList<WxUserItem>>> GetDeptMemberListAsync(long deptId);
     }
 }

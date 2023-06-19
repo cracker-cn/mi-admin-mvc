@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "_ElementUiPlusLayout";
+}
+
+<el-card shadow="never">
+<h2>hello</h2>
+</el-card>
+
+@section Scripts{
+    <script>
+        const ROOT_PATH = '/WxWork/DeptUser/';
+        const App = {
+            data() {
+                return {
+                    treeData:[]
+                }
+            },
+            methods:{
+                getDeptTree(){
+                    axios.post(ROOT_PATH + 'GetDeptList').then(res=>{
+                        if (MiUtils.ajaxSucceed(res.data.code)){
+                            this.treeData = res.data.result;
+                        }
+                    })
+                }
+            },
+            created(){
+                this.getDeptTree()
+            }
+        }
+    </script>
+}
