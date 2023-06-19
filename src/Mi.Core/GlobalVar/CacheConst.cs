@@ -10,6 +10,8 @@
 
         public readonly static TimeSpan Year = TimeSpan.FromDays(366);
 
+        public readonly static TimeSpan WxWorkTokenExpire = TimeSpan.FromSeconds(7190);
+
         public readonly static string CONTROLLER_TYPES = nameof(CONTROLLER_TYPES).ToLower();
     }
 }

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Mi.Repository\Mi.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WxWork\" />
+  </ItemGroup>
+
 </Project>

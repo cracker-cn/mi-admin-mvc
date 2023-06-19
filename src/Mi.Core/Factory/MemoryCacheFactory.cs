@@ -111,7 +111,7 @@ namespace Mi.Core.Factory
         /// </summary>
         /// <param name="key">缓存Key</param>
         /// <returns></returns>
-        public T? Get<T>(string key) where T : class, new()
+        public T? Get<T>(string key)
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));

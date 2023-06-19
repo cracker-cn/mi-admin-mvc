@@ -97,5 +97,18 @@ namespace Mi.Core.Toolkit.Helper
             }
             return strItemTarget;
         }
+
+        /// <summary>
+        /// 参数querystring模式
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static string ParamString(Dictionary<string, string> param)
+        {
+            var str = string.Join('&', param.Select(x => $"{x.Key}={x.Value}"));
+            return "?" + str.Trim('&');
+        }
+
+        public static string CorpSecretKey(string corpSecret) => $"wx_work_{corpSecret}";
     }
 }

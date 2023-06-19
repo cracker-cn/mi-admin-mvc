@@ -1,7 +1,9 @@
 ﻿using Mi.Core.DB;
 using Mi.Core.Factory;
 using Mi.Core.GlobalUser;
+using Mi.Core.GlobalVar;
 using Mi.Core.Models;
+using Mi.Core.Others;
 using Mi.Core.Service;
 using Mi.Core.TagHelpers;
 using Mi.Core.Toolkit.Extension;
@@ -60,6 +62,12 @@ namespace Mi.Core.Extension
 			service.AddScoped<MemoryCacheFactory>();
 			//==HostService==
 			service.AddHostedService<SeedDataBackgroundService>();
+			service.AddHttpClient(WxWorkConst.NAME, client =>
+			{
+				client.BaseAddress = new Uri(WxWorkConst.BASE_URL);
+            });
+			//Request
+			service.AddScoped<WxWorkRequest>();
         }
 	}
 }
