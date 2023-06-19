@@ -3,6 +3,7 @@ using Mi.Core.Factory;
 using Mi.Core.GlobalUser;
 using Mi.Core.GlobalVar;
 using Mi.Core.Models;
+using Mi.Core.Models.WxWork;
 using Mi.Core.Others;
 using Mi.Core.Service;
 using Mi.Core.TagHelpers;
@@ -68,6 +69,7 @@ namespace Mi.Core.Extension
             });
 			//Request
 			service.AddScoped<WxWorkRequest>();
+			service.AddScoped<WxWorkConfig>();
         }
 	}
 }

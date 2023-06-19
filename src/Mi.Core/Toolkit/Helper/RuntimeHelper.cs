@@ -72,5 +72,15 @@ namespace Mi.Core.Toolkit.Helper
                 return false;
             })!;
         }
+
+        public static Dictionary<string, string> ParseDictionary<T>(T model)
+        {
+            var dict = new Dictionary<string, string>();
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                dict.Add(prop.Name, Convert.ToString(prop.GetValue(model)) ?? "");
+            }
+            return dict;
+        }
     }
 }

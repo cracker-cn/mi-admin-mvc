@@ -21,9 +21,19 @@ namespace Mi.Core.Others
             _cache = cache;
         }
 
-        public async Task<T> SendAsync<T>(string url, string corpSecret, HttpMethod httpMethod, Dictionary<string, string>? param = null)
+        /// <summary>
+        /// 发送请求，body为json数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="corpSecret"></param>
+        /// <param name="httpMethod"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<T> SendAsync<T>(string url, string corpSecret, HttpMethod httpMethod, Dictionary<string, string>? param = null) where T : WxWorkApiResponseBase
         {
-            var message = new HttpRequestMessage(httpMethod, url + "?access_token=" + GetAccessTokenAsync(corpSecret));
+            var message = new HttpRequestMessage(httpMethod, await ConcatTokenAsync(url, corpSecret));
             if (param != null)
             {
                 var str = JsonConvert.SerializeObject(param);
@@ -38,6 +48,42 @@ namespace Mi.Core.Others
             }
         }
 
+        public Task<T> SendAsync<T, TParam>(string url, string corpSecret, HttpMethod httpMethod, TParam param) where T : WxWorkApiResponseBase
+        {
+            var dict = RuntimeHelper.ParseDictionary(param);
+            return SendAsync<T>(url, corpSecret, httpMethod, dict);
+        }
+
+        /// <summary>
+        /// GET请求
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="corpSecret"></param>
+        /// <param name="queryString">拼接好的querystring参数，不用问号</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<T> GetAsync<T>(string url, string corpSecret, string queryString)
+        {
+            queryString = queryString.TrimStart('?');
+            if (!queryString.StartsWith('&')) queryString += "&";
+            using (var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME))
+            {
+                var resMessage = await httpClient.GetAsync(await ConcatTokenAsync(url, corpSecret) + queryString);
+                object? res;
+                if(typeof(T).FullName == typeof(string).FullName)
+                {
+                    res = await resMessage.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    res = await resMessage.Content.ReadFromJsonAsync<T>();
+                }
+                if (res == null) throw new ArgumentNullException(nameof(res), "GetAsync获取json为空");
+                return (T)Convert.ChangeType(res,typeof(T));
+            }
+        }
+
         private async Task<string> GetAccessTokenAsync(string corpSecret)
         {
             if (_cache.Exists(StringHelper.CorpSecretKey(corpSecret))) return _cache.Get<string>(StringHelper.CorpSecretKey(corpSecret)) ?? "";
@@ -47,7 +93,7 @@ namespace Mi.Core.Others
                 {"corpsecret",corpSecret}
             };
             var url = "cgi-bin/gettoken" + StringHelper.ParamString(dict);
-            using(var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME)) 
+            using (var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME))
             {
                 var resMessage = await httpClient.GetAsync(url);
                 var res = await resMessage.Content.ReadFromJsonAsync<WxWorkAccessToken>();
@@ -58,6 +104,12 @@ namespace Mi.Core.Others
                 }
                 return token;
             }
+        }
+
+        private async Task<string> ConcatTokenAsync(string url, string corpSecret)
+        {
+            var token = await GetAccessTokenAsync(corpSecret);
+            return $"{url}?access_token={token}";
         }
     }
 }

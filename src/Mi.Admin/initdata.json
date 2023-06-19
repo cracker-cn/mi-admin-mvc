@@ -17,8 +17,8 @@
   },
   //企业微信配置
   "WxWork": {
-    "corpid": "", //企业Id
+    "corpid": "wwbf83b5bb46465e2f", //企业Id
     "wx_work_member_secret": "", //应用密钥-成员
-    "wx_work_contact_list_secret": "" //应用密钥-通讯录
+    "wx_work_contact_list_secret": "gFhdKOKBO8vYfvd24gR6O-FZxCmcCS1opz0FpHrz_c8" //应用密钥-通讯录
   }
 }

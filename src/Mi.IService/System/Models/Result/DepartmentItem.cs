@@ -11,5 +11,9 @@ namespace Mi.IService.System.Models.Result
         public string? Leader { get; set; }
 
         public IList<DepartmentItem>? Children { get; set; }
+
+        public long Id { get; set; }
+
+        public long ParentId { get; set; }
     }
 }
