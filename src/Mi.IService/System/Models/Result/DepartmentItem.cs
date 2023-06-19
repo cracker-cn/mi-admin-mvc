@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mi.Entity.Field;
 
 namespace Mi.IService.System.Models.Result
 {
-    public class DepartmentItem
+    public class DepartmentItem : IChildren<IList<DepartmentItem>>
     {
+        public string? Name { get; set; }
+
+        public string? NameEn { get; set; }
+
+        public string? Leader { get; set; }
+
+        public IList<DepartmentItem>? Children { get; set; }
     }
 }

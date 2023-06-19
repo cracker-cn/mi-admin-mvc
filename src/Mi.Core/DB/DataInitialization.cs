@@ -12,7 +12,6 @@ namespace Mi.Core.DB
 {
     public class DataInitialization
     {
-        private static long UiConfigKeyId = 0;
         public static async Task<bool> RunAsync()
         {
             var configuration = new ConfigurationBuilder()
@@ -28,7 +27,9 @@ namespace Mi.Core.DB
                 await DapperDB.ExecuteAsync(@"insert into SysUser(Id,UserName,Password,PasswordSalt,IsSuperAdmin,CreatedOn,CreatedBy,IsEnabled,IsDeleted)
 							values(@id,@name,@pwd,@salt,1,@time,-1,1,0)", new { id = IdHelper.SnowflakeId(), name = userName, pwd, salt, time = TimeHelper.LocalTime() });
             }
-            //站点配置字典
+
+            #region 站点配置字典
+
             var key = "UiConfig";
             var config = configuration.Bind<SysConfigModel>(key);
             if (!DapperDB.Exist("select 1 from SysDict where ParentKey=@key", new { key }))
@@ -45,7 +46,11 @@ namespace Mi.Core.DB
                 sql.Append(GenValueSql("首页地址", nameof(config.home_page_url), config.home_page_url, "UiConfig", uiConfigId));
                 await DapperDB.ExecuteAsync(sql.ToString().Trim(','));
             }
-            //企业微信配置
+
+            #endregion
+
+            #region 企业微信配置
+
             var wxWorkConfig = configuration.Bind<WxWorkConfig>(DictKeyConst.WxWork);
             if (!DapperDB.Exist("select 1 from SysDict where ParentKey=@key", new { key = DictKeyConst.WxWork }))
             {
@@ -56,6 +61,7 @@ namespace Mi.Core.DB
                 sql.Append(GenValueSql("应用密钥-通讯录", nameof(wxWorkConfig.wx_work_contact_list_secret), wxWorkConfig.wx_work_contact_list_secret, DictKeyConst.WxWork, wxWorkConfigId));
                 await DapperDB.ExecuteAsync(sql.ToString().Trim(','));
             }
+            #endregion
 
             return true;
         }
