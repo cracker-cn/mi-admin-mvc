@@ -1,6 +1,6 @@
 ﻿using Mi.Entity.Field;
 
-namespace Mi.IService.System.Models.Result
+namespace Mi.IService.WxWork.Models.Result
 {
     public class DepartmentItem : IChildren<IList<DepartmentItem>>
     {

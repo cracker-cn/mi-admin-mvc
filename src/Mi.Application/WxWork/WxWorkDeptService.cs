@@ -1,6 +1,8 @@
 ﻿using Mi.Core.Models.WxWork;
 using Mi.Core.Others;
-using Mi.IService.System.Models.Result;
+using Mi.IService.WxWork;
+using Mi.IService.WxWork.Models;
+using Mi.IService.WxWork.Models.Result;
 
 namespace Mi.Application.WxWork
 {

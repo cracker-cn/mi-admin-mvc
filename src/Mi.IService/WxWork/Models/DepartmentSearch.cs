@@ -1,4 +1,4 @@
-﻿namespace Mi.IService.System.Models
+﻿namespace Mi.IService.WxWork.Models
 {
     public class DepartmentSearch : PagingSearchModel
     {

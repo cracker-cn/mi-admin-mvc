@@ -1,6 +1,7 @@
-﻿using Mi.IService.System.Models.Result;
+﻿using Mi.IService.WxWork.Models;
+using Mi.IService.WxWork.Models.Result;
 
-namespace Mi.IService.System
+namespace Mi.IService.WxWork
 {
     public interface IDepartmentService
     {
