@@ -1,6 +1,6 @@
 ﻿namespace Mi.Core.Models.WxWork
 {
-    public class WxWorkDeptUser : WxWorkApiResponseBase
+    public class WxDeptUserResponse : WxApiResponseBase
     {
         public IList<WxDeptUser>? userlist { get; set; }
     }

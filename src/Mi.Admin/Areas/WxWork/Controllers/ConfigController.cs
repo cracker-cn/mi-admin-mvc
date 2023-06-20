@@ -11,9 +11,9 @@ namespace Mi.Admin.Areas.WxWork.Controllers
     public class ConfigController : Controller
     {
         private readonly IDictService _dictService;
-        private readonly WxWorkConfig _config;
+        private readonly WxConfig _config;
 
-        public ConfigController(IDictService dictService, WxWorkConfig config)
+        public ConfigController(IDictService dictService, WxConfig config)
         {
             _dictService = dictService;
             _config = config;
@@ -29,6 +29,6 @@ namespace Mi.Admin.Areas.WxWork.Controllers
         public async Task<MessageModel> SetConfig([FromBody] Dictionary<string, string> operation) => await _dictService.SetAsync(operation);
 
         [HttpPost, AuthorizeCode("WxWork:GetConfig")]
-        public MessageModel GetConfig() => new MessageModel<WxWorkConfig>(_config);
+        public MessageModel GetConfig() => new MessageModel<WxConfig>(_config);
     }
 }

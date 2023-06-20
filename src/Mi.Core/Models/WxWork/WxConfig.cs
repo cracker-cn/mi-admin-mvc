@@ -2,7 +2,7 @@
 
 namespace Mi.Core.Models.WxWork
 {
-    public class WxWorkConfig
+    public class WxConfig
     {
         [NotNull]
         public string? corpid { get; set; }

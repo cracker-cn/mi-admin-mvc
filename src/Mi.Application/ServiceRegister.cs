@@ -17,10 +17,10 @@ namespace Mi.Application
                 cfg.CreateMap<FunctionOperation, SysFunction>();
                 cfg.CreateMap<WxUserItem, WxDeptUser>();
             });
-            service.AddScoped<WxWorkConfig>(p =>
+            service.AddScoped<WxConfig>(p =>
             {
                 var dictService = DotNetService.Get<IDictService>();
-                return dictService.Get<WxWorkConfig>(DictKeyConst.WxWork);
+                return dictService.Get<WxConfig>(DictKeyConst.WxWork);
             });
         }
     }

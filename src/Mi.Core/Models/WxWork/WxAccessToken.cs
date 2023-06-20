@@ -1,6 +1,6 @@
 ﻿namespace Mi.Core.Models.WxWork
 {
-    public class WxWorkAccessToken : WxWorkApiResponseBase
+    public class WxAccessToken : WxApiResponseBase
     {
         public string? access_token { get; set; }
 

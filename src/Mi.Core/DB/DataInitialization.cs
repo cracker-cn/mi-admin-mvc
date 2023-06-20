@@ -51,7 +51,7 @@ namespace Mi.Core.DB
 
             #region 企业微信配置
 
-            var wxWorkConfig = configuration.Bind<WxWorkConfig>(DictKeyConst.WxWork);
+            var wxWorkConfig = configuration.Bind<WxConfig>(DictKeyConst.WxWork);
             if (!DapperDB.Exist("select 1 from SysDict where ParentKey=@key", new { key = DictKeyConst.WxWork }))
             {
                 var wxWorkConfigId = DapperDB.ExecuteScalar<long>("select id from SysDict where Key=@key limit 1;", new { key = DictKeyConst.WxWork });

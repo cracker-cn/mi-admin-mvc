@@ -31,7 +31,7 @@ namespace Mi.Core.Others
         /// <param name="param"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<T> SendAsync<T>(string url, string corpSecret, HttpMethod httpMethod, Dictionary<string, string>? param = null) where T : WxWorkApiResponseBase
+        public async Task<T> SendAsync<T>(string url, string corpSecret, HttpMethod httpMethod, Dictionary<string, string>? param = null) where T : WxApiResponseBase
         {
             var message = new HttpRequestMessage(httpMethod, await ConcatTokenAsync(url, corpSecret));
             if (param != null)
@@ -48,7 +48,7 @@ namespace Mi.Core.Others
             }
         }
 
-        public Task<T> SendAsync<T, TParam>(string url, string corpSecret, HttpMethod httpMethod, TParam param) where T : WxWorkApiResponseBase
+        public Task<T> SendAsync<T, TParam>(string url, string corpSecret, HttpMethod httpMethod, TParam param) where T : WxApiResponseBase
         {
             var dict = RuntimeHelper.ParseDictionary(param);
             return SendAsync<T>(url, corpSecret, httpMethod, dict);
@@ -96,7 +96,7 @@ namespace Mi.Core.Others
             using (var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME))
             {
                 var resMessage = await httpClient.GetAsync(url);
-                var res = await resMessage.Content.ReadFromJsonAsync<WxWorkAccessToken>();
+                var res = await resMessage.Content.ReadFromJsonAsync<WxAccessToken>();
                 var token = res?.access_token ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(token))
                 {

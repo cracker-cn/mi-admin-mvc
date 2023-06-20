@@ -1,6 +1,6 @@
 ﻿namespace Mi.Core.Models.WxWork
 {
-    public class WxWorkApiResponseBase
+    public class WxApiResponseBase
     {
         public int errcode { get; set; }
         public string errmsg { get; set; } = "ok";
@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static bool Succeed(this WxWorkApiResponseBase model)
+        public static bool Succeed(this WxApiResponseBase model)
         {
             return model != null && model.errcode == 0;
         }

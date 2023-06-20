@@ -2,7 +2,7 @@
 
 namespace Mi.Core.Models.WxWork
 {
-    public class WxWorkDept : WxWorkApiResponseBase
+    public class WxDept : WxApiResponseBase
     {
         public IList<Department>? department { get; set; }
     }
