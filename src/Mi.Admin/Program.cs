@@ -1,6 +1,7 @@
 using Mi.Admin.WebComponent;
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
+using Mi.Core.DB;
 using Mi.Core.Hubs;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
@@ -41,6 +42,7 @@ builder.Host.UseSerilog((context, logger) =>
 	logger.Enrich.FromLogContext();
 	logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
 	logger.WriteTo.Async(a => a.File(serilogPath, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate));
+    logger.WriteTo.SQLite(ConfigurationExtension.AppSettings.GetConnectionString("Sqlite")!.Replace("Data Source=",""));
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
 
