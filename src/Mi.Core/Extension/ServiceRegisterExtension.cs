@@ -3,10 +3,8 @@ using Mi.Core.Factory;
 using Mi.Core.GlobalUser;
 using Mi.Core.GlobalVar;
 using Mi.Core.Models;
-using Mi.Core.Models.WxWork;
 using Mi.Core.Others;
 using Mi.Core.Service;
-using Mi.Core.TagHelpers;
 using Mi.Core.Toolkit.Extension;
 using Mi.Repository.DB;
 
@@ -19,56 +17,57 @@ using Newtonsoft.Json;
 
 namespace Mi.Core.Extension
 {
-	public static class ServiceRegisterExtension
-	{
-		public static void AddRequiredService(this IServiceCollection service)
-		{
-			//EFCore
-			service.AddDbContext<MIDB>(opt =>
-			{
-				opt.UseSqlite(DBConfig.ConnectionString)
-				.EnableSensitiveDataLogging();
-			}, ServiceLifetime.Scoped);
-			//自动注入
-			service.AutoInject();
+    public static class ServiceRegisterExtension
+    {
+        public static void AddRequiredService(this IServiceCollection service)
+        {
+            //EFCore
+            service.AddDbContext<MIDB>(opt =>
+            {
+                opt.UseSqlite(DBConfig.ConnectionString)
+                .EnableSensitiveDataLogging();
+            }, ServiceLifetime.Scoped);
+            //自动注入
+            service.AutoInject();
             //关闭参数自动校验,我们需要返回自定义的格式
             service.Configure<ApiBehaviorOptions>((o) =>
             {
                 o.SuppressModelStateInvalidFilter = true;
             });
             service.AddSingleton<MessageModel>();
-			service.AddHttpContextAccessor();
-			//验证码
-			service.AddSimpleCaptcha(builder =>
-			{
-				builder.UseMemoryStore();
-				builder.AddConfiguration(opt =>
-				{
-					opt.CodeLength = 4;
-					opt.ExpiryTime = TimeSpan.FromMinutes(2);
-				});
-			});
-			service.AddScoped<IMiUser, MiUser>();
-			//header
-			service.AddTransient(p => {
-				var httpContext = p.GetRequiredService<IHttpContextAccessor>().HttpContext!;
-				if(httpContext.Items.TryGetValue(MiHeader.MIHEADER, out var str))
-				{
+            service.AddHttpContextAccessor();
+            //验证码
+            service.AddSimpleCaptcha(builder =>
+            {
+                builder.UseMemoryStore();
+                builder.AddConfiguration(opt =>
+                {
+                    opt.CodeLength = 4;
+                    opt.ExpiryTime = TimeSpan.FromMinutes(2);
+                });
+            });
+            service.AddScoped<IMiUser, MiUser>();
+            //header
+            service.AddTransient(p =>
+            {
+                var httpContext = p.GetRequiredService<IHttpContextAccessor>().HttpContext!;
+                if (httpContext.Items.TryGetValue(MiHeader.MIHEADER, out var str))
+                {
                     return JsonConvert.DeserializeObject<MiHeader>((string)str) ?? new MiHeader();
                 }
-				return new MiHeader();
+                return new MiHeader();
             });
-			service.AddScoped<CreatorFactory>();
-			service.AddScoped<CaptchaFactory>();
-			service.AddScoped<MemoryCacheFactory>();
-			//==HostService==
-			service.AddHostedService<SeedDataBackgroundService>();
-			service.AddHttpClient(WxWorkConst.NAME, client =>
-			{
-				client.BaseAddress = new Uri(WxWorkConst.BASE_URL);
+            service.AddScoped<CreatorFactory>();
+            service.AddScoped<CaptchaFactory>();
+            service.AddScoped<MemoryCacheFactory>();
+            //==HostService==
+            service.AddHostedService<SeedDataBackgroundService>();
+            service.AddHttpClient(WxWorkConst.NAME, client =>
+            {
+                client.BaseAddress = new Uri(WxWorkConst.BASE_URL);
             });
-			//Request
-			service.AddScoped<WxWorkRequest>();
+            //Request
+            service.AddScoped<WxWorkRequest>();
         }
-	}
+    }
 }

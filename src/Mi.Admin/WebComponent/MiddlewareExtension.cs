@@ -1,4 +1,6 @@
-﻿using Mi.Admin.WebComponent.Middleware;
+﻿using AspNetCoreRateLimit;
+
+using Mi.Admin.WebComponent.Middleware;
 
 namespace Mi.Admin.WebComponent
 {
@@ -13,6 +15,8 @@ namespace Mi.Admin.WebComponent
         {
             builder.UseMiddleware<UserMiddleware>();
             builder.UseMiddleware<MiHeaderMiddleware>();
+            //启用客户端IP限制速率
+            builder.UseIpRateLimiting();
             return builder;
         }
     }

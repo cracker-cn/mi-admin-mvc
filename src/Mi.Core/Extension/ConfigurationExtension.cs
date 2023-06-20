@@ -18,5 +18,9 @@ namespace Mi.Core.Extension
             }
             return model;
         }
+
+        public static IConfiguration AppSettings => new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json").Build();
     }
 }
