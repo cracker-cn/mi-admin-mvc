@@ -3,7 +3,20 @@
 }
 
 <el-card shadow="never">
-<h2>hello</h2>
+    <el-row>
+        <el-col :span="4">
+            <el-input v-model="filterText" placeholder="输入关键字进行过滤"></el-input>
+            <el-tree class="mt-1" :data="treeData" node-key="id" :props="defaultProps" @@node-click="handleNodeClick"
+                     :filter-node-method="filterNode" ref="treeRef"></el-tree>
+        </el-col>
+        <el-col :span="20">
+            <el-table style="width:100%" :data="userData" stripe class="ml-2">
+                <el-table-column type="index" width="50"></el-table-column>
+                <el-table-column prop="name" label="企微用户名"></el-table-column>
+                <el-table-column prop="userid" label="企微用户Id"></el-table-column>
+            </el-table>
+        </el-col>
+    </el-row>
 </el-card>
 
 @section Scripts{
@@ -12,19 +25,53 @@
         const App = {
             data() {
                 return {
-                    treeData:[]
+                    userData: [],
+                    treeData: [],
+                    defaultProps: {
+                        label: 'name',
+                        children: 'children'
+                    },
+                    filterText: ''
                 }
             },
-            methods:{
-                getDeptTree(){
-                    axios.post(ROOT_PATH + 'GetDeptList').then(res=>{
-                        if (MiUtils.ajaxSucceed(res.data.code)){
+            watch: {
+                filterText(val) {
+                    if (this.$refs['treeRef']) {
+                        this.$refs['treeRef'].filter(val)
+                    }
+                }
+            },
+            methods: {
+                filterNode(value, data) {
+                    if (!value) return true
+                    return data.name.includes(value)
+                },
+                handleNodeClick(data) {
+                    this.getDeptUser(data.id)
+                },
+                getDeptUser(id) {
+                    axios.get(ROOT_PATH + 'GetDeptMemberList?deptId=' + id).then(res => {
+                        if (MiUtils.ajaxSucceed(res.data.code)) {
+                            this.userData = res.data.result;
+                        } else {
+                            ElementPlus.ElMessage.error(res.data.message)
+                        }
+                    })
+                },
+                getDeptTree() {
+                    axios.post(ROOT_PATH + 'GetDeptList').then(res => {
+                        if (MiUtils.ajaxSucceed(res.data.code)) {
                             this.treeData = res.data.result;
+                            if (this.treeData && this.treeData.length >= 1) {
+                                this.getDeptUser(this.treeData[0].id)
+                            }
+                        } else {
+                            ElementPlus.ElMessage.error(res.data.message)
                         }
                     })
                 }
             },
-            created(){
+            created() {
                 this.getDeptTree()
             }
         }

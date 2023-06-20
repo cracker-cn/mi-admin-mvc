@@ -18,6 +18,10 @@
     margin-left: 15px !important;
 }
 
+.ml-2 {
+    margin-left: 30px !important;
+}
+
 .mi-btn-green {
     background-color: #16baaa !important;
     color: #fff !important;

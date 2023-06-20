@@ -28,7 +28,7 @@ namespace Mi.Admin.Areas.WxWork.Controllers
             return View();
         }
 
-        [HttpGet("WxWork:DeptUser:Query")]
+        [HttpGet,AuthorizeCode("WxWork:DeptUser:Query")]
         public async Task<MessageModel<IList<WxUserItem>>> GetDeptMemberList(long deptId)
         {
             return await _wxUserService.GetDeptMemberListAsync(deptId);

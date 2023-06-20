@@ -15,7 +15,7 @@ namespace Mi.Application
                 cfg.CreateMap<SysDict, DictItem>();
                 cfg.CreateMap<DictOperation, SysDict>();
                 cfg.CreateMap<FunctionOperation, SysFunction>();
-                cfg.CreateMap<WxUserItem, WxDeptUser>();
+                cfg.CreateMap<WxDeptUser, WxUserItem>();
             });
             service.AddScoped<WxConfig>(p =>
             {

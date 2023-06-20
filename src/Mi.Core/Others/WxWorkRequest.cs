@@ -66,7 +66,7 @@ namespace Mi.Core.Others
         public async Task<T> GetAsync<T>(string url, string corpSecret, string queryString)
         {
             queryString = queryString.TrimStart('?');
-            if (!queryString.StartsWith('&')) queryString += "&";
+            if (!queryString.StartsWith('&')) queryString = "&" + queryString;
             using (var httpClient = _httpClientFactory.CreateClient(WxWorkConst.NAME))
             {
                 var resMessage = await httpClient.GetAsync(await ConcatTokenAsync(url, corpSecret) + queryString);
