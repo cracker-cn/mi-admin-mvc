@@ -58,32 +58,49 @@
         public string? gender { get; set; }
         public string? email { get; set; }
         public string? biz_mail { get; set; }
+
         public IList<int>? is_leader_in_dept { get; set; }
+
         public IList<string>? direct_leader { get; set; }
+
         public string? avatar { get; set; }
+
         public string thumb_avatar { get; set; }
+
         public string telephone { get; set; }
+
         public string alias { get; set; }
+
         public int status { get; set; }
+
         public string address { get; set; }
+
         public string english_name { get; set; }
+
         public string open_userid { get; set; }
+
         public int main_department { get; set; }
+
         public WxUserDetailsExtattr extattr { get; set; }
+
         public string qr_code { get; set; }
+
         public string external_position { get; set; }
+
         public WxUserDetailsExternalProfile external_profile { get; set; }
     }
 
     public class WxUserDetailsWeb
     {
         public string url { get; set; }
+
         public string title { get; set; }
     }
 
     public class WechatChannels
     {
         public string nickname { get; set; }
+
         public int status { get; set; }
     }
 }

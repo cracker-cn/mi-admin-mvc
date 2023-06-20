@@ -3,11 +3,13 @@ using Mi.Core.Models;
 using Mi.Core.Models.WxWork;
 using Mi.IService.System;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.WxWork.Controllers
 {
     [Area("WxWork")]
+    [Authorize]
     public class ConfigController : Controller
     {
         private readonly IDictService _dictService;

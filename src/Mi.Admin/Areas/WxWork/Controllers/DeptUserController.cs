@@ -4,11 +4,13 @@ using Mi.IService.WxWork;
 using Mi.IService.WxWork.Models;
 using Mi.IService.WxWork.Models.Result;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mi.Admin.Areas.WxWork.Controllers
 {
     [Area("WxWork")]
+    [Authorize]
     public class DeptUserController : Controller
     {
         private readonly IWxUserService _wxUserService;
