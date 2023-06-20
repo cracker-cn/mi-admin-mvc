@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using Mi.Core.Attributes;
+using Mi.Core.CommonOption;
 using Mi.Core.Models;
 using Mi.IService.Cache;
 
@@ -28,7 +29,7 @@ namespace Mi.Admin.Areas.Development.Controllers
 
         [HttpPost]
         [AuthorizeCode("Development:CacheKey:Query")]
-        public async Task<MessageModel<IList<string>>> GetAllKeys(string? vague, int cacheType) => await _keyService.GetAllKeysAsync(vague);
+        public async Task<MessageModel<IList<Option>>> GetAllKeys(string? vague, int cacheType) => await _keyService.GetAllKeysAsync(vague);
 
         [HttpPost]
         [AuthorizeCode("Development:CacheKey:Remove")]

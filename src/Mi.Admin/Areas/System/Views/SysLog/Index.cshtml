@@ -51,7 +51,7 @@
 
             table.render({
                 elem: '#log-table',
-                url: '/System/Log/GetLoginLogList',
+                url: '/System/SysLog/GetLoginLogList',
                 page: true,
                 request: {
                     limitName: 'size'
@@ -110,6 +110,7 @@
                     }
                 ]],
                 skin: 'line',
+                toolbar: true,
                 defaultToolbar: [{
                     title: '刷新',
                     layEvent: 'refresh',
@@ -135,6 +136,16 @@
                 })
                 return false;
             });
+
+            table.on('toolbar(log-table)', function (obj) {
+                if (obj.event === 'refresh') {
+                    window.refresh();
+                }
+            });
+
+            window.refresh = function (param) {
+                table.reload('log-table');
+            }
 
             $("#btnReset").click(function () {
                 $("input[name='userName']").val('');

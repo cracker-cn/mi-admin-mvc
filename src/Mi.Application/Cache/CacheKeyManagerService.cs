@@ -16,18 +16,18 @@ namespace Mi.Application.Cache
             _msg = msg;
         }
 
-        public Task<MessageModel<IList<string>>> GetAllKeysAsync(string? vague, int cacheType = 1)
+        public Task<MessageModel<IList<Option>>> GetAllKeysAsync(string? vague, int cacheType = 1)
         {
-            var list = new List<string>();
+            var list = new List<Option>();
             if (cacheType == 1)
             {
-                list = _cache.GetCacheKeys();
+                list = _cache.GetCacheKeys().OrderBy(x=>x).Select(x=>new Option{ Name = x}).ToList();
                 if (!string.IsNullOrEmpty(vague))
                 {
-                    list = list.Where(x => x.Contains(vague)).ToList();
+                    list = list.Where(x => x.Name!.Contains(vague)).ToList();
                 }
             }
-            return Task.FromResult(new MessageModel<IList<string>>(list));
+            return Task.FromResult(new MessageModel<IList<Option>>(list));
         }
 
         public Task<MessageModel<string>> GetDataAsync(string key)

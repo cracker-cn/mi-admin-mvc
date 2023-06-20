@@ -42,7 +42,6 @@ builder.Host.UseSerilog((context, logger) =>
 	logger.Enrich.FromLogContext();
 	logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
 	logger.WriteTo.Async(a => a.File(serilogPath, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate));
-    logger.WriteTo.SQLite(ConfigurationExtension.AppSettings.GetConnectionString("Sqlite")!.Replace("Data Source=",""));
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
 

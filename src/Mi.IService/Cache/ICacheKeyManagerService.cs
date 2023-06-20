@@ -2,7 +2,7 @@
 {
     public interface ICacheKeyManagerService
     {
-        Task<MessageModel<IList<string>>> GetAllKeysAsync(string? vague, int cacheType = 1);
+        Task<MessageModel<IList<Option>>> GetAllKeysAsync(string? vague, int cacheType = 1);
 
         Task<MessageModel> RemoveKeyAsync(string key);
 
