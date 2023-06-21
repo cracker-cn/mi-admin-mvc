@@ -2,9 +2,9 @@
 
 namespace Mi.Core.Service
 {
-    public class EnvironmentHandler
+    public static class EnvironmentHandler
     {
         [NotNull]
-        public string? WebRootPath { get; set; }
+        public static string? WebRootPath { get; set; } = "wwwroot";
     }
 }

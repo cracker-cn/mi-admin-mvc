@@ -72,8 +72,7 @@ namespace Mi.Core.Toolkit.Helper
 
         public static string DefaultAvatar()
         {
-            var webRootPath = DotNetService.Get<IOptionsMonitor<EnvironmentHandler>>().CurrentValue.WebRootPath;
-            var path = Path.Combine(webRootPath, "admin", "images", "avatar.jpg");
+            var path = Path.Combine(EnvironmentHandler.WebRootPath, "admin", "images", "avatar.jpg");
             return FileHelper.GetBase64(path);
         }
 
