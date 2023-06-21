@@ -12,11 +12,11 @@
         <el-form-item label="企业Id" prop="corpid">
             <el-input v-model="form.corpid" placeholder="请输入企业Id" />
         </el-form-item>
-        <el-form-item label="客户secret" prop="wx_work_member_secret">
-            <el-input v-model="form.wx_work_member_secret" placeholder="请输入客户-应用密钥" />
+        <el-form-item label="通讯录同步secret" prop="wx_work_contact_list_secret_sync">
+            <el-input v-model="form.wx_work_contact_list_secret_sync" placeholder="请输入通讯录同步-密钥" />
         </el-form-item>
         <el-form-item label="通讯录secret" prop="wx_work_contact_list_secret">
-            <el-input v-model="form.wx_work_contact_list_secret" placeholder="请输入通讯录-应用密钥" />
+            <el-input v-model="form.wx_work_contact_list_secret" placeholder="请输入通讯录-密钥" />
         </el-form-item>
         <el-form-item>
             <el-button v-permission="'WxWork:SetConfig'" type="primary" @@click="onSubmit('form',form)">确定</el-button>
@@ -31,14 +31,14 @@
         const App = {
             data() {
                 return {
-                    labelWidth: '120px',
+                    labelWidth: '140px',
                     form: {},
                     rules: {
                         corpid: [
                             { required: true, message: '企业Id不能为空', trigger: 'blur' }
                         ],
-                        wx_work_member_secret: [
-                            { required: true, message: '客户-应用密钥为空', trigger: 'blur' }
+                        wx_work_contact_list_secret_sync: [
+                            { required: true, message: '通讯录同步-应用密钥为空', trigger: 'blur' }
                         ],
                         wx_work_contact_list_secret: [
                             { required: true, message: '通讯录-应用密钥不能为空', trigger: 'blur' }
@@ -51,7 +51,7 @@
                     axios.post(ROOT_PATH + "GetConfig").then(res => {
                         if (MiUtils.ajaxSucceed(res.data.code)) {
                             this.form.corpid = res.data.result.corpid
-                            this.form.wx_work_member_secret = res.data.result.wx_work_member_secret
+                            this.form.wx_work_contact_list_secret_sync = res.data.result.wx_work_contact_list_secret_sync
                             this.form.wx_work_contact_list_secret = res.data.result.wx_work_contact_list_secret
                         } else {
                             ElementPlus.ElMessage.error(res.data.message)

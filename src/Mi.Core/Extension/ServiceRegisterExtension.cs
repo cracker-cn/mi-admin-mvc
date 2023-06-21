@@ -21,12 +21,12 @@ namespace Mi.Core.Extension
     {
         public static void AddRequiredService(this IServiceCollection service)
         {
-            //EFCore
+            //EFCore，由于Sqlite不支持并发，DB注入使用瞬时模式，不支持事务共享
             service.AddDbContext<MIDB>(opt =>
             {
                 opt.UseSqlite(DBConfig.ConnectionString)
                 .EnableSensitiveDataLogging();
-            }, ServiceLifetime.Scoped);
+            }, ServiceLifetime.Transient);
             //自动注入
             service.AutoInject();
             //关闭参数自动校验,我们需要返回自定义的格式

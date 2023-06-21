@@ -33,7 +33,7 @@ namespace Mi.Application.WxWork
             if (result.Succeed() && result.department != null)
             {
                 var allDepts = result.department;
-                list = allDepts.Select(x => new DepartmentItem
+                list = allDepts.Where(x=>x.parentid == 0).Select(x => new DepartmentItem
                 {
                     Id = x.id,
                     ParentId = x.parentid,

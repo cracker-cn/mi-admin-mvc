@@ -16,8 +16,7 @@ const MiUtils = {
     },
     getItem: function (key) {
         return localStorage.getItem(key)
-    },
-    request: internalRequest.axiosInstance()
+    }
 }
 
 /**
@@ -126,35 +125,4 @@ function base64Encryption(str) {
  */
 function base64Decrypt(str) {
     return decodeURI(window.atob(str))
-}
-
-/**
- * 依赖Axios
- */
-const internalRequest = {
-    axiosInstance: function () {
-        const _axios = axios.create({
-            timeout: 5000,
-            headers: { 'mi-header': genMiHeader() }
-        })
-
-        //请求拦截
-        _axios.interceptors.request.use(
-            config => {
-                return config
-            },
-            error => {
-                console.error(error)
-                return Promise.reject(error)
-            },
-        )
-
-        //响应拦截
-        _axios.interceptor.response.use(res => {
-            return res.data
-        }, err => {
-            console.error(err);
-        })
-        return _axios
-    }
 }

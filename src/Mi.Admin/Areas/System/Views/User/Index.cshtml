@@ -112,14 +112,14 @@
                         align: 'center'
                     },
                     {
-                        title: '状态',
+                        title: '允许登录',
                         field: 'isEnabled',
                         align: 'center',
                         templet: function (d) {
                             if (d.isEnabled === 1) {
-                                return `<span class="layui-badge layui-bg-green">启用</span>`
+                                return `<span class="layui-badge layui-bg-green">是</span>`
                             }
-                            return `<span class="layui-badge layui-bg-orange">禁用</span>`
+                            return `<span class="layui-badge layui-bg-orange">否</span>`
                         }
                     },
                     {
@@ -179,7 +179,7 @@
                 } else if (obj.event === 'has-role') {
                     window.role(obj)
                 } else if (obj.event === 'audit') {
-                    layer.confirm('启用后，用户将可以登录系统，是否继续？', {
+                    layer.confirm('启用后，用户可以登录系统，是否继续？', {
                         icon: 3,
                         title: '提示'
                     }, function (index) {

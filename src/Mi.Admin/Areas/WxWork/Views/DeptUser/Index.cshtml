@@ -6,14 +6,23 @@
     <el-row>
         <el-col :span="4">
             <el-input v-model="filterText" placeholder="输入关键字进行过滤"></el-input>
-            <el-tree class="mt-1" :data="treeData" node-key="id" :props="defaultProps" @@node-click="handleNodeClick"
+            <el-tree :default-expand-all="true" class="mt-1" :data="treeData" node-key="id" :props="defaultProps" @@node-click="handleNodeClick"
                      :filter-node-method="filterNode" ref="treeRef"></el-tree>
         </el-col>
         <el-col :span="20">
-            <el-table style="width:100%" :data="userData" stripe class="ml-2">
+            <el-table style="width:100%" :data="filterTableData" stripe class="mx-1">
                 <el-table-column type="index" width="50"></el-table-column>
                 <el-table-column prop="name" label="企微用户名"></el-table-column>
                 <el-table-column prop="userid" label="企微用户Id"></el-table-column>
+                <el-table-column align="right">
+                    <template #header>
+                        <el-input v-model="wx_username" placeholder="输入企微用户名进行过滤" />
+                    </template>
+                    <template #default="scope">
+                        <el-button type="primary" size="small" @@click="seeDetails(scope.row)"><el-icon><Search /></el-icon></el-button>
+                        <el-button type="warning" size="small" @@click="bindUser(scope.row)"><el-icon><Key /></el-icon></el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </el-col>
     </el-row>
@@ -31,7 +40,13 @@
                         label: 'name',
                         children: 'children'
                     },
-                    filterText: ''
+                    filterText: '',
+                    wx_username: ''
+                }
+            },
+            computed:{
+                filterTableData(){
+                    return this.userData.filter(x => x.name.toLowerCase().indexOf(this.wx_username.toLowerCase()) != -1)
                 }
             },
             watch: {
@@ -42,6 +57,8 @@
                 }
             },
             methods: {
+                seeDetails(row){},
+                bindUser(row){},
                 filterNode(value, data) {
                     if (!value) return true
                     return data.name.includes(value)
