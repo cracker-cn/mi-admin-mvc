@@ -8,7 +8,7 @@ namespace Mi.Core.Models.WxWork
         public string? corpid { get; set; }
 
         [NotNull]
-        public string? wx_work_member_secret { get; set; }
+        public string? wx_work_contact_list_secret_sync { get; set; }
 
         [NotNull]
         public string? wx_work_contact_list_secret { get; set; }

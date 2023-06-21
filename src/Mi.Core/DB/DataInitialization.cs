@@ -57,7 +57,7 @@ namespace Mi.Core.DB
                 var wxWorkConfigId = DapperDB.ExecuteScalar<long>("select id from SysDict where Key=@key limit 1;", new { key = DictKeyConst.WxWork });
                 var sql = new StringBuilder("INSERT INTO SysDict('Id', 'Name', 'Key', 'Value', 'ParentKey', 'Sort', 'ParentId', 'Remark', 'CreatedBy', 'CreatedOn', 'ModifiedBy', 'ModifiedOn', 'IsDeleted') VALUES");
                 sql.Append(GenValueSql("企业Id", nameof(wxWorkConfig.corpid), wxWorkConfig.corpid, DictKeyConst.WxWork, wxWorkConfigId));
-                sql.Append(GenValueSql("应用密钥-成员", nameof(wxWorkConfig.wx_work_member_secret), wxWorkConfig.wx_work_member_secret, DictKeyConst.WxWork, wxWorkConfigId));
+                sql.Append(GenValueSql("应用密钥-成员", nameof(wxWorkConfig.wx_work_contact_list_secret_sync), wxWorkConfig.wx_work_contact_list_secret_sync, DictKeyConst.WxWork, wxWorkConfigId));
                 sql.Append(GenValueSql("应用密钥-通讯录", nameof(wxWorkConfig.wx_work_contact_list_secret), wxWorkConfig.wx_work_contact_list_secret, DictKeyConst.WxWork, wxWorkConfigId));
                 await DapperDB.ExecuteAsync(sql.ToString().Trim(','));
             }
