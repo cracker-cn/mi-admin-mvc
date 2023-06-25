@@ -4,7 +4,9 @@ namespace Mi.IService.System
 {
     public interface ILogService
     {
-        Task<bool> WriteLogAsync(string userName, bool succeed, string operationInfo);
+        Task<bool> WriteLoginLogAsync(string userName, bool succeed, string operationInfo);
+
+        Task<bool> WriteLogAsync(string url, string? param, string? actionFullName, string? contentType = default, bool succeed = true, string? exception = default);
 
         Task<MessageModel<PagingModel<SysLoginLog>>> GetLoginLogListAsync(LoginLogSearch search);
     }

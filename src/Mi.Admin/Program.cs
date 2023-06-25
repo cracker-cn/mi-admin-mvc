@@ -8,6 +8,7 @@ using Mi.Core.Service;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.StaticFiles;
 
 using Serilog;
@@ -19,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(opt =>
 {
 	opt.Filters.Add<GlobalExceptionFilter>();
-	opt.Filters.Add<ParameterValidationFilterAttribute>();
+	opt.Filters.Add<GlobalActionFilterAttribute>();
 }).AddJsonOptions(opt =>
 {
 	opt.JsonSerializerOptions.Converters.Add(new LongConverter());
@@ -48,6 +49,8 @@ builder.Services.Configure<PaConfigModel>(uiConfig);
 EnvironmentHandler.WebRootPath = builder.Environment.WebRootPath;
 
 builder.Services.AddSignalR();
+builder.Services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
+.Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
 

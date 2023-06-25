@@ -28,7 +28,7 @@ namespace Mi.Admin.Areas.Account.Controllers
         {
             var result = await _permissionService.LoginAsync(userName, password, code);
             var logService = DotNetService.Get<ILogService>();
-            await logService.WriteLogAsync(userName, result.EnsureSuccess(), result.Message ?? "");
+            await logService.WriteLoginLogAsync(userName, result.EnsureSuccess(), result.Message ?? "");
             return result;
         }
 

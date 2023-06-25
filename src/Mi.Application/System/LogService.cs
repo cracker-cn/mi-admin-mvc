@@ -1,6 +1,7 @@
 ﻿using Mi.Core.Factory;
 using Mi.Core.Service;
 using Mi.IRepository.BASE;
+using Mi.Repository.BASE;
 
 using Microsoft.AspNetCore.Http;
 
@@ -11,12 +12,14 @@ namespace Mi.Application.System
         private readonly HttpContext httpContext;
         private readonly CreatorFactory _creator;
         private readonly MiHeader _header;
+        private readonly IMiUser _miUser;
 
-        public LogService(IHttpContextAccessor httpContextAccessor, CreatorFactory creator, MiHeader header)
+        public LogService(IHttpContextAccessor httpContextAccessor, CreatorFactory creator, MiHeader header, IMiUser miUser)
         {
             httpContext = httpContextAccessor.HttpContext;
             _creator = creator;
             _header = header;
+            _miUser = miUser;
         }
 
         public async Task<MessageModel<PagingModel<SysLoginLog>>> GetLoginLogListAsync(LoginLogSearch search)
@@ -30,7 +33,22 @@ namespace Mi.Application.System
             return new MessageModel<PagingModel<SysLoginLog>>(list);
         }
 
-        public async Task<bool> WriteLogAsync(string userName, bool succeed, string operationInfo)
+        public async Task<bool> WriteLogAsync(string url, string? param, string? actionFullName, string? contentType = null, bool succeed = true, string? exception = null)
+        {
+            var repo = DotNetService.Get<IRepositoryBase<SysLog>>();
+            var log = _creator.NewEntity<SysLog>();
+            log.RequestUrl = url;
+            log.RequestParams = param;
+            log.ActionFullName = actionFullName;
+            log.ContentType = contentType;
+            log.Succeed = succeed ? 1: 0;
+            log.Exception = exception;
+            log.UserId = _miUser.UserId;
+            log.UserName = _miUser.UserName;
+            return await repo.AddAsync(log);
+        }
+
+        public async Task<bool> WriteLoginLogAsync(string userName, bool succeed, string operationInfo)
         {
             var model = _creator.NewEntity<SysLoginLog>();
             var repo = DotNetService.Get<IRepositoryBase<SysLoginLog>>();
@@ -41,8 +59,7 @@ namespace Mi.Application.System
             model.RegionInfo = _header.Region;
             model.Browser = _header.Browser;
             model.System = _header.System;
-            await repo.AddAsync(model);
-            return true;
+            return await repo.AddAsync(model);
         }
     }
 }
