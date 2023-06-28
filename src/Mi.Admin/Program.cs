@@ -1,7 +1,6 @@
 using Mi.Admin.WebComponent;
 using Mi.Admin.WebComponent.Filter;
 using Mi.Admin.WebComponent.Middleware;
-using Mi.Core.DB;
 using Mi.Core.Hubs;
 using Mi.Core.Models.UI;
 using Mi.Core.Service;
@@ -19,26 +18,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(opt =>
 {
-	opt.Filters.Add<GlobalExceptionFilter>();
-	opt.Filters.Add<GlobalActionFilterAttribute>();
+    opt.Filters.Add<GlobalExceptionFilter>();
+    opt.Filters.Add<GlobalActionFilterAttribute>();
 }).AddJsonOptions(opt =>
 {
-	opt.JsonSerializerOptions.Converters.Add(new LongConverter());
-	opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+    opt.JsonSerializerOptions.Converters.Add(new LongConverter());
+    opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
 });
 
 builder.Services.AddAuthentication()
-	.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddRequiredService();
 //ÈÕÖ¾
 builder.Host.UseSerilog((context, logger) =>
 {
     var serilogOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
-    var serilogPath = builder.Environment.WebRootPath + "\\log\\.txt";
+    var serilogPath = builder.Environment.WebRootPath + "\\exception\\.txt";
     logger.Enrich.FromLogContext();
-	logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
-	logger.WriteTo.Async(a => a.File(serilogPath, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate));
+    logger.WriteTo.Console(theme: AnsiConsoleTheme.Literate);
+    logger.WriteTo.Async(a => a.File(serilogPath, restrictedToMinimumLevel: LogEventLevel.Error, rollingInterval: RollingInterval.Day, outputTemplate: serilogOutputTemplate));
 });
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, FuncAuthorizationMiddleware>();
 
@@ -56,8 +55,8 @@ DotNetService.Initialization(builder.Services);
 
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Home/Error");
-	app.UseHsts();
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -67,8 +66,8 @@ contentTypeProvider.Mappings.Add(".less", "text/css");
 contentTypeProvider.Mappings.Add(".yml", "text/html");
 var options = new StaticFileOptions()
 {
-	ServeUnknownFileTypes = true,
-	ContentTypeProvider = contentTypeProvider
+    ServeUnknownFileTypes = true,
+    ContentTypeProvider = contentTypeProvider
 };
 app.UseStaticFiles(options);
 
@@ -79,12 +78,12 @@ app.AddCustomerMiddleware();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-	name: "Area",
-	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    name: "Area",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<NoticeHub>("/noticeHub");
 app.Run();

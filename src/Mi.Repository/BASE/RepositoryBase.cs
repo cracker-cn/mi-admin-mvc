@@ -156,9 +156,9 @@ namespace Mi.Repository.BASE
 			return DB.GetAsync<T>(id);
 		}
 
-		public async Task<T> GetAsync(Expression<Func<T, bool>> exp)
+		public async Task<T?> GetAsync(Expression<Func<T, bool>> exp)
 		{
-			return await DB.Set<T>().FirstOrDefaultAsync(exp) ?? new T();
+			return await DB.Set<T>().FirstOrDefaultAsync(exp);
 		}
 
 		public PagingModel<T> QueryPage(int page, int size, Expression<Func<T, bool>>? exp = null)

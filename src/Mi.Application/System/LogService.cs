@@ -1,7 +1,6 @@
 ﻿using Mi.Core.Factory;
 using Mi.Core.Service;
 using Mi.IRepository.BASE;
-using Mi.Repository.BASE;
 
 using Microsoft.AspNetCore.Http;
 
@@ -33,7 +32,17 @@ namespace Mi.Application.System
             return new MessageModel<PagingModel<SysLoginLog>>(list);
         }
 
-        public async Task<bool> WriteLogAsync(string url, string? param, string? actionFullName, string? contentType = null, bool succeed = true, string? exception = null)
+        public async Task<bool> SetExceptionAsync(string uniqueId, string errorMsg)
+        {
+            var repo = DotNetService.Get<IRepositoryBase<SysLog>>();
+            var log = await repo.GetAsync(x => x.UniqueId == uniqueId);
+            if (log == null) return false;
+            log.Exception = errorMsg;
+            log.Succeed = 0;
+            return await repo.UpdateAsync(log);
+        }
+
+        public async Task<bool> WriteLogAsync(string url, string? param, string? actionFullName, string? uniqueId = default, string? contentType = null, bool succeed = true, string? exception = null)
         {
             var repo = DotNetService.Get<IRepositoryBase<SysLog>>();
             var log = _creator.NewEntity<SysLog>();
@@ -41,10 +50,11 @@ namespace Mi.Application.System
             log.RequestParams = param;
             log.ActionFullName = actionFullName;
             log.ContentType = contentType;
-            log.Succeed = succeed ? 1: 0;
+            log.Succeed = succeed ? 1 : 0;
             log.Exception = exception;
             log.UserId = _miUser.UserId;
             log.UserName = _miUser.UserName;
+            log.UniqueId = uniqueId;
             return await repo.AddAsync(log);
         }
 

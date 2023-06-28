@@ -17,5 +17,7 @@
         public int Succeed { get; set; } = 0;
 
         public string? Exception { get; set; }
+
+        public string? UniqueId { get; set; }
     }
 }

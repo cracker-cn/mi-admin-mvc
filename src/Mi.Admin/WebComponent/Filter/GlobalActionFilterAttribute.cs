@@ -4,6 +4,7 @@ using Mi.Admin.Areas.Account.Controllers;
 using Mi.Admin.Controllers.BASE;
 using Mi.Core.CommonOption;
 using Mi.Core.Models;
+using Mi.Core.Toolkit.Helper;
 using Mi.IService.System;
 
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,8 @@ namespace Mi.Admin.WebComponent.Filter
     {
         private readonly ILogger<GlobalActionFilterAttribute> _logger;
         private readonly ILogService _logService;
-        private readonly static string?[] IGNORE_CONTROLLERS = new string?[2] { typeof(PublicController).FullName,
+
+        private static readonly string?[] IGNORE_CONTROLLERS = new string?[2] { typeof(PublicController).FullName,
             typeof(LoginController).FullName };
 
         public GlobalActionFilterAttribute(ILogger<GlobalActionFilterAttribute> logger, ILogService logService)
@@ -43,7 +45,7 @@ namespace Mi.Admin.WebComponent.Filter
             if (!IGNORE_CONTROLLERS.Contains(context.Controller.ToString()))
             {
                 var httpContext = context.HttpContext;
-                var url = $"HttpVerb:{httpContext.Request.Method},Path:{httpContext.Request.Path}";
+                var url = $"{{ 'HttpVerb' : '{httpContext.Request.Method}' , 'Path' : '{httpContext.Request.Path}' }}";
                 string? param;
                 if (httpContext.Request.Method == "GET")
                 {
@@ -51,12 +53,15 @@ namespace Mi.Admin.WebComponent.Filter
                 }
                 else
                 {
+                    //TODO:拿不到参数
                     Stream stream = httpContext.Request.Body;
                     byte[] buffer = new byte[httpContext.Request.ContentLength.GetValueOrDefault()];
                     stream.Read(buffer, 0, buffer.Length);
                     param = Encoding.UTF8.GetString(buffer);
                 }
-                await _logService.WriteLogAsync(url, param ?? "", context.ActionDescriptor.DisplayName, httpContext.Request.ContentType, true);
+                var guid = IdHelper.UUID();
+                httpContext.Items.Add("RequestId", guid);
+                await _logService.WriteLogAsync(url, param ?? "", context.ActionDescriptor.DisplayName, guid, httpContext.Request.ContentType, true);
             }
             await next();
         }

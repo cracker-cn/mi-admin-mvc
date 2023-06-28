@@ -80,7 +80,7 @@ namespace Mi.IRepository.BASE
         /// <returns></returns>
         Task<T> GetAsync(object id);
 
-        Task<T> GetAsync(Expression<Func<T, bool>> exp);
+        Task<T?> GetAsync(Expression<Func<T, bool>> exp);
 
         Task<IList<T>> GetAllAsync();
 
