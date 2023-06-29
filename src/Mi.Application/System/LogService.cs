@@ -32,6 +32,19 @@ namespace Mi.Application.System
             return new MessageModel<PagingModel<SysLoginLog>>(list);
         }
 
+        public async Task<MessageModel<PagingModel<SysLog>>> GetLogListAsync(LogSearch search)
+        {
+            var repo = DotNetService.Get<IRepositoryBase<SysLog>>();
+            var exp = ExpressionCreator.New<SysLog>()
+                .AndIf(!string.IsNullOrEmpty(search.UserName), x => x.UserName.Contains(search.UserName!))
+                .AndIf(search.UserId.HasValue && search.UserId > 0, x => x.UserId == search.UserId.GetValueOrDefault())
+                .AndIf(search.Succeed == 1, x => x.Succeed == 1)
+                .AndIf(search.Succeed == 2, x => x.Succeed == 0)
+                .AndIf(search.CreatedOn != null && search.CreatedOn.Length == 2, x => x.CreatedOn >= search.CreatedOn![0].Date && x.CreatedOn <= search.CreatedOn![1].Date.AddDays(1).AddSeconds(-1));
+            var list = await repo.QueryPageAsync(search.Page, search.Size, x => x.CreatedOn, exp, false);
+            return new MessageModel<PagingModel<SysLog>>(list);
+        }
+
         public async Task<bool> SetExceptionAsync(string uniqueId, string errorMsg)
         {
             var repo = DotNetService.Get<IRepositoryBase<SysLog>>();

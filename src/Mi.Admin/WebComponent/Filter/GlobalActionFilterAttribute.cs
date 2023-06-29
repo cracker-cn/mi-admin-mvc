@@ -45,19 +45,13 @@ namespace Mi.Admin.WebComponent.Filter
             if (!IGNORE_CONTROLLERS.Contains(context.Controller.ToString()))
             {
                 var httpContext = context.HttpContext;
-                var url = $"{{ 'HttpVerb' : '{httpContext.Request.Method}' , 'Path' : '{httpContext.Request.Path}' }}";
-                string? param;
-                if (httpContext.Request.Method == "GET")
+                var url = $"{{ \"http_verb\" : \"{httpContext.Request.Method}\" , \"path\" : \"{httpContext.Request.Path}\" }}";
+                string? param = httpContext.Request.QueryString.Value;
+                if (httpContext.Request.ContentType == "application/json")
                 {
-                    param = httpContext.Request.QueryString.Value;
-                }
-                else
-                {
-                    //TODO:拿不到参数
-                    Stream stream = httpContext.Request.Body;
-                    byte[] buffer = new byte[httpContext.Request.ContentLength.GetValueOrDefault()];
-                    stream.Read(buffer, 0, buffer.Length);
-                    param = Encoding.UTF8.GetString(buffer);
+                    httpContext.Request.Body.Position = 0;
+                    using var reader = new StreamReader(httpContext.Request.Body, Encoding.UTF8);
+                    param = await reader.ReadToEndAsync();
                 }
                 var guid = IdHelper.UUID();
                 httpContext.Items.Add("RequestId", guid);

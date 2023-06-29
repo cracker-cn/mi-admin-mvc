@@ -52,6 +52,12 @@ builder.Services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = tru
 .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 var app = builder.Build();
 DotNetService.Initialization(builder.Services);
+//ÆôÓÃµ¹´ø
+app.Use((context, next) =>
+{
+    context.Request.EnableBuffering();
+    return next(context);
+});
 
 if (!app.Environment.IsDevelopment())
 {

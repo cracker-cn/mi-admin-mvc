@@ -258,7 +258,9 @@
             },
             created() {
                 this.fetchTableData()
-                this.fetchTreeData()
+                setTimeout(() => {
+                    this.fetchTreeData();
+                }, 800)
             }
         };
     </script>

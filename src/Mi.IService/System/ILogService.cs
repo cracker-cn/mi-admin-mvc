@@ -11,5 +11,7 @@ namespace Mi.IService.System
         Task<MessageModel<PagingModel<SysLoginLog>>> GetLoginLogListAsync(LoginLogSearch search);
 
         Task<bool> SetExceptionAsync(string uniqueId,string errorMsg);
+
+        Task<MessageModel<PagingModel<SysLog>>> GetLogListAsync(LogSearch search);
     }
 }

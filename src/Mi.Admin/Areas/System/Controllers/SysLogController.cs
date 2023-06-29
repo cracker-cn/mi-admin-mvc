@@ -25,10 +25,19 @@ namespace Mi.Admin.Areas.System.Controllers
             return View();
         }
 
+        [AuthorizeCode("System:ActionLog:Page")]
+        public IActionResult ActionLog()
+        {
+            return View();
+        }
+
         [HttpPost, AuthorizeCode("System:LoginLog:Query")]
         public async Task<MessageModel<PagingModel<SysLoginLog>>> GetLoginLogList([FromBody] LoginLogSearch search)
         {
             return await _logService.GetLoginLogListAsync(search);
         }
+
+        [HttpPost, AuthorizeCode("System:ActionLog:Query")]
+        public async Task<MessageModel<PagingModel<SysLog>>> GetLogList([FromBody] LogSearch search) => await _logService.GetLogListAsync(search);
     }
 }

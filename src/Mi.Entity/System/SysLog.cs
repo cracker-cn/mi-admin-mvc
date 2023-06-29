@@ -4,6 +4,7 @@
     {
         public long UserId { get; set; }
 
+        [NotNull]
         public string? UserName { get; set; }
 
         public string? ActionFullName { get; set; }

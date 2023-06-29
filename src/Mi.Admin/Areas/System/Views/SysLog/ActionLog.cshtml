@@ -22,11 +22,11 @@
                 </div>
             </div>
             <div class="layui-form-item layui-inline">
-                <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="log-query" auth-code="System:LoginLog:Query">
+                <permission-button class-name="pear-btn pear-btn-primary pear-btn-md" lay-submit="true" lay-filter="log-query" auth-code="System:ActionLog:Query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
                 </permission-button>
-                <permission-button class-name="pear-btn pear-btn-md" id="btnReset" auth-code="System:LoginLog:Query">
+                <permission-button class-name="pear-btn pear-btn-md" id="btnReset" auth-code="System:ActionLog:Query">
                     <i class="layui-icon layui-icon-refresh"></i>
                     重置
                 </permission-button>
@@ -51,7 +51,7 @@
 
             table.render({
                 elem: '#log-table',
-                url: '/System/SysLog/GetLoginLogList',
+                url: '/System/SysLog/GetLogList',
                 page: true,
                 request: {
                     limitName: 'size'
@@ -68,39 +68,39 @@
                         align: 'center'
                     },
                     {
-                        title: 'IP',
-                        field: 'ipAddress',
+                        title: '请求地址',
+                        field: 'requestUrl',
                         align: 'center'
                     },
                     {
-                        title: '区域',
-                        field: 'regionInfo',
+                        title: '类型',
+                        field: 'contentType',
                         align: 'center'
                     },
                     {
-                        title: '浏览器',
-                        field: 'browser',
-                        align: 'center'
-                    },
-                    {
-                        title: '系统',
-                        field: 'system',
+                        title: '参数',
+                        field: 'requestParams',
                         align: 'center'
                     },
                     {
                         title: '状态',
-                        field: 'status',
+                        field: 'succeed',
                         align: 'center',
                         templet: function (d) {
-                            if (d.status === 1) {
+                            if (d.succeed === 1) {
                                 return `<span class="layui-badge layui-bg-green">成功</span>`
                             }
                             return `<span class="layui-badge layui-bg-orange">失败</span>`
                         }
                     },
                     {
-                        title: '操作信息',
-                        field: 'operationInfo',
+                        title: '请求方法',
+                        field: 'actionFullName',
+                        align: 'center'
+                    },
+                    {
+                        title: '异常',
+                        field: 'exception',
                         align: 'center'
                     },
                     {
